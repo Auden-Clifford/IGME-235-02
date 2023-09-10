@@ -1,1 +1,3 @@
 ErrorDocument 404 /awc6002/235/error/error.html
+
+DirectoryIndex noterror.html 
