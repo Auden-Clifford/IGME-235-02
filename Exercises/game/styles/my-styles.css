@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Imbue:opsz@10..100&display=swap');
+h1 
+{ 
+    color:red;
+    font-family: sans-serif;
+    border-bottom: 1px solid blue;
+}
+blockquote 
+{ 
+    background-color: lightgray;
+    padding: 1rem;
+}
+html {scroll-behavior: smooth;}
+body 
+{
+    font-family: Arial, sans-serif;
+    background-color:lightblue;
+}
+h2
+{
+    color:cornflowerblue;
+    font-family: 'Imbue', serif;
+    margin-left: 100px;
+}
+p{margin-left: 100px;}
+ul{margin-left: 100px;}
+img.side{float: right; margin: 0 12px;}
