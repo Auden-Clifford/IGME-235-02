@@ -6,14 +6,22 @@ body
     border: 3px solid #9E2A2B;
     font-family: Arial, sans-serif;
     color:#540B0E;
+    background-color: #540B0E;
+}
+main, header, footer
+{
+    border: 1px solid #9E2A2B;
+    width: 90%;
+    padding: 2rem;
+    margin: 0 auto;
     background-color: #FFECAD;
 }
 h1 
 { 
-    margin-top: 10%;
+    /*margin-top: 10%;*/
     color:#540B0E;
     font-family: sans-serif;
-    border-bottom: 1px solid #315687;
+    /*border-bottom: 1px solid #315687;*/
 }
 blockquote 
 { 
@@ -25,16 +33,17 @@ h2
 {
     color:#315687;
     font-family: 'Imbue', serif;
-    margin-left: 100px;
 }
-p{margin-left: 100px;}
-ul{margin-left: 100px;}
 img.side{float: right; margin: 0 12px;}
-section#publishingInfo{background-color: #E09F3E;}
+section#publishingInfo{background-color: #E09F3E; padding: 1%;}
+
+/*Link Styles*/
 a:link{color: #315687;}
 a:visited{color: #88A3AA;}
 a:focus{background-color: #EBC284;}
 a:hover{color:#4173B4;}
 a:active{color: #96B3D9;}
-img{margin: 5% 5%; padding: 1%; border: 2px solid #540B0E;}
+
+img{margin: 1% 1%; padding: 1%; border: 2px solid #315687;}
 img#largeImage{box-sizing: border-box; width: 100%; padding: 0%; margin: 0%;}
+hr{border-top: 2px dotted #315687;}
