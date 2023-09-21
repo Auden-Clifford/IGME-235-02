@@ -1,2 +1,6 @@
-/* Do everything in this file */
-h1, h2, h3 {border-bottom: 1px solid red;}
+figure {max-width: 650px; margin: 2% auto;}
+figure img {width: 100%;}
+header, main, footer {width: 90vw; margin: 0% auto;}
+
+section#tetlist {display: flex; flex-flow: row wrap;}
+div.tet {flex: 0 1 450px; border: 1px solid black;}
