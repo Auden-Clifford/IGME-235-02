@@ -1,0 +1,19 @@
+/* Do everything in this file */
+h1, h2, h3 {border-bottom: 1px solid red;}
+h2 {clear: both;}
+footer 
+{
+    clear: both; 
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    color: gray;
+}
+
+/*styles for top tetomino diagram*/
+figure {float: right; width: 40%; margin: 2%;}
+figure img {width: 100%;}
+
+/*styles for the individual tetomino images*/
+div.tet {float: left; width: 20%; border: 1px solid red;}
