@@ -1,0 +1,42 @@
+body
+{
+    width: 60%;
+    margin: auto;
+    border: 1px solid black;
+}
+
+header{
+    width: 100%;
+    /*margin: auto;*/
+    border: 1px solid black;
+}
+header h1{
+    border: 1px solid black;
+    margin: auto;
+    width: 80%;
+}
+header h1 object{
+    width: 100%;
+}
+
+
+section{
+    width: 35%;
+    margin: 3em;
+    padding: 1em;
+    border: 1px solid black;
+}
+
+/*section#description{float: left;}*/
+
+section#publishingInfo, section#gameCatagories{
+    clear: both;
+    float: right;
+    margin-top: 0em;
+    margin-bottom: 1em;
+}
+
+section#quote{
+    clear: both;
+    width: 90%;
+}
