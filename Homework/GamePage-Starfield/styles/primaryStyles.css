@@ -1,42 +1,85 @@
+@font-face {
+    font-family: 'univers_lt_std93XBlkEx';
+    src: url('../fonts/univers/univers_lt_std_93_extra_black_extended-webfont.woff2') format('woff2'),
+         url('../fonts/univers/univers_lt_std_93_extra_black_extended-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro&family=Permanent+Marker&display=swap');
+
+
 body
 {
     width: 60%;
     margin: auto;
-    border: 1px solid black;
+
+    color: #AEBFD6;
+    font-family: 'Crimson Pro', serif;
+
+    background-color: #10141E;
+    background-image: url(../images/stars-background.jpg);
+    background-attachment: fixed;
+    background-size: cover;
 }
 
+/*styles for logo (& nested backups)*/
 header{
     width: 100%;
-    /*margin: auto;*/
-    border: 1px solid black;
 }
 header h1{
-    border: 1px solid black;
     margin: auto;
     width: 80%;
+    font-family: univers_lt_std93XBlkEx, 'Arial Black', sans-serif;
 }
 header h1 object{
     width: 100%;
 }
+img{
+    width: 100%;
+}
 
+/*general styles for grid & elements*/
+main{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr .5fr;
 
-section{
-    width: 35%;
-    margin: 3em;
+    border: 3px solid #F3F5F7;
+    background-color: rgba(33, 49, 80, .5);
+    padding: 5%; 
+}
+footer{
+    text-align: center;
     padding: 1em;
-    border: 1px solid black;
 }
+section, div#characterGif{
+    width: auto;
+    margin: 1em 2em;
+    padding: 1em;
 
-/*section#description{float: left;}*/
-
-section#publishingInfo, section#gameCatagories{
-    clear: both;
-    float: right;
-    margin-top: 0em;
-    margin-bottom: 1em;
+    background-color: rgba(47, 76, 121, .5);
 }
+h2{
+    color: #F3F5F7;
+    font-family: univers_lt_std93XBlkEx, 'Arial Black', sans-serif;
+}
+section#description img{margin-top: 2em;}
 
+/*styles for grid positioning*/
+section#description{
+    grid-row: 1 / 4;
+    grid-column: 1 / 2;
+}
+section#publishingInfo{grid-row: 1 / 2;}
+section#gameCatagories{grid-row: 2 / 3;}
 section#quote{
-    clear: both;
-    width: 90%;
+    grid-row: 4 / 5;
+    grid-column: 1 / 3;
 }
+
+/*styles for links*/
+a:link{color: #C15543;}
+a:visited{color: #7A3529;}
+a:focus{background-color: #47658D;}
+a:hover{color: #D18375;}
+a:active{color: #B8503D;}
