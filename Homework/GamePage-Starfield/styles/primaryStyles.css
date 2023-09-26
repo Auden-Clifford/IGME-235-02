@@ -1,7 +1,7 @@
 @font-face {
     font-family: 'univers_lt_std93XBlkEx';
-    src: url('../fonts/univers/univers_lt_std_93_extra_black_extended-webfont.woff2') format('woff2'),
-         url('../fonts/univers/univers_lt_std_93_extra_black_extended-webfont.woff') format('woff');
+    src: url('../Fonts/univers/univers_lt_std_93_extra_black_extended-webfont.woff2') format('woff2'),
+         url('../Fonts/univers/univers_lt_std_93_extra_black_extended-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -29,7 +29,7 @@ header{
 header h1{
     margin: auto;
     width: 80%;
-    font-family: univers_lt_std93XBlkEx, 'Arial Black', sans-serif;
+    font-family: 'univers_lt_std93XBlkEx', 'Arial Black', sans-serif;
 }
 header h1 object{
     width: 100%;
