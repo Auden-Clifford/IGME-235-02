@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Documentation</title>
+    </head>
+
+    <body>
+        <header>
+            <h1>Documentation - IGME 235 Project 1</h1>
+
+            <p>
+                Design adapted from <a href="src/intel.pdf">this</a> layout.
+            </p>
+        </header>
+
+        <main>
+            <section>
+                <h2>Sketch & Planning</h2>
+
+                <p>
+                    I started by drawing boxes around each item on the pdf, then I drew grid lines to fit those boxes. The result was a 
+                    mostly incomprehensible mess.
+                </p>
+
+                <figure>
+                    <img src="src/SpecSketch-original.jpg" alt="The original design sketch. with and without the content behind it.">
+                </figure>
+
+                <p>
+                    I decided to separate this design into two parts: the grids and the content. This created a slightly 
+                    less incomprehensible mess.
+                </p>
+
+                <figure>
+                    <img src="src/SpecSketch-split.jpg" alt="My sketch split between the grid and the content it contains.">
+                </figure>
+
+                <p>
+                    It wasn’t immediately obvious what HTML element would best fit the boxes on the screen, after all, they didn’t 
+                    exactly line up semantically with something like a section or a paragraph. Some of them only had images inside 
+                    them. I decided on the div-id method. Each of these boxes (in purple) would be a div with a unique ID pertaining 
+                    to the information it contains.
+                </p>
+
+                <p>
+                    The next thing I did was move things around to create a mobile layout. I considered just stacking each item on top 
+                    of the next, perhaps in a flexbox rather than a grid. However, I wanted to preserve the criss-cross overlapping 
+                    design of the original source, so I decided to make the design fit into a thinner grid. The mobile design would 
+                    keep some elements side-by-side, but allow most things to fill in below. I planned for no more than two elements 
+                    appearing in the same row, this way the elements would not have to squeeze too much to fit the narrow screen, and 
+                    the content would not become unreadable.
+                </p>
+
+                <figure>
+                    <img src="src/SpecSketch-adaptive.jpg" alt="Sketch for the adaptive mobile design.">
+                </figure>
+            </section>
+
+        </main>
+
+        <footer>
+            <h2>Sources (spec)</h2>
+            <ul>
+                <li><a href="media/bookmark.svg">this bookmark icon</a> adapted from this <a href="https://www.freepik.com/icon/bookmark_7346127#fromView=resource_detail&position=5">Icon by Muhammad_Usman</a> on freepik.com</li>
+                <li><a href="media/plane.svg">this plane icon</a> adapted from <a href="https://www.ctmargentina.com/images/_icons/aereos.png">this</a> icon from <a href="https://www.ctmargentina.com/en/">CTM Argentina's website</a></li>
+                <li><a href="media/vacation.png">this vacation icon</a> adapted from <a href="https://www.veryicon.com/icons/object/elements-of-family-life/vacation-2.html">this icon from vericon.com</a></li>
+                <li><a href="media/workAnywhere.jpg">this</a> Image by <a href="https://www.freepik.com/free-photo/person-working-from-home-with-pet-dog_18492130.htm#query=man%20working%20from%20home&position=10&from_view=keyword&track=ais">Freepik</a></li>
+                <li><a href="media/headphones.jpg">this</a> Image by <a href="https://www.freepik.com/free-photo/pretty-brunette-woman-white-tee-brown-jacket-smiles-widely-listens-music-headphones-cute-girl-holds-phone-yellow-background_23986325.htm#query=woman%20wearing%20headphones%20yellow%20background&position=16&from_view=search&track=ais">lookstudio</a> on Freepik</li>
+                <li><a href="media/intelLogo.svg">this intel logo</a> from <a href="https://brandlogovector.com/intel-new-2020-logo-vector/">brandlogovector.com</a></li>
+            </ul>
+        </footer>
+    </body>
+</html>
