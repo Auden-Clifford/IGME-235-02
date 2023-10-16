@@ -7,34 +7,46 @@
     }
 }
 
-body {
-    font-family: 'Montserrat', sans-serif;
-}
-img {
-    width: 100%;
-}
-p object {
-    width: 30%;
-}
-
+/*header grid and placement (large screen)*/
 header {
     display: grid;
 
     grid-template-columns: 30px 70px 200px 1fr 2fr;
     grid-template-rows: 80px 20px 60px 150px 60px 60px 30px;
 }
+#logo {grid-area: 1 / 1 / 3 / 3 ;}
+#banner {grid-area: 2 / 1 / -3 / -1;}
+#banner img {width: 100%;}
+#headline {grid-area: 4 / 2 / -2 / 4;}
+#salesPitch {grid-area: -4 / -2 / -1 / -1;}
 
-#logo {
-    grid-area: 1 / 1 / 3 / 3 ;
+/*footer grid and placement (small screen)*/
+main {
+    display: grid;
+    grid-template-columns: 1fr 80px 90px 30px 70px 90px 1fr 90px;
+    grid-template-rows: 150px 60px 90px 70px 50px 30px 70px 90px;
+}
+#sabbatical {grid-area: 1 / 1 / 2 / 4;}
+#bonuses {grid-area: 1 / 4 / 2 / -3}
+#travel {grid-area: 1 / -3 / 3 / -1;}
+#workAnywhere {grid-area: 2 / 1 / -4 / 3;}
+#flexibleWorkModels {grid-area: 2 / 3 / -3 / 6;}
+#charity {grid-area: 2 / -4 / 4 / -2;}
+#recognition {grid-area: -4 / 1 / -1 / 2;}
+#stock {grid-area: -5 / 2 / -2 / 5}
+#fourOoneK{grid-area: -2 / 2 / -1 / 5}
+#tuition {grid-area: 4 / -4 / -3 / -1;}
+#medical {grid-area: -3 / -5 / -1 / -1;}
+
+body {
+    font-family: 'Montserrat', sans-serif;
 }
 
+/* styles for header*/
 #banner {
-    grid-area: 2 / 1 / -3 / -1;
     z-index: -1;
 }
-
 #headline {
-    grid-area: 4 / 2 / -2 / 4;
     background-color: rgba(222, 75, 98, 0.5);
 }
 h1 {
@@ -44,156 +56,79 @@ h1 {
     padding: 0.5em;
     margin: 40px 0;
 }
-
 #salesPitch {
-    grid-area: -4 / -2 / -1 / -1;
     background-color: white;
 }
 #salesPitch object{
     float: left;
+    width: 30%;
 }
 
-
-main {
-    display: grid;
-    grid-template-columns: 1fr 80px 90px 30px 70px 90px 1fr 90px;
-    grid-template-rows: 150px 60px 90px 70px 50px 30px 70px 90px;
-}
-
+/* styles for main*/
 .benefits {
-    background-color: white;
-    padding: 10px;
+    border: 10px solid white;
+}
+.benefits p {
+    margin: 10%;
+}
+.benefits object {
+    width: 30%;
+    margin: 1em;
 }
 
-div p {
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
-
-#sabbatical {
-    grid-area: 1 / 1 / 2 / 4;
-}
-#sabbatical p{
+#sabbatical, #travel, #recognition, #medical {
     background-color: #dcd6d6;
-    margin: 0;
-    padding: 1em;
 }
 #sabbatical object {
     float: left;
-}
 
-#bonuses {
-    grid-area: 1 / 4 / 2 / -3
 }
-#bonuses p {
-    color: white;
-    background-color: #2078c8;
-    margin: 0;
-    padding: 1em;
+#travel object {
+    float: right;
 }
-
-#travel {
-    grid-area: 1 / -3 / 3 / -1;
-}
-#travel p {
-    background-color: #dcd6d6;
-    margin: 0;
-    padding: 1em;
-}
-
-#workAnywhere {
-    grid-area: 2 / 1 / -4 / 3;
-}
-#workAnywhere p {
-    color: white;
-    background-color: #e04060;
-    margin: 0;
-    padding: 1em;
-}
-
-#flexibleWorkModels {
-    grid-area: 2 / 3 / -3 / 6;
-}
-#flexibleWorkModels p {
-    color: white;
-    background-color: #40b0f8;
-    margin: 0;
-    padding: 1em;
-}
-
-#charity {
-    grid-area: 2 / -4 / 4 / -2;
-}
-#charity p {
-    color: white;
-    background-color: #2078c8;
-    margin: 0;
-    padding: 1em;
-}
-
-#recognition {
-    grid-area: -4 / 1 / -1 / 2;
-}
-#recognition p {
-    background-color: #dcd6d6;
-    margin: 0;
-    padding: 1em;
-}
+#recognition p{ margin: 5%;}
 #recognition object {
     display: block;
-    margin: auto;
+    margin: 1em auto;
     width: 60%;
-}
-
-#stock {
-    grid-area: -5 / 2 / -2 / 5
-}
-#stock p{
-    color: white;
-    background-color: #2078c8;
-    margin: 0;
-    padding: 1em;
-}
-
-#fourOoneK{
-    grid-area: -2 / 2 / -1 / 5
-}
-#fourOoneK p{
-    color: white;
-    background-color: #e04060;
-    margin: 0;
-    padding: 1em;
-}
-
-#tuition {
-    grid-area: 4 / -4 / -3 / -1;
-}
-#tuition p {
-    color: white;
-    background-color: #e04060;
-    margin: 0;
-    padding: 1em;
-}
-#tuition img {
-    width: 30%;
-    float: left;
-}
-
-#medical {
-    grid-area: -3 / -5 / -1 / -1;
-}
-#medical p{
-    background-color: #dcd6d6;
-    margin: 0;
-    padding: 1em;
 }
 #medical img {
     height: 100%;
     width: auto;
     float: left;
+    margin-right: 2em;
 }
 
+#bonuses, #charity, #stock {
+    color: white;
+    background-color: #2078c8;
+}
+
+#workAnywhere, #tuition, #fourOoneK {
+    color: white;
+    background-color: #e04060;
+}
+#workAnywhere img {
+    width: 100%;
+}
+#tuition img {
+    margin: 1em;
+    width: 30%;
+    float: left;
+}
+
+#flexibleWorkModels {
+    columns: white;
+    background-color: #40b0f8;
+}
+
+#graphic object{
+    margin: 0;
+    width: 100%;
+}
+
+
+/*styles for footer*/
 #siteLink {
     text-align: right;
 }
@@ -203,29 +138,5 @@ div p {
     font-size: x-small;
 }
 
-/*
-#sabbatical, #travel, #recognition, #medical p{
-    background-color: #dcd6d6;
-}
-*/
 
-/*
-#bonuses, #charity, #stock {
-    color: white;
-    background-color: #2078c8;
-}
-*/
 
-/*
-#workAnywhere, #tuition, #fourOoneK {
-    color: white;
-    background-color: #e04060;
-}
-*/
-
-/*
-#flexibleWorkModels {
-    columns: white;
-    background-color: #40b0f8;
-}
-*/
