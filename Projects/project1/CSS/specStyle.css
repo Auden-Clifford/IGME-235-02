@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro&family=Montserrat:wght@300&family=Permanent+Marker&display=swap');
+
+@media screen and (min-width: 800px) {
+    body {
+        width: 800PX;
+        margin: auto;
+    }
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+img {
+    width: 100%;
+}
+p object {
+    width: 30%;
+}
+
+header {
+    display: grid;
+
+    grid-template-columns: 30px 70px 200px 1fr 2fr;
+    grid-template-rows: 80px 20px 60px 150px 60px 60px 30px;
+}
+
+#logo {
+    grid-area: 1 / 1 / 3 / 3 ;
+}
+
+#banner {
+    grid-area: 2 / 1 / -3 / -1;
+    z-index: -1;
+}
+
+#headline {
+    grid-area: 4 / 2 / -2 / 4;
+    background-color: rgba(222, 75, 98, 0.5);
+}
+h1 {
+    display: block;
+    font-size: 40px;
+    color: white;
+    padding: 0.5em;
+    margin: 40px 0;
+}
+
+#salesPitch {
+    grid-area: -4 / -2 / -1 / -1;
+    background-color: white;
+}
+#salesPitch object{
+    float: left;
+}
+
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 80px 90px 30px 70px 90px 1fr 90px;
+    grid-template-rows: 150px 60px 90px 70px 50px 30px 70px 90px;
+}
+
+.benefits {
+    background-color: white;
+    padding: 10px;
+}
+
+div p {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+#sabbatical {
+    grid-area: 1 / 1 / 2 / 4;
+}
+#sabbatical p{
+    background-color: #dcd6d6;
+    margin: 0;
+    padding: 1em;
+}
+#sabbatical object {
+    float: left;
+}
+
+#bonuses {
+    grid-area: 1 / 4 / 2 / -3
+}
+#bonuses p {
+    color: white;
+    background-color: #2078c8;
+    margin: 0;
+    padding: 1em;
+}
+
+#travel {
+    grid-area: 1 / -3 / 3 / -1;
+}
+#travel p {
+    background-color: #dcd6d6;
+    margin: 0;
+    padding: 1em;
+}
+
+#workAnywhere {
+    grid-area: 2 / 1 / -4 / 3;
+}
+#workAnywhere p {
+    color: white;
+    background-color: #e04060;
+    margin: 0;
+    padding: 1em;
+}
+
+#flexibleWorkModels {
+    grid-area: 2 / 3 / -3 / 6;
+}
+#flexibleWorkModels p {
+    color: white;
+    background-color: #40b0f8;
+    margin: 0;
+    padding: 1em;
+}
+
+#charity {
+    grid-area: 2 / -4 / 4 / -2;
+}
+#charity p {
+    color: white;
+    background-color: #2078c8;
+    margin: 0;
+    padding: 1em;
+}
+
+#recognition {
+    grid-area: -4 / 1 / -1 / 2;
+}
+#recognition p {
+    background-color: #dcd6d6;
+    margin: 0;
+    padding: 1em;
+}
+#recognition object {
+    display: block;
+    margin: auto;
+    width: 60%;
+}
+
+#stock {
+    grid-area: -5 / 2 / -2 / 5
+}
+#stock p{
+    color: white;
+    background-color: #2078c8;
+    margin: 0;
+    padding: 1em;
+}
+
+#fourOoneK{
+    grid-area: -2 / 2 / -1 / 5
+}
+#fourOoneK p{
+    color: white;
+    background-color: #e04060;
+    margin: 0;
+    padding: 1em;
+}
+
+#tuition {
+    grid-area: 4 / -4 / -3 / -1;
+}
+#tuition p {
+    color: white;
+    background-color: #e04060;
+    margin: 0;
+    padding: 1em;
+}
+#tuition img {
+    width: 30%;
+    float: left;
+}
+
+#medical {
+    grid-area: -3 / -5 / -1 / -1;
+}
+#medical p{
+    background-color: #dcd6d6;
+    margin: 0;
+    padding: 1em;
+}
+#medical img {
+    height: 100%;
+    width: auto;
+    float: left;
+}
+
+#siteLink {
+    text-align: right;
+}
+
+#copyright {
+    color: gray;
+    font-size: x-small;
+}
+
+/*
+#sabbatical, #travel, #recognition, #medical p{
+    background-color: #dcd6d6;
+}
+*/
+
+/*
+#bonuses, #charity, #stock {
+    color: white;
+    background-color: #2078c8;
+}
+*/
+
+/*
+#workAnywhere, #tuition, #fourOoneK {
+    color: white;
+    background-color: #e04060;
+}
+*/
+
+/*
+#flexibleWorkModels {
+    columns: white;
+    background-color: #40b0f8;
+}
+*/
