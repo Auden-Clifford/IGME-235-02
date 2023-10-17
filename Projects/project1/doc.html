@@ -18,7 +18,7 @@
 
         <main>
             <section>
-                <h2>Sketch & Planning</h2>
+                <h2>Spec - Sketch & Planning</h2>
 
                 <p>
                     I started by drawing boxes around each item on the pdf, then I drew grid lines to fit those boxes. The result was a 
@@ -57,6 +57,60 @@
                 <figure>
                     <img src="src/SpecSketch-adaptive.jpg" alt="Sketch for the adaptive mobile design.">
                 </figure>
+
+                <h2>Spec - Challenges</h2>
+
+                <p>
+                    I kind of knew from looking at it that the overlapping boxes were going to be trouble. However, I did not anticipate the number of times they would have me going
+                    back to revise my code. Once I got the grid marked out, placing the elements wasn't too difficult. However, it was my plan
+                    for the boxes themselves that would go through iteration.
+                </p>
+
+                <p>
+                    The first plan was to give the &#60;div&#62; elements, white backgrounds with 10px of padding, then the &#60;p&#62; elements inside the divs would have colored
+                    backgrounds and fill the entire space. This way, there would be 10-20px channels between grid elements. It was important to do it this way rather than simply
+                    making the divs smaller because then the elements that overlapped would not have the white channels around them. The divs' white background would serve the purpose
+                    of carving channels into overlapped elements.
+                </p>
+
+                <P>
+                    However, this approach had several drawbacks. For starters, since the background color came from the &#60;p&#62 elements, they had to take up 100% of the
+                    available space. Thus any other media inside the blocks had to go inside the &#60;p&#62 elements or else they would be pushed outside the block. This caused issues
+                    because it meant that things like images and icons got the same padding as the text, so I could either make the images look right by including 0
+                    padding, or I could make the text look right by adding a reasonable amount of padding, forcing the images to squish into smaller boxes.
+
+                </P>
+
+                <p>
+                    I knew at some point I would need to change this system and toyed with some ideas. I thought of making each box be 2 layered divs, which would allow me to
+                    separate the media from the &#60;p&#62 elements, but wouldn't look great semantically. Eventually, I realized the obvious solution and made the outside div both
+                    the white space and the background color. For some reason, I hadn't originally thought of making those white borders actual white borders in CSS. They probably
+                    registered in my mind as "spaces in between boxes" so I couldn't originally see them for the borders they were.
+                </p>
+
+                <p>
+                    The new design, rather than using divs with white backgrounds with 10px of padding and a &#60;p&#62 element inside with a colored background that took up all 
+                    available space, now has divs with a 10px white border and a colored background, within which I could place the media and text however I wished.
+                </p>
+
+                <p>
+                    Unfortunately, because of this setback, I was unable to finish implementing the adaptive grid I planned, but I think that was for the best. The adaptive grid was
+                    not required for the spec page and, while the mockup I made will be a good starting place, I think I have a better idea in the works for my adaptive grids which
+                    I'll implement during the next phase of the project.
+                </p>
+            </section>
+
+            <section>
+                <h2>Adapt to content - goals & planning</h2>
+
+                <p>
+                    My plan for this section is to turn this design into a portfolio. Thus my goal will be to show off my programming and game design skills to potential employers.
+                    I planned to use the overlapping boxes of the original design as places to put images and titles for my projects which, when clicked, bring you to the project's
+                    description further down the page. Additionally, my plan for adapting the design to my content was to have a more uniform grid. The grid I created was lopsided 
+                    and jaggy. It was essentially built for the explicit purpose of looking as much like the print design as possible and I wouldn't need that anymore. What I would 
+                    need would be a grid that I could easily insert new content into when I wanted to add a new project or replace an old one. Thus, having something more uniform 
+                    would be beneficial. If I made the areas small enough I could even still preserve my ability to overlap panels.
+                </p>
             </section>
 
         </main>
