@@ -60,7 +60,7 @@
 
                 <p>
                     For this project I worked with a team to create a side-scrolling 
-                    physics-based run-and-gun platformer. Over the course of the project I 
+                    physics-based run-and-gun platformer in MonoGame. Over the course of the project I 
                     was able to flex my programming and debugging skills and learned firsthand 
                     the importance of team coordination and communication.
                 </p>
@@ -89,6 +89,42 @@
                     <li>Physics Collisions</li>
                     <li>Player Systems</li>
                 </ul>
+
+                <p>
+                    My primary role in the project was to be in charge of the physics system. 
+                    Physics interaction between game objects was a large focus of the 
+                    gameplay. Thus, the system I created had to be robust if the project was 
+                    to succeed. The system I developed utilized an axis-aligned bounding box 
+                    system to detect collisions between objects in the game. These objects 
+                    would then decide internally how to resolve the collision.
+                </p>
+
+                <p>
+                    During the development of the physics system, I worked on the player 
+                    class in tandem and often used the player as a test for new physics 
+                    code. The player class reads user inputs and tracks the player’s state 
+                    through an internal finite state machine. I would make significant 
+                    changes to this part of the project quite a few times during development 
+                    as the team iterated on our plan for what states were necessary for the 
+                    player to track and what each of them meant for the player’s interaction.
+                </p>
+
+                <p>
+                    I created a debug mode to mitigate the effects of the project’s 
+                    increasing complexity on our ability to find and correct errors. This 
+                    system would allow us to visually track key information like hitboxes and 
+                    weapon attack areas as well as certain physics properties like the 
+                    position and velocity of significant game objects.
+                </p>
+
+                <p>
+                    My second largest role in the project was the development of an external 
+                    tool for level editing that interfaced with the game via a file I/O 
+                    system. I created a UI system using Windows Forms that allowed the user 
+                    to “paint” game tiles onto a canvas to create level files. Additionally, 
+                    I created the class in our main MonoGame project that could read these 
+                    files and turn them into playable levels.
+                </p>
 
                 <h3>Problems Overcome</h3>
 
