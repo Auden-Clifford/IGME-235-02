@@ -30,6 +30,20 @@ img{ width: 100%;}
     border: 10px solid #06080F;
 }
 
+aside{
+    font-size: small;
+    color: #B8B8B8;
+    flex-direction: column;
+    width: 30%;
+    border: 5px dashed #14213D;
+}
+aside.multiContainter img {
+    width: 100%;
+}
+aside.multiContainter p {
+    width: 100%;
+}
+
 
 header {
     margin-bottom: 10em;
@@ -87,6 +101,11 @@ h1 {
 #profile {
     /*border-radius: 2px;*/
     border: 5px dashed #FCA311;
+}
+
+/*styles for main elements*/
+#sgbLore {
+    float: right;
 }
 
 #headerGrid{
