@@ -8,10 +8,6 @@ body {
     box-sizing: border-box;
 }
 img{ width: 100%;}
-.imageContainter
-{
-    z-index: -1;
-}
 .multiContainter {
     display: flex;
     justify-content: space-between;
@@ -25,8 +21,20 @@ img{ width: 100%;}
 .multiContainter p {
     width: 60%;
 }
+.thumbnail img {
+    border: 3px dashed #FCA311;
+}
 .subtitle {
+    text-align: center;
     background-color: #FCA311;
+    border: 10px solid #06080F;
+}
+.projectType {
+    background-color: #B8B8B8;
+    border: 10px solid #06080F;
+}
+.codingLanguage {
+    background-color: #14213D;
     border: 10px solid #06080F;
 }
 
@@ -108,7 +116,17 @@ h1 {
     float: right;
 }
 
-#headerGrid{
+#thumbnailGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 50px 50px 1fr 50px 50px);
+    grid-template-rows: repeat(10, 50px);
+}
+#sgbImage {grid-area: 2 / 2 / 6 / 7;}
+#sgbTitle {grid-area: 5 / 1 / 7 / 4;}
+#sgbType {grid-area: 1 / 5 / 3 / 8;}
+#sgbLang {grid-area: 1 / 1 / 3 / 3;}
+
+#headerGrid {
     display: grid;
     width: 95%;
     margin: auto;
