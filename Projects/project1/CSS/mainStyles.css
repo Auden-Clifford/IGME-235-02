@@ -95,19 +95,19 @@ h1 {
     margin: auto;
 
     grid-template-columns: 20px 30px 1fr 60px 20px;
-    grid-template-rows: 80px 30px 1fr 1fr;
+    grid-template-rows: 80px 30px 1fr 0.5fr;
 }
 #banner {grid-area: 1 / 1 / 3 / -1;}
 #title {grid-area: 2 / 2 / 4 / 4;}
 #headline {grid-area: 4 / 2 / -1 / -2;}
 
-@media screen and (min-width: 930) {
+@media screen and (min-width: 860px) {
     #headerGrid{ 
-        grid-template-columns: 50px 270px 1fr 2fr 50px;
+        grid-template-columns: 50px 270px 1fr 3fr 50px;
         grid-template-rows: 80px 150px 60px 60px 50px;
     }
     #banner {grid-area: 1 / 1 / -3 / -1;}
-    #title {grid-area: 2 / 3 / 4 / 3;}
+    #title {grid-area: 2 / 2 / 5 / 3;}
     #headline {grid-area: -4 / -3 / -1 / -2;}
 }
 
