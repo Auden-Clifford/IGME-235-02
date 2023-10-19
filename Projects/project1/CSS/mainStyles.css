@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro&family=Montserrat:wght@300&family=Permanent+Marker&display=swap');
+
+/*General Rules*/
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    background-color: #06080F;
+    box-sizing: border-box;
+}
+img{ width: 100%;}
+.imageContainter
+{
+    z-index: -1;
+}
+.multiContainter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+}
+.multiContainter img, .multiContainter object {
+    
+    width: 30%;
+}
+.multiContainter p {
+    width: 60%;
+}
+.subtitle {
+    background-color: #FCA311;
+    border: 10px solid #06080F;
+}
+
+
+header {
+    margin-bottom: 10em;
+    width: 100%;
+}
+/*Top Navigation styles*/
+#topNav {
+    background-color: #14213D;
+    width: 100%;
+}
+#topNav ul {
+    display: flex;
+    justify-content: center;
+
+    width: 70%;
+    margin: auto;
+    padding: 0;
+}
+#topNav li {
+    list-style: none;
+    /*display: inline-block;*/
+}
+#topNav a{
+    display: block;
+    text-decoration: none;
+    color: #FCA311;
+    transition: all 0.3s ease 0s;
+
+    text-align: center;
+    font-size: large;
+    padding: 1.5em;
+    /*width: 30%;*/
+}
+#topNav a:hover, a:focus{
+    background-color: #E5E5E5;
+    color: #06080F;
+}
+#topNav a:active{
+    background-color: #06080F;
+    color: #E5E5E5;
+}
+/*----- end top Nav styles ----*/
+/*Styles for specific header elements*/
+#title{ 
+    background-color: rgba(252, 162, 17, 0.75);
+}
+h1 {
+    font-size: 40px;
+    padding: 0.5em;
+    margin: 40px 0;
+}
+#headline{
+    background-color: #14213D;
+}
+#profile {
+    /*border-radius: 2px;*/
+    border: 5px dashed #FCA311;
+}
+
+#headerGrid{
+    display: grid;
+    width: 95%;
+    margin: auto;
+
+    grid-template-columns: 20px 30px 1fr 60px 20px;
+    grid-template-rows: 80px 30px 1fr 1fr;
+}
+#banner {grid-area: 1 / 1 / 3 / -1;}
+#title {grid-area: 2 / 2 / 4 / 4;}
+#headline {grid-area: 4 / 2 / -1 / -2;}
+
+@media screen and (min-width: 930) {
+    #headerGrid{ 
+        grid-template-columns: 50px 270px 1fr 2fr 50px;
+        grid-template-rows: 80px 150px 60px 60px 50px;
+    }
+    #banner {grid-area: 1 / 1 / -3 / -1;}
+    #title {grid-area: 2 / 3 / 4 / 3;}
+    #headline {grid-area: -4 / -3 / -1 / -2;}
+}
+
+@media screen and (min-width: 1250px) {
+    body {
+        width: 1250PX;
+        margin: auto;
+    }
+    #headerGrid
+    {
+        width: 1200px;
+    }
+}
+

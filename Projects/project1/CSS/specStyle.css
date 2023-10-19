@@ -38,6 +38,8 @@ main {
 #tuition {grid-area: 4 / -4 / -3 / -1;}
 #medical {grid-area: -3 / -5 / -1 / -1;}
 
+
+
 body {
     font-family: 'Montserrat', sans-serif;
 }
