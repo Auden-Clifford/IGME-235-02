@@ -7,7 +7,7 @@ body {
     background-color: #06080F;
     box-sizing: border-box;
 }
-img{ width: 100%;}
+img { width: 100%;}
 .multiContainter {
     display: flex;
     justify-content: space-between;
@@ -37,19 +37,32 @@ img{ width: 100%;}
     background-color: #14213D;
     border: 10px solid #06080F;
 }
+.repoLink {
+    background-color: #B8B8B8;
+    border: 10px solid #06080F;
+}
 
-aside{
+/*asides and figures have similar, but not the same style*/
+aside {
     font-size: small;
     color: #B8B8B8;
     flex-direction: column;
     width: 30%;
     border: 5px dashed #14213D;
+    margin: 2em;
 }
-aside.multiContainter img {
+aside.multiContainter img, figure.multiContainter img {
     width: 100%;
 }
-aside.multiContainter p {
+aside.multiContainter p, figure.multiContainter p {
     width: 100%;
+}
+figure{
+    font-size: small;
+    color: #E5E5E5;
+    flex-direction: column;
+    width: 30%;
+    border: 5px dashed #FCA311;
 }
 
 
@@ -115,6 +128,9 @@ h1 {
 #sgbLore {
     float: right;
 }
+#sgbDebug {
+    float: left;
+}
 
 #thumbnailGrid {
     display: grid;
@@ -125,6 +141,7 @@ h1 {
 #sgbTitle {grid-area: 5 / 1 / 7 / 4;}
 #sgbType {grid-area: 1 / 5 / 3 / 8;}
 #sgbLang {grid-area: 1 / 1 / 3 / 3;}
+#sgbRepo {grid-area: 3 / 6 / 5 / 8;}
 
 #headerGrid {
     display: grid;
