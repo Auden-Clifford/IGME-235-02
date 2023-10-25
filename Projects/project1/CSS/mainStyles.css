@@ -15,6 +15,17 @@ h2 {
     color: #FCA311;
     border-bottom: 1px dashed;
 }
+h3 {
+    clear: left;
+}
+ul {
+    width: 50%;
+}
+a:link {color: #FCA311;}
+a:visited {color: #B8B8B8;}
+a:focus {background-color: #FCA311; color: #FDC05D}
+a:hover {color: #FDC05D;}
+a:active {color: #E5E5E5;}
 .multiContainter {
     display: flex;
     justify-content: space-between;
@@ -43,6 +54,10 @@ h2 {
     padding: 1.5em;
     padding-left: 50px;
 }
+.thumbnailTitle a {
+    text-decoration: none;
+    color: #E5E5E5;
+}
 .projectType {
     background-color: #B8B8B8;
     color: #06080F;
@@ -63,6 +78,8 @@ h2 {
     border: 10px solid #06080F;
     padding: 1em;
 }
+
+
 
 /*asides and figures have similar, but not the same style*/
 aside {
@@ -147,11 +164,29 @@ h1 {
 }
 
 /*styles for main elements*/
+#spCollide
+{
+    float: right;
+}
+/*
+#spEnemyStandard {
+    float: left;
+}
+#spEnemyShoot {
+    float: left;
+}
+#spEnemyFast {
+    float: left;
+}
+*/
 #sgbLore {
     float: right;
 }
 #sgbDebug {
     float: left;
+}
+#sgbEditor {
+    float: right;
 }
 
 #thumbnailGrid {

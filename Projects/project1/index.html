@@ -46,7 +46,7 @@
                 </div>
 
                 <div id="sgbTitle" class="thumbnailTitle">
-                    SHOTGUNBOOMERANG
+                    <a href="#sgb">SHOTGUNBOOMERANG</a>
                 </div>
 
                 <div id="sgbType" class="projectType">
@@ -109,6 +109,126 @@
                     </a>
                 </div>
             </nav>
+
+            <section id="spinner">
+                <h2>Spinner Scorge</h2>
+                <nav>
+                    <a href="https://github.com/IGME-202-2231/project-1-Auden-Clifford">GitHub</a><br>
+                    <a href="https://igme-202-2231.github.io/project-1-Auden-Clifford/">Play</a>
+                </nav>
+
+                <p>
+                    I was tasked with creating my own version of a classic top-down shoot ‘em up game in Unity. The game I created was Spinner Scorge, the base concept for which was 
+                    “what if we give Beyblades guns?” My goal was to introduce the chaotic interactions of spinning objects colliding to the SHMUP genre.
+                </p>
+
+                <h3>Game Mechanics</h3>
+
+                <p>
+                    Just like when dueling with Beybldes, if your spinner stops spinning you’re out. This means that the player’s angular velocity was this game’s equivalent to 
+                    health. Spinners lose some angular velocity (health) in the process of colliding with one another, but some spinners have guns, the bullets from which directly 
+                    slow other spinners’ rotation when they hit. The player can only regain their “health” by getting kills or clearing whole waves of enemies.
+                </p>
+
+                <p>
+                    <figure id="spCollide" class="multiContainter">
+                        <img src="media/SGB_debug.PNG" alt="">
+
+                        <p>
+                            Wham! The spinners collide and are sent flying across the map. This chaotic motion was 
+                            achieved by programmatically simulating physics collisions. Unfortunately, the code is 
+                            essentially "faking it" as momentum is not properly conserved, but the effect 
+                            nonetheless is a fun game mechanic regardless of real-world accuracy.
+                        </p>
+                    </figure>
+
+                    Because I wanted the spinners to move and collide like tops I had to add a few things uncommon to the SHMUP genre. The first was a physics/collision system, much 
+                    like rigid body collisions. This project required that I not use Unity’s built-in rigid body components, so the physics code is my own design. In this system, 
+                    spinners move using force vectors and physically collide with one another rather than simply taking damage on contact. The next addition was unbound movement 
+                    across an infinite plane. It is typical of SHMUP games to either have a fixed view or a scrolling view, however, it would be difficult to evoke the chaotic 
+                    feeling of a Beyblade duel if the player was locked to moving in one direction, so I simply made the view follow the player as they move and did not set bounds 
+                    for their movement.
+                </p>
+
+                <p>
+                    The object of the game is to get as high a score as possible without dying. The game ends when the player dies and the player may then retry for a higher score. 
+                    The player gains points toward their score by getting kills. Certain types of enemies give more points than others. These enemies are spawned in random locations 
+                    around the player and the number and difficulty of enemies spawned increases with the current round. A round will last as long as it takes the player to kill all 
+                    of the enemies that were spawned at the beginning of the round. As soon as the player kills the last enemy the next round begins and new enemies are spawned.
+                </p>
+
+                <h4>Enemy Types</h4>
+                <ul>
+                        <li id="spEnemyStandard" class="multiContainter">
+                            <img src="media/SGB_debug.PNG" alt="">
+    
+                            <p>
+                                <strong>Standard Enemy</strong> - These enemies seek out the player and attempt to collide with them. They're small and a little slower than the player, 
+                                however they are the most plentiful of the enemies and can easily overwhelm the player.
+                            </p>
+                        </li>
+
+
+                        <li id="spEnemyShoot" class="multiContainter">
+                            <img src="media/SGB_debug.PNG" alt="">
+    
+                            <p>
+                                <strong>Shooter Enemy</strong> - Instead of being a melee threat, when these enemies get close to the player they shoot a fan of bullets out in a circle, 
+                                causing chaos for friend and foe alike. These enemies are somewhat rare, only one will spawn for every 5 standard enemies.
+                            </p>
+                        </li>
+
+
+                        <li id="spEnemyFast" class="multiContainter">
+                            <img src="media/SGB_debug.PNG" alt="">
+    
+                            <p>
+                                <strong>Fast Enemy</strong> - These enemies are fast, small, and pack a massive punch, the fast enemies are capable of shredding a player's health bar very 
+                                quickly. These enemies are rare, only 1 will spawn for every 10 standard enemies spawned.
+                            </p>
+                        </li>
+
+                </ul>
+
+                <h3>Problems Overcome</h3>
+
+                <p>
+                    When I started this project I was still in the process of getting acquainted with Unity’s component-based architecture. Re-adjusting my thinking to work with this 
+                    system was challenging and led to some code issues earlier in the project. Some of my components were heavily coupled with others and would not function if the 
+                    other components were not present. I managed to cut back on these design issues later in the project, designing my components to be more self-sufficient and 
+                    function on their own. There are still some components that rely on others in order to work, but in the end, I made sure not to code this way unless I was sure it 
+                    was necessary for the function of the program.
+                </p>
+
+                <p>
+                    I also had some trouble implementing the physics system for this game. I realized that calculating the forces involved in the collision of two objects would not 
+                    be as simple as rearranging some College Physics I equations so I ended up reaching out to a friend for help. This friend, an upperclassman and a physics major, 
+                    informed me that the answer I wanted would require that the computer perform a computationally expensive operation each time collisions were detected and that 
+                    rather than spending time figuring this problem out only for it to cause massive lag, I should just fudge the collision as accurately as possible and leave it at 
+                    that. This was an imperfect solution, but it highlighted an important lesson I learned during this project which is that I don’t always need a perfect solution. 
+                    The collision system I ended up with works well enough despite not being completely accurate to real-life conservation of momentum and honestly might feel better 
+                    during gameplay than if the system was completely physically accurate. 
+                </p>
+
+                <h3>What I Would do Differently</h3>
+
+                <p>
+                    I’m pretty happy with how this project turned out all things considered. It’s still fairly 
+                    recent so I’ve yet to have any huge revelations that make me rethink my approach to the code. 
+                    The only thing I think I might change given the time is I would spend some more time looking at 
+                    existing rigid body collision algorithms to see how mine might be improved upon.
+                </p>
+
+                <p>
+                    As for features I’d like to add, I would want to add bits of terrain and walls around the map 
+                    to give the arena more interest than it currently has. Right now my script only handles 
+                    bounding circle collisions so adding any kind of walls or terrain would have required me to 
+                    make major changes to the collision system. My hope is that having terrain to bounce off of 
+                    in addition to enemies would keep the fights more interesting and would be more evocative of a 
+                    Beyblade duel where the spinners are as likely to bounce off the sides of the arena as each 
+                    other.
+                </p>
+            </section>
 
             <section id="sgb">
                 <h2>SHOTGUNBOOMERANG</h2>
@@ -191,27 +311,182 @@
 
                 <h3>Problems Overcome</h3>
 
+                <ul>
+                    <li>Physics problem</li>
+                    <li>Lag: Level Editor</li>
+                    <li>Planning Problem</li>
+                </ul>
+
+                <p>
+                    One of the largest setbacks during this project came when we encountered a physics bug. Keeping 
+                    momentum and flow with physics-based movement was essential to the gameplay loop, so the bug was 
+                    potentially catastrophic if it wasn’t fixed. I set up several troubleshooting meetings with the 
+                    team so that we could all discuss potential solutions. Our initial approaches only seemed to swap 
+                    the location where the bug was occurring, it was only when I looked at the problem from a 
+                    different angle that I was able to come up with the answer. All of our solutions up to then had 
+                    been focused on the order in which collisions were resolved on the horizontal or vertical axis. 
+                    However, I realized that rather than resolving one axis or the other first, resolving the 
+                    collisions in order of largest area would always result in a more optimal outcome. We had been 
+                    stuck in a loop of thinking of solutions centered on one axis or the other and it took me 
+                    stepping back and looking at the problem as a whole to realize a solution.
+                </p>
+
+                <p>
+                    <figure id="sgbEditor" class="multiContainter">
+                        <img src="media/SGB_debug.PNG" alt="">
+
+                        <p>
+                            In the current build, scrolling around the level is easy and quick. This was not always the case, before I fixed the issue moving from one part of the level to the other could take several seconds.
+                        </p>
+                    </figure>
+
+                    Sometimes a bug causes catastrophic consequences for a project, and sometimes they’re just 
+                    annoying. This was the case with a different issue I encountered while working on the level 
+                    editor. I had the program in a state where it technically worked, however, if the user attempted 
+                    to scroll the view from one area of the level to another it would take several seconds for the 
+                    view to respond. It was working, just really slowly. The editor used a 2D array of picture boxes 
+                    to display game tiles in the 2D environment where each tile in a level would be represented by a 
+                    picture box. The problem was that picture boxes are somewhat complex structures, and each time 
+                    the user scrolled around the level, these boxes would need to be moved around or hidden as they 
+                    moved offscreen. This process caused significant lag, and the problem would become much worse 
+                    with larger levels. I was eventually able to come up with a solution for this issue by rethinking 
+                    the way tiles were stored in the program. Rather than each tile being assigned its own picture 
+                    box, only the tiles’ sprites would be stored in the 2D array. The sprites would then fill into a 
+                    smaller grid of picture boxes making up the viewport as they came into view. This way, the 
+                    program only needed enough picture boxes to fill the view and didn’t have to deal with the 
+                    computationally expensive process of moving and hiding the boxes, now only needing to swap out 
+                    their image when the user scrolls.
+                </p>
+
+                <p>
+                    Aside from just coding errors, we also had to tackle some structural issues as well. 
+                    Specifically, we encountered an issue that was caused by a lack of a realistic plan for the 
+                    overall gameplay loop. We had core mechanics we knew we were going to implement, but some of our 
+                    plans were very loosely defined and often overambitious. Aspects we originally thought of for 
+                    the gameplay loop included traversal challenges, clearing enemies, puzzle solving, boss 
+                    monsters, and even cutscenes! As the project went on, however, it became clear that many of 
+                    these things would have to become stretch goals. Additionally, it should have been clear to us 
+                    from the beginning that the gameplay would not feel like a focused and coherent experience with 
+                    so many different modes of play. Luckily, as we got further into the project our team was able 
+                    to recognize that our plan needed to be re-focused and we would meet several times to discuss 
+                    restructuring parts of the project.
+                </p>
+
                 <h3>What I Would Change</h3>
+
+                <p>
+                    If I were to do this project again the first thing I would change would be to spend more time on planning. It definitely became clear to us over the course of the 
+                    project that having clear and realistic goals streamlines production. If we had spent less time rolling back and forth between ideas and more time implementing 
+                    systems that we planned weeks in advance we could have finished the project much more quickly and incorporated many more stretch goals. 
+                </p>
+
+                <p>
+                    In hindsight, I believe that many of my solutions for passing information between classes were less than ideal. Being more experienced now in the ways of 
+                    reducing coupling and managing information There are a few systems that I may replace or alter to streamline their functioning. One thing that I may change is 
+                    the collision detection system. Each object in the game currently runs its own collision detection function internally by checking its own bounds against those 
+                    of each other object in the level. This, of course, requires that each game object has access to a list of all other objects. Rather than do this I would remake 
+                    this system to include some sort of collision manager class, likely a singleton, that checks for any collisions each frame and then allows the objects to resolve 
+                    their collisions internally. Additionally, unlike the current system, which has a different collision detection process for different types of objects, this 
+                    system would not care whether the object was an enemy, a tile, or a projectile; it would be able to simply detect these collisions and tell the objects to resolve 
+                    them regardless of what kind of objects they are.
+                </p>
 
             </section>
 
             <section id="basement">
                 <h2>Basement_Green</h2>
 
+                <p>
+                    In this project I created an immersive VR environment based on a real photo as a method to practice my level and environment design skills. 
+                </p>
+
                 <h3>Goals</h3>
-                <li>Test my VR development skills</li>
-                <li>Learn about the Source 2 engine</li>
-                <li>Create an immersive VR environment</li>
+                <ul>
+                    <li>Test my VR development skills</li>
+                    <li>Learn about the Source 2 engine</li>
+                    <li>Create an immersive VR environment</li>
+                </ul>
+                
+                <p>
+                    Leading up to this project I had been following a series of online tutorials to learn the use of the the Valve developer tools that come with the VR game 
+                    Half-Life: Alyx. I had spent a lot of time completing assorted exercises to practice the different tools and techniques of VR development, but had yet to use 
+                    them in a complete project.
+                </p>
+
+                <p>
+                    I wanted to test what I had learned so far and cement my understanding of the development tools I had been given so I decided to start a mapping project. The goal 
+                    was to create a fully-detailed level within Half-Life: Alyx’s Hammer Editor. I wanted this environment to be as immersive as possible to truly take advantage of 
+                    the VR platform’s strengths.
+                </p>
+
+                <p>
+                    Beyond simply practicing the skills I had learned, however, I hoped the project would push me to learn more about the editor as I tackled unforeseen problems and 
+                    thought of new things to try. I have found that “learning by doing” is one of the fastest ways to pick up skills you otherwise would have never encountered.
+                </p>
 
                 <h3>The Challenge</h3>
 
+                <p>
+                    I decided to come up with a relatively simple challenge for myself to serve as a springboard for the project. The goal would be to choose an image from somewhere 
+                    on the internet and recreate it as faithfully as possible in a VR environment. Furthermore, I would need to extrapolate from the image and create some areas of 
+                    the environment that are not visible in the original.
+                </p>
+
+                <p>
+                    The image I chose was a fairly simple photo of a rubbled abandoned basement. It was a small enough space that I could reasonably expect to recreate it faithfully 
+                    but also had enough interest and detail to allow me to push my skills. Additionally, the image clearly implied that there were other areas connected to the 
+                    basement that were not in view, such as a stairwell and an upstairs.
+                </p>
+                
+                <p>
+                    I began by boxing out a rough outline of the environment before moving on to add details. I decided that the environment would be split into 3 areas: the 
+                    basement, which is visible in the image; the stairwell, the entrance to which is visible in the image but which is otherwise unseen; and the upstairs, which can 
+                    just barely be seen in the image through the holes in the basement’s ceiling.
+                </p>
+
+                <p>
+                    The contents and design of the basement were more or less already decided for me by the image. However, I would have to come up with my own plan for the 
+                    stairwell and upper floor. I wanted the upper floor to contrast the basement, so I decided that it would be a cleaner, well-lit environment with several windows 
+                    and a skylight to juxtapose the basement’s cluttered, chaotic darkness. The stairwell was a bit different, since it would be hidden from the view of both the 
+                    basement and the upstairs I could basically do whatever I wanted with it. I decided to use this place to practice working with more organic environments since 
+                    the other two areas did not present much opportunity to do so. To spice things up a bit I decided to fill the area with some of Half-Life: Alyx’s alien flora 
+                    assets, creating a truly bizarre spectacle things that glow and things that grow.
+                </p>
+
+                <p>
+                    Once these interiors were done, there was one last piece that I wanted to add. The upstairs windows looked out on an endless void, and I had yet to practice my 
+                    skills at using Hammer editor’s 3D skybox system. Naturally, this was the perfect opportunity to add some background elements to ground the scene in a more 
+                    immersive reality. Creating a skybox pushed me to learn about Source 2’s prefab architecture and forced me to figure out how to use tools to control the scene’s 
+                    lighting.
+                </p>
+
+                <p>
+                    I also ran into a common VR design challenge in the course of the project. It’s pretty well known that one of the main drawbacks of VR devices is the potential to 
+                    cause motion sickness. This is especially the case when the player must navigate uneven terrain which causes the view to move up and down rapidly. This is exactly 
+                    the problem the uneven, rubble-covered floor of the basement caused. I wanted to make this environment as VR-friendly as possible, so I couldn’t just leave it as 
+                    it was, however, I also didn’t want to make the basement floor completely flat since it would feel unnatural compared to the dilapidated state of the rest of the 
+                    room and break immersion. Instead, I created a fake invisible floor to go overtop the bumpy terrain. The player could now walk around the floor without causing 
+                    motion sickness and no aesthetic value was lost.
+                </p>
+
+                <p>
+                    I was very happy with the end result. The map I made was no sprawling spectacle of awe, but that small space was packed with detail and I tend to think that VR 
+                    gameplay shines in compact environments.
+                </p>
+
                 <h3>What I Would Change</h3>
+
+                <p>
+                    Much of this project was simply done on the fly. I implemented ideas in as they came to me and didn’t do too much planning before the project began. Since my goal 
+                    was to learn as much as possible about Source 2 and VR development, this approach was beneficial as it allowed me to naturally explore new concepts. If I were to 
+                    start a similar project with any purpose other than learning I would spend much more time in planning. I would want to sketch floor plans for the levels and come 
+                    up with methods to emphasize important game mechanics.
+                </p>
             </section>
 
-            <section id="spinner">
-                <h2>Spinner Scorge</h2>
 
-            </section>
+
+            
 
         </main>
         <footer>
