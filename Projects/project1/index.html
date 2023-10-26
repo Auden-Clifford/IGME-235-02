@@ -10,9 +10,9 @@
         <header>
             <nav id="topNav">
                 <ul>
+                    <li><a href="#spinner">Spinner Scorge</a></li>
                     <li><a href="#sgb">Shotgun Boomerang</a></li>
                     <li><a href="#basement">Basement Green</a></li>
-                    <li><a href="#spinner">Spinner Scorge</a></li>
                 </ul>
             </nav>
 
@@ -37,7 +37,7 @@
                 <div id="aboutMe" class="info">
                     <h2>About Me</h2>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque cumque, nemo omnis eligendi voluptate repellendus enim velit aliquam magnam fuga?
+                        I’m Auden Clifford, A second-year Game Design and Development student at Rochester Institute of Technolofy. I first developed at taste for designing games during highscool when I got into minecraft modding and writing Dungeons & Dragons campaigns. In the present day, I'm currently interested in exploring VR development. I excel at the programming and always enjoy a challenge or an interesting logic problem. I'm well-versed in various tools like Visual Studio, IntelliJ, Unity, Unreal, MonoGame, Source 2, Photoshop, Maya, Blender, and GitHub.The coding languages I've worked with so far include C#, JavaScript, Java, Python, HTML, and CSS.
                     </p>
                 </div>
 
@@ -78,7 +78,7 @@
 
                 <!--repo not yet set up-->
                 <div id="bgRepo" class="repoLink imageContainer">
-                    <!--<a href="https://github.com/404">--> 
+                    <a href="https://github.com/404"> 
                         <img src="media/github-mark-white.png" alt="GitHub Link">
                     </a>
                 </div>
@@ -130,18 +130,18 @@
                     slow other spinners’ rotation when they hit. The player can only regain their “health” by getting kills or clearing whole waves of enemies.
                 </p>
 
+                <figure id="spCollide" class="multiContainter">
+                    <img src="media/spinner.gif" alt="">
+
+                    <p>
+                        Wham! The spinners collide and are sent flying across the map. This chaotic motion was 
+                        achieved by programmatically simulating physics collisions. Unfortunately, the code is 
+                        essentially "faking it" as momentum is not properly conserved, but the effect 
+                        nonetheless is a fun game mechanic regardless of real-world accuracy.
+                    </p>
+                </figure>
+
                 <p>
-                    <figure id="spCollide" class="multiContainter">
-                        <img src="media/SGB_debug.PNG" alt="">
-
-                        <p>
-                            Wham! The spinners collide and are sent flying across the map. This chaotic motion was 
-                            achieved by programmatically simulating physics collisions. Unfortunately, the code is 
-                            essentially "faking it" as momentum is not properly conserved, but the effect 
-                            nonetheless is a fun game mechanic regardless of real-world accuracy.
-                        </p>
-                    </figure>
-
                     Because I wanted the spinners to move and collide like tops I had to add a few things uncommon to the SHMUP genre. The first was a physics/collision system, much 
                     like rigid body collisions. This project required that I not use Unity’s built-in rigid body components, so the physics code is my own design. In this system, 
                     spinners move using force vectors and physically collide with one another rather than simply taking damage on contact. The next addition was unbound movement 
@@ -160,7 +160,7 @@
                 <h4>Enemy Types</h4>
                 <ul>
                         <li id="spEnemyStandard" class="multiContainter">
-                            <img src="media/SGB_debug.PNG" alt="">
+                            <img src="media/Spinner_EnemyStandard.svg" alt="">
     
                             <p>
                                 <strong>Standard Enemy</strong> - These enemies seek out the player and attempt to collide with them. They're small and a little slower than the player, 
@@ -170,7 +170,7 @@
 
 
                         <li id="spEnemyShoot" class="multiContainter">
-                            <img src="media/SGB_debug.PNG" alt="">
+                            <img src="media/Enemy_Shooter.svg" alt="">
     
                             <p>
                                 <strong>Shooter Enemy</strong> - Instead of being a melee threat, when these enemies get close to the player they shoot a fan of bullets out in a circle, 
@@ -180,7 +180,7 @@
 
 
                         <li id="spEnemyFast" class="multiContainter">
-                            <img src="media/SGB_debug.PNG" alt="">
+                            <img src="media/Enemy_Fast.svg" alt="">
     
                             <p>
                                 <strong>Fast Enemy</strong> - These enemies are fast, small, and pack a massive punch, the fast enemies are capable of shredding a player's health bar very 
@@ -232,6 +232,9 @@
 
             <section id="sgb">
                 <h2>SHOTGUNBOOMERANG</h2>
+                <nav>
+                    <a href="https://github.com/Auden-Clifford/SHOTGUN-BOOMERANG">GitHub</a><br>
+                </nav>
 
                 <p>
                     For this project I worked with a team to create a side-scrolling 
@@ -284,15 +287,15 @@
                     player to track and what each of them meant for the player’s interaction.
                 </p>
 
+                <figure id="sgbDebug" class="multiContainter">
+                    <img src="media/SGB_debug.PNG" alt="">
+
+                    <p>
+                        <strong>Debug Mode</strong> in action; Hitboxes are highlited, the shotgun's effective radius is drawn, along with it's curent spread, and In the top-left corner various useful statistics are displayed.
+                    </p>
+                </figure>
+
                 <p>
-                    <figure id="sgbDebug" class="multiContainter">
-                        <img src="media/SGB_debug.PNG" alt="">
-
-                        <p>
-                            <strong>Debug Mode</strong> in action; Hitboxes are highlited, the shotgun's effective radius is drawn, along with it's curent spread, and In the top-left corner various useful statistics are displayed.
-                        </p>
-                    </figure>
-
                     I created a debug mode to mitigate the effects of the project’s 
                     increasing complexity on our ability to find and correct errors. This 
                     system would allow us to visually track key information like hitboxes and 
@@ -331,15 +334,15 @@
                     stepping back and looking at the problem as a whole to realize a solution.
                 </p>
 
+                <figure id="sgbEditor" class="multiContainter">
+                    <img src="media/editor.gif" alt="">
+
+                    <p>
+                        In the current build, scrolling around the level is quick and easy. This was not always the case, before I fixed the issue moving from one part of the level to the other could take several seconds.
+                    </p>
+                </figure>
+
                 <p>
-                    <figure id="sgbEditor" class="multiContainter">
-                        <img src="media/SGB_debug.PNG" alt="">
-
-                        <p>
-                            In the current build, scrolling around the level is quick and easy. This was not always the case, before I fixed the issue moving from one part of the level to the other could take several seconds.
-                        </p>
-                    </figure>
-
                     Sometimes a bug causes catastrophic consequences for a project, and sometimes they’re just 
                     annoying. This was the case with a different issue I encountered while working on the level 
                     editor. I had the program in a state where it technically worked, however, if the user attempted 
@@ -402,7 +405,7 @@
 
                 <h3>Goals</h3>
                 <ul>
-                    <li>Test my VR development skills</li>
+                    <li>Test my VR design skills</li>
                     <li>Learn about the Source 2 engine</li>
                     <li>Create an immersive VR environment</li>
                 </ul>
@@ -426,16 +429,16 @@
 
                 <h3>The Challenge</h3>
 
+                <figure id="bgReference" class="multiContainter">
+                    <img src="media/abandoned_basement_green.jpg" alt="">
+                    <img src="media/basement_green_1.PNG" alt="">
+
+                    <p>
+                        On top is the original image I referenced for the project and below is the closest equivalent viewpoint from the VR environment. The overall structure of the building is the same, but the lighting in the VR scene is much more dramatic.
+                    </p>
+                </figure>
+
                 <p>
-                    <figure id="bgReference" class="multiContainter">
-                        <img src="media/SGB_debug.PNG" alt="">
-                        <img src="media/SGB_debug.PNG" alt="">
-
-                        <p>
-                            On top is the original image I referenced for the project and below is the closest equivalent viewpoint from the VR environment. The overall structure of the building is the same, but the lighting in the VR scene is much more dramatic. The similarities are much more noticeable with the headset.
-                        </p>
-                    </figure>
-
                     I decided to come up with a relatively simple challenge for myself to serve as a springboard for the project. The goal would be to choose an image from somewhere 
                     on the internet and recreate it as faithfully as possible in a VR environment. Furthermore, I would need to extrapolate from the image and create some areas of 
                     the environment that are not visible in the original.
@@ -456,7 +459,20 @@
                 <p>
                     The contents and design of the basement were more or less already decided for me by the image. However, I would have to come up with my own plan for the 
                     stairwell and upper floor. I wanted the upper floor to contrast the basement, so I decided that it would be a cleaner, well-lit environment with several windows 
-                    and a skylight to juxtapose the basement’s cluttered, chaotic darkness. The stairwell was a bit different, since it would be hidden from the view of both the 
+                    and a skylight to juxtapose the basement’s cluttered, chaotic darkness. 
+                </p>
+
+                <figure id="bgOther" class="multiContainter">
+                    <img src="media/basement_green_2.PNG" alt="">
+                    <img src="media/basement_green_4.PNG" alt="">
+
+                    <p>
+                        Neither the stairwell (top) nor the upstairs (bottom) are visible in the original image, so the designs had to be thought up on the fly. I think these do a good job of encapsulating the range of different environments that can be created in Half-Life: Alyx.
+                    </p>
+                </figure>
+                
+                <p>
+                    The stairwell was a bit different, since it would be hidden from the view of both the 
                     basement and the upstairs I could basically do whatever I wanted with it. I decided to use this place to practice working with more organic environments since 
                     the other two areas did not present much opportunity to do so. To spice things up a bit I decided to fill the area with some of Half-Life: Alyx’s alien flora 
                     assets, creating a truly bizarre spectacle things that glow and things that grow.
@@ -499,7 +515,21 @@
 
         </main>
         <footer>
-
+            <section>
+                <h2>Contact</h2>
+            <address>
+                <ul>
+                    <li><a href="www.linkedin.com/in/auden-clifford">LinkedIn</a></li>
+                    <li><a href="mailto:awpclifford@gmail.com">email</a></li>
+                    <li>Phone: (838) 202-7433</li>
+                </ul>
+            </address>
+            </section>
+            
+            <section>
+                <h2>Documentation</h2>
+            <a href="doc.html">Site design documentation</a>
+            </section>
         </footer>
     </body>
 </html>
