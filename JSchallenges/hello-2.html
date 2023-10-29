@@ -6,15 +6,17 @@
    <script>
      "use strict";
      console.log("Hello world!");
-     const answer = 42;
+     let answer = 42;
      // string concatenation
-     console.log("The answer to everything is " + answer); 
+     console.log(`The answer to everything is ${answer}`); 
 	
      let x = 1;
      let y = 1;
-     let sum = x + y;
+     let z = 1;
+     let sum = x + y + z;
      // string templating (ES6 only)
-     console.log(`${x} + ${y} is ${sum}`); 
+     console.log(`${x} + ${y} + ${z} is ${sum}`); 
+     answer = 43;
    </script>
 </head>
 <body>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="utf-8" />
+   <title>DOM-1</title>
+   <style>
+      body{border:1px solid gray;}
+   </style>
+   <script>
+     "use strict";
+     // first, get a reference to the first <h1> on the page
+     let h1 = document.querySelector("h1");
+
+     // second, change its HTML
+     h1.innerHTML = "My <i>UFO</i> Page";	
+</script>
+</head>
+<body>
+<h1>My Page</h1>
+<h2>Info</h2>
+<h2>Pictures</h2>
+<h2>Info</h2>
+<p>Blah Blah Blah</p>
+<p>Blah Blah Blah</p>
+<footer>Copyright &copy; 20XX</footer>
+</body>
+</html>

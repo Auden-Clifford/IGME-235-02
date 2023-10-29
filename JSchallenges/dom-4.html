@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>DOM-3</title>
+	<style>
+		body{border:1px solid gray;}
+		p b{transform: rotate(20deg)}
+	</style>
+</head>
+<body>
+<h1>My Page</h1>
+<h2>Info</h2>
+<h2>Pictures</h2>
+<h2>More Info</h2>
+<p>Blah <b>Blah</b> Blah</p>
+<p>Blah <b>Blah</b> Blah</p>
+<p id="lastParagraph">Blah <b>Blah</b> Blah</p>
+<footer>Copyright &copy; <b>20XX</b></footer>
+<script>
+	"use strict";
+	// 1 - get a reference to ALL of the <h2> elements on the page and add a number to the beginning of them
+	// also, do some CSS transforms on them.
+	let allHeadings = document.querySelectorAll("h2");
+
+	// 2 - loop through array using classic `for` loop
+	for(let i=0;i<allHeadings.length;i++){
+		let h2 = allHeadings[i];
+		let currentText = h2.innerHTML;
+		h2.innerHTML = "#" + (i + 1) + " - " + currentText;
+		h2.style.transform = "translateX(" + (i * 120) + "px) translateY(" + (i * 100) + "px) rotate(" + 
+		(i * 20) + "deg)";
+		
+		// or write the above as an ES6 template string
+		//h2.style.transform = `translateX(${i*120}px) translateY(${i*100}px) rotate(${i*20}deg)`;
+		
+		h2.style.display = "inline-block"; // make sure the h2 isn't too wide, or it will rotate off the screen
+	}
+	
+	// 3 - use a *descendent selector* to target the <b> tags inside of paragraphs 
+	// but not that <b> tag in the footer
+	let myList = document.querySelectorAll("p b");
+	for (let element of myList) { // use the ES6 `for...of` loop 
+		// we  set CSS values through the .style property
+		element.style.color = "red";
+		element.style.fontVariant = "small-caps";
+		element.style.fontFamily = "monospace";
+		element.style.fontSize = "1.5em";
+		element.style.border = "2px solid pink";
+		element.style.paddingTop = "5px";
+		element.style.paddingBottom = "5px";
+	}
+
+    // select the <p> tags and do the translate thing
+    let paragraphs = document.querySelectorAll("p");
+    for(let i = 0; i < paragraphs.length; i++)
+    {
+        let p = paragraphs[i];
+        p.style.transform = `translateX(${i*120}px) translateY(${i*100}px) rotate(${i*20}deg)`;
+    }
+	
+	</script>
+</body>
+</html>
