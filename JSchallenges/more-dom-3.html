@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>More DOM 3</title>
+	<style>
+		body{border:1px solid gray;}
+	</style>
+</head>
+<body>
+<h1>My Page</h1>
+<h2>Info</h2>
+<p>Blah <b>Blah</b> Blah</p>
+<h2>Links</h2>
+<ul>
+	<li><a href="http://www.apple.com">Apple</a></li>
+	<li><a href="http://www.google.com">Google</a></li>
+</ul>
+
+<script>
+	"use strict";
+	// 1 - Create a <footer>
+	let footer = document.createElement("footer");
+	
+	// 2 - set the title attribute, which gives us a tooltip 
+	footer.setAttribute("title","Don't copy this page without my permission!");
+	
+	// 3 - create the text of the <footer>
+	let textNode = document.createTextNode("© 20XX by Ima Student");
+	
+	// 4 - insert the text into the <footer>
+	footer.appendChild(textNode);
+	
+	// 5 - insert the <footer> at the end of the <body>
+	document.body.appendChild(footer);
+	
+	/* NEW CODE*/
+	// 6 - this code does the same thing as #1-#5 above, without having to use
+	// document.createTextNode() or element.setAttribute()
+	
+	// add another <footer>, with less code!
+	let footer2 = document.createElement("footer");
+	footer2.title = "Don't copy this page without my permission!";
+	footer2.innerHTML = "&copy; 20XX by Ima Student"
+	document.body.appendChild(footer2);
+	
+</script>
+</body>
+</html>

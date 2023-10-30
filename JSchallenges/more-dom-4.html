@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>More DOM 4</title>
+	<style>
+		body{border:1px solid gray;}
+	</style>
+</head>
+<body>
+<h1>My Page</h1>
+<h2>Info</h2>
+<p>Blah <b>Blah</b> Blah</p>
+<h2>Links</h2>
+<ul>
+	<li><a href="http://www.apple.com">Apple</a></li>
+	<li><a href="http://www.google.com">Google</a></li>
+</ul>
+
+<script>
+	"use strict";
+	// 1 - Create a <footer>
+	let footer = document.createElement("footer");
+	
+	// 2 - set the title attribute, which gives us a tooltip 
+	footer.setAttribute("title","Don't copy this page without my permission!");
+	
+	// 3 - create the text of the <footer>
+	let textNode = document.createTextNode("© 20XX by Ima Student");
+	
+	// 4 - insert the text into the <footer>
+	footer.appendChild(textNode);
+	
+	// 5 - insert the <footer> at the end of the <body>
+	document.body.appendChild(footer);
+	
+	// 6 - this code does the same thing as #1-#5 above, without having
+	// to use document.createTextNode() or element.setAttribute()
+	
+	// add another <footer>!
+	let footer2 = document.createElement("footer");
+	footer2.title = "Don't copy this page without my permission!";
+	footer2.innerHTML = "&copy; 20XX by Ima Student"
+	document.body.appendChild(footer2);
+	
+	/* NEW CODE*/
+	// 7 - create a new <li> and insert it into the end of the <ul>
+	let listItem = document.createElement("li");
+	listItem.innerHTML = "GeoCities";
+	
+	let unorderedList = document.querySelector("ul");
+	unorderedList.appendChild(listItem);
+	
+	// 8 - create a new <li> and a new <a>
+	// 8A - create an <li> with a link in it
+	let fbListItem = document.createElement("li");
+	let link = document.createElement("a");
+	link.innerHTML = "Facebook";
+	link.href = "http://www.facebook.com";
+	fbListItem.appendChild(link)
+	
+	// 8B - get a reference to the google list item
+	let googleListItem = document.querySelector("ul li a[href*='google.com']").parentNode;
+	
+	// 8C - insert the Facebook link before the Google list item
+	unorderedList.insertBefore(fbListItem,googleListItem);
+
+    let amazonLink = document.createElement("a");
+    amazonLink.innerHTML = "Amazon";
+    amazonLink.href = "http://www.amazon.com";
+
+    let amazonListItem = document.createElement("li")
+    amazonListItem.appendChild(amazonLink);
+
+    unorderedList.appendChild(amazonListItem);
+
+	// 9 - Modify the google link's href
+    let googleLink = document.querySelector("ul li a[href*='google.com']");
+    googleLink.href = "http://www.bing.com";
+
+    document.querySelector("ul li a[href*='apple.com']").href = "http://lowendmac.com";
+
+    // 10 - Delete the paragraph
+    document.body.removeChild(document.querySelector("p"));
+</script>
+</body>
+</html>
