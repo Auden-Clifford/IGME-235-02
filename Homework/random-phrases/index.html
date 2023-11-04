@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Guard's Wisdom</title>
+
+    <link rel="stylesheet" href="styles/mainStyles.css">
+
+    <script>
+        "use strict"
+
+        let guardQuotes = [
+            "I used to be an adventurer like you. Then I took an arrow in the knee...",  
+            "Disrespect the law, and you disrespect me.", 
+            "No lollygaggin'.", 
+            "My cousin's out fighting dragons, and what do I get? Guard duty.", 
+            "I fear the night. Because the werewolves and vampires don't.", 
+            "Fear not. Come dragon or giant, we'll be ready.",
+            "Brigands I can handle, but this talk of dragons? World's gone mad, I say.",
+            "Staying safe I hope.",
+            "Could sure use a warm bed right about now...",
+            "I'd be a lot warmer and a lot happier with a bellyful of mead...",
+            "Watch the skies, traveler.",
+            "I mostly deal with petty thievery and drunken brawls. Been too long since we've had a good bandit raid.",
+            "No matter what else happens, the guards will always be grateful for everything you've done.",
+            "Stormcloaks, Imperials, dragons. Ain't no matter to me what I kill. Let them come."
+        ];
+
+        let display;
+        let button;
+
+        /*
+        returns a random quote from the guardquotes array
+        */
+        function RandomQuote()
+        {
+            return guardQuotes[Math.floor(Math.random() * guardQuotes.length)];
+        }
+
+        /*
+        displays a random quote on the page
+        */
+        function DisplayQuote()
+        {
+            display.innerHTML = RandomQuote();
+        }
+
+        function RandomBackground()
+        {
+            document.querySelector("html").style.backgroundImage = `url("media/guard${Math.floor(Math.random() * 3)+1}.jpg")`
+        }
+
+        /*
+        once the page has loaded, this function should set up the variables and display a phrase
+        */
+        function Init()
+        {
+            display = document.querySelector("#phraseDisplay");
+            button = document.querySelector("button");
+
+            RandomBackground();
+
+            button.onclick = DisplayQuote;
+
+            DisplayQuote();
+        }
+
+        window.onload = Init;
+        
+    </script>
+</head>
+<body>
+    <header>
+        <h1>The Guard's Wisdom</h1>
+    </header>
+    <main>
+        <div id="phraseDisplay">This is a test phrase</div>
+        <button>"Guard, what is your wisdom?"</button>
+    </main>
+    <footer>
+        <p>Created by: Auden Cliford</p>
+    </footer>
+    
+</body>
+</html>

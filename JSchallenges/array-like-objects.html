@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Array-like Objects</title>
+</head>
+<body>
+
+<script>
+// A
+let allNodes = document.querySelectorAll("*"); // returns a NodeList object
+
+for (let i=0;i<allNodes.length;i++){
+	console.log(allNodes[i]); // works fine
+}
+
+for (let node of allNodes){
+	console.log(node); // works fine
+}
+
+allNodes.forEach(function(item, index, array) {
+  console.log(item, index); // works fine on newer browsers
+});
+
+// NodeList does NOT have the .filter() method!
+let filteredArray = allNodes.filter(node => node.tagName == "BODY"); //FAIL!
+
+debugger;
+</script>
+</body>
+</html>

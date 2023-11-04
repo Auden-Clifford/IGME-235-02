@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Eagle+Lake&family=Metamorphous&display=swap');
+
+html{
+    height: 100%;
+    background-image: url("../media/guard1.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+body {
+    font-family: 'Metamorphous', serif;
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    color: white;
+}
+h1 {
+    font-family: 'Eagle Lake', serif;
+    text-transform: uppercase;
+}
+div#phraseDisplay {
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 60%;
+    margin: 20px auto;
+    padding: 3em;
+}
+button {
+    background-image: url("../media/button-light.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+
+    width: 30em;
+
+    background-color: transparent;
+    border: none;
+
+    color: white;
+    font-family: 'Metamorphous', serif;
+    padding: 30px 0;
+}
+button:hover {
+    background-image: url("../media/button-hover.svg");
+}
+button:active {
+    background-image: url("../media/button-click.svg");
+    color: black;
+}

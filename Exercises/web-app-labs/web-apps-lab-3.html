@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Web Apps-4-HW</title>
+	<style>
+		body{border:1px solid gray;}
+	</style>
+</head>
+<body>
+<h1>My Favorites</h1>
+<h2>My Favorite Movies (and shows)</h2>
+
+<ol id="moviesList">
+	
+</ol>
+
+<h2>My Favorite Foods</h2>
+
+<ol id="foodsList">
+	
+</ol>
+
+<h2>My Favorite Links</h2>
+
+<ol id="linksList">
+	
+</ol>
+
+<script>
+"use strict";
+let movies = [
+    "Nausicaa of the Vally of the Wind",
+    "Spiderman: into the Spider-Verse",
+    "Spiderman: Across the Spider-Verse ",
+    "Star Wars: The Clone Wars",
+    "One Piece"
+];
+let foods = ["chicken masala", "quesadilla", "fish tacos", "fried calamari", "banana bread"]; 
+
+// Optional - can you figure out how to pull both the key AND the value
+// from the `links` object literal?
+let links = {
+		"RIT": "http://www.rit.edu",
+		"RWAG" : "https://www.facebook.com/RWAGclub",
+		"New Media Club" : "http://newmediaclub.cias.rit.edu"
+}
+
+// loop through the movies array and generate list items in the apropriate list
+let movieList = document.querySelector("#moviesList");
+for(let i = 0; i < movies.length; i++)
+{
+    let item = document.createElement("li");
+    item.innerHTML = movies[i];
+    movieList.appendChild(item);
+}
+
+// loop through the foods array and generate items in the appropriate list
+let foodList = document.querySelector("#foodsList");
+for(let food of foods)
+{
+    let item = document.createElement("li");
+    item.innerHTML = food;
+    foodList.appendChild(item);
+}
+
+// loop through the links array and generate items in the appropriate list
+let linkList = document.querySelector("#linksList");
+for(let linkInArray in links)
+{
+    let item = document.createElement("li");
+    let link = document.createElement("a");
+    link.href = links.linkInArray;
+    link.innerHTML = linkInArray;
+    item.appendChild(link);
+
+    linkList.appendChild(item);
+}
+</script>
+</body>
+</html>

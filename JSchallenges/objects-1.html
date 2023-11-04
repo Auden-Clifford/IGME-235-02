@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Objects-1</title>
+</head>
+<body>
+<script>
+"use strict";
+// 1 - Create an object literal with properties
+let car1 = {
+  make: "Ford",
+  model: "Pinto",
+  cylinders: 4
+};
+
+// 2 - Add properties to existing objects
+car1.color = "Red"; // add properties to objects with dot syntax
+car1["year"] = 1972; // or with brackets
+
+// 3 -  Delete properties from an object with the delete operator
+delete car1["color"];
+delete car1.year;
+
+// 4 - access property values with dot syntax, or square brackets
+console.log(car1.make); // Ford
+console.log(car1["model"]); // Pinto
+
+</script>
+</body>
+</html>

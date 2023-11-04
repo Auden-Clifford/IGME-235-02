@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Objects-2</title>
+</head>
+<body>
+<script>
+"use strict";
+// 1 - Create an object literal with properties AND methods
+let car1 = {
+	make: "Ford",
+	model: "Pinto",
+	cylinders: 4,
+	maxSpeed: 100,
+	speed: 10,
+	speedUp: function(howMuch){
+// 2- we need to use "this" whenever we refer to a property of the current object
+		this.speed += howMuch; 
+		if(this.speed > this.maxSpeed){
+			this.speed = maxSpeed;
+		}
+	},
+	stop: function(){
+		this.speed = 0;
+	}
+};
+
+console.log(car1.speed); // 10
+car1.speedUp(50); 		// car1.speed is now 60
+car1.stop(); 			// car1.speed is now 0
+
+
+</script>
+</body>
+</html>

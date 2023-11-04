@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Array Operations</title>
+</head>
+<body>
+
+<script>
+// A.
+// An array of strings
+let colors = ["red","green","blue"];
+console.log(`colors.length = ${colors.length}`); // 3
+
+// an array of numbers
+let numbers = [7.9, 5.9, 100.3];
+
+// mixed typed
+let collection = ["Jaberwocky", 42, 98.6, false, Date(), Math.sin, null];
+
+// B.
+let first = colors[0]; // "red"
+let last = colors[colors.length - 1]; // "blue"
+
+// C.
+colors.push("purple");
+
+// D.
+last = colors.pop(); // remove "purple" from the end
+
+// E.
+first = colors.shift(); // remove "red" from beginning
+
+// F.
+colors.unshift("red"); // add "red" back to the front
+
+// G.
+let position = colors.indexOf("green"); // 1
+
+// H.
+// remove 1 item
+position = 2;
+let numberToRemove = 1;
+let removedArray1 = colors.splice(position, numberToRemove); // ["blue"]
+
+// remove more than 1
+position = 0;
+numberToRemove = 2;
+let removedArray2 = colors.splice(position, numberToRemove); // ["red","green"]
+
+console.log(`colors.length = ${colors.length}`); // 0
+
+// I
+let fruits = ["apples","oranges","bananas"];
+position = 0;
+let numberToCopy = 2;
+let copiedItems = fruits.slice(position,numberToCopy);
+console.log(fruits); // ["apples","oranges","bananas"]
+console.log(copiedItems); // ["apples","oranges"]
+
+// J
+let shallowCopy = fruits.slice();
+console.log(shallowCopy); // ["apples","oranges","bananas"]
+
+let car = {make:"Ford"};
+let cars = [car];
+let carsCopy = cars.slice();
+console.log(car == cars[0] && cars[0] == carsCopy[0]); // true, all the same car
+
+debugger;
+
+</script>
+</body>
+</html>

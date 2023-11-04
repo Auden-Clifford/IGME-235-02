@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Functions-1</title>
+</head>
+<body>
+
+<script>
+"use strict";
+// 1 - These first 2 examples do not have a return value, and instead rely on "side effects"
+
+// 1A - no arguments, no return value
+function sayHello(){
+	console.log("Hello!");
+}
+
+// 1B - String argument, no return value
+function sayHelloTo(name){
+	console.log("Hello " + name + "!");
+}
+
+sayHello(); 			// "Hello!"
+sayHelloTo("Bob"); 		// "Hello Bob!"
+let a = sayHelloTo("Mary"); 	// `a` defaults to `undefined` because this function has no return value
+
+
+// 2 - these functions DO return values
+
+// 2A - one String argument, String return value
+function formatGreeting(name){
+	return "Hello " + name + "!";
+}
+
+// 2B - here we store the returned value in a variable
+let greeting = formatGreeting("Mary");
+greeting = greeting.toUpperCase();
+console.log(greeting); 	// HELLO MARY!
+
+let greetFull = function(firstName, lastName){
+    return `Hello ${firstName} ${lastName}!`;
+}
+
+console.log(greetFull("Auden", "Clifford"));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Functions-2</title>
+</head>
+<body>
+
+<script>
+"use strict";
+// 1 - Function Expression
+let formatGreeting1 = function(name){
+	// we are going to use ES6 String template literals instead of concatenation going forward
+	return `Hello ${name}!`;
+}
+
+let formatGreeting2 = function(name){
+	return `Greetings and felicitations, kind ${name}.`;
+}
+
+// 1A - we can still call the functions as normal
+let greeting = formatGreeting1("Mary");
+let greeting2 = formatGreeting2("Mary");
+
+console.log(greeting); 		// Hello Mary!
+console.log(greeting2); 	// Greetings and felicitations, kind Mary.
+
+
+// 2 - A function that takes another function as an argument, and then calls it
+function createGreetings(myData,myFunc){
+	let greetings = []; // empty array
+	for (let n of myData){
+		let g = myFunc(n); // call the passed in function and pass in a name
+		//let g = myFunc.call(this,n); // does the same thing
+		greetings.push(g); // add greeting to array
+	}
+	return greetings;
+}
+
+let names = ["Gary","Larry","Mary","Sherri"];
+// 2A - here we pass the names array, and our 1st greeting format function
+let greetings1 = createGreetings(names,formatGreeting1); 
+
+// 2B - here we pass the names array, and our 2nd greeting format function
+let greetings2 = createGreetings(names,formatGreeting2); 
+
+console.log(greetings1); // ["Hello Gary!", "Hello Larry!", "Hello Mary!", "Hello Sherri!"]
+console.log(greetings2); // ["Greetings and felicitations, kind Gary.", "Greetings and felicitations, kind Larry.", "Greetings and felicitations, kind Mary.", "Greetings and felicitations, kind Sherri."]
+
+</script>
+</body>
+</html>
