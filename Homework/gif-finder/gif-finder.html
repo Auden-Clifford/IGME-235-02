@@ -127,7 +127,7 @@
         if(term.length < 1) return;
 
         //append the search term to the url
-        url += term;
+        url += "&q=" + term;
 
         // grab the limit and append it to the URL
         let limit = document.querySelector("#limit").value;
@@ -137,7 +137,25 @@
         document.querySelector("#status").innerHTML = `<b>Searching for '${displayTerm}'</b>`;
 
         console.log(url);
+
+        // 12 Request data!
+        getData(url);
 	}
+
+    function getData(url){
+        // create XHR object
+        let xhr = new XMLHttpRequest();
+
+        // set onload handler
+        xhr.onload = dataLoaded;
+
+        // set onerror handler
+        xhr.onerror = dataError;
+
+        // open connection and send the request
+        xhr.open("GET", url);
+        xhr.send();
+    }
 	
   </script>
 
