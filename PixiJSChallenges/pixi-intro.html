@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>PixiJS-1</title>
+	<script src="https://pixijs.download/release/pixi.min.js"></script>
+</head>
+<body>
+<script>
+
+// #1 - Create a new Pixi application
+// https://pixijs.download/release/docs/PIXI.Application.html
+const app = new PIXI.Application(
+    {
+	width: 600,
+	height: 400
+    }
+);
+
+// #2 - Append its "view" (a <canvas> tag that it created for us) to the DOM
+document.body.appendChild(app.view); 
+
+</script>
+</body>
+</html>
