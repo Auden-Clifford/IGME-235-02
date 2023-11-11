@@ -2,9 +2,14 @@
     font-family:verdana,tahoma,sans-serif;
 }
 
+body {
+    text-align: center;
+}
+
  header{
      background: url(../images/cats.jpg);
      height:195px;
+     border-radius: 20px;
  }
  
  header h1{
@@ -14,28 +19,78 @@
      font-size:100px;
      padding-top: 35px;
  }
+
+ #widgetContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1em;
+    background-color: lightgray;
+    width: 40%;
+    margin: 2em auto;
+    border-radius: 20px;
+ }
  
  #status{
      font-style: italic;
-     height:32px;
  }
  
+ #content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    width: 90%;
+    margin: auto;
+ }
+
+ .result img {
+    width: 100%;
+ }
+
  .result {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    border-radius: 30px;
+    background-color: white;
+    /*filter: drop-shadow (for some reason) is ever so slightly 
+    different from box-shadow and I think it gives a better effect*/
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 16px 16px 10px);
+    padding:2em;
+ }
+
+ .result span {
+    order: -1;
+ }
+
+ /*
+ .result {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
     position: relative;
     height: 175px;
     width: 100px;
     float:left;
-    border:1px solid gray;
-    padding:5px;
+    border-radius: 30px;
+    background-color: white;
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 16px 16px 10px);
+    /*box-shadow: 16px 16px 10px rgba(0, 0, 0, 0.6);
+    padding:2em;
     margin-left:10px;
     margin-bottom:10px;
 }
 
 .result img {
+    
     position: absolute;
     left: 5px;
     bottom: 5px;
     display:block;
+    
     
 }
 
@@ -48,6 +103,7 @@
 .result audio{
     width: 130px;
 }
+*/
 
 button{
   display : inline-block;
