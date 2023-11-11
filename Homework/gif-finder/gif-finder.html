@@ -156,6 +156,17 @@
         xhr.open("GET", url);
         xhr.send();
     }
+
+    // callback functions
+    function dataLoaded(e){
+        let xhr = e.target;
+
+        console.log(xhr.responseText);
+    }
+
+    function dataError(e){
+        console.log("An error occurred");
+    }
 	
   </script>
 
