@@ -116,7 +116,27 @@
         // start building the url string
         let url = `${GIPHY_URL}api_key=${GIPHY_KEY}`;
 
-        let term = document.querySelector("#searchterm").value;
+        // get the search term and get rid of trailing and leading spaces
+        let term = document.querySelector("#searchterm").value.trim();
+        displayTerm = term;
+        
+        // encode spaces and special characters
+        term = encodeURIComponent(term);
+
+        // ensure there is a term to search
+        if(term.length < 1) return;
+
+        //append the search term to the url
+        url += term;
+
+        // grab the limit and append it to the URL
+        let limit = document.querySelector("#limit").value;
+        url += "$limit=" + limit;
+
+        // update UI
+        document.querySelector("#status").innerHTML = `<b>Searching for '${displayTerm}'</b>`;
+
+        console.log(url);
 	}
 	
   </script>
