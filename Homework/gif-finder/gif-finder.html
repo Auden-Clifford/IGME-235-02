@@ -131,7 +131,7 @@
 
         // grab the limit and append it to the URL
         let limit = document.querySelector("#limit").value;
-        url += "$limit=" + limit;
+        url += "&limit=" + limit;
 
         // update UI
         document.querySelector("#status").innerHTML = `<b>Searching for '${displayTerm}'</b>`;
@@ -162,6 +162,43 @@
         let xhr = e.target;
 
         console.log(xhr.responseText);
+
+        // parse the text to a JavaScript object
+        let obj = JSON.parse(xhr.responseText);
+        
+        // print a message and bail if there are no results
+        if(!obj.data || obj.data.length == 0){
+            document.querySelector("#status").innerHTML = `<b>No results found for '${displayTerm}'</b>`;
+            return;
+        }
+
+        // start building the HTML string to display
+        let results = obj.data;
+        console.log("results.length = " + results.length);
+        let bigString = `$<p><i>Here are ${results.length} results for '${displayTerm}'</i></p>`;
+
+        // loop through the results
+        for(let i = 0; i < results.length; i++)
+        {
+            let result = results[i];
+
+            // get the GIF URL
+            let smallURL = result.images.fixed_width_small.url;
+            if(!smallURL) smallURL = "images/no-image-found.png";
+
+            // GIPHY page url
+            let url = result.url;
+
+            // make a <div> for each result
+            let line = `<div class ='result'><img src='${smallURL}' title='${result.id}'/><span><a target='_blank' href='${url}'>View on Giphy</a></span></div>`;
+                
+            bigString += line;
+        }
+
+        // add the new HTML to the content area
+        document.querySelector("#content").innerHTML = bigString;
+
+        document.querySelector("#status").innerHTML = "<b>Success!</b>";
     }
 
     function dataError(e){
