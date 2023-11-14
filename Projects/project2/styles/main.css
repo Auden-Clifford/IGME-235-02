@@ -1,0 +1,41 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    border: 3px solid black;
+}
+nav {
+    display: flex;
+    align-items: center;
+}
+nav div {
+    margin: 1em;
+}
+
+main {
+    display: grid;
+
+    grid-template-areas: 
+    "decks  contents"
+    "cards  contents";
+}
+#decks {
+    grid-area: decks;
+
+    display: flex;
+    align-items: center;
+
+    height: 200px;
+    border: 3px solid black;
+}
+#decks div {
+    height: 150px;
+    width: 150px;
+    margin: 1em;
+    border: 3px solid black;
+}
+#cardSearch {
+    grid-area: cards;
+} 
+#deckContents {
+    grid-area: contents;
+}

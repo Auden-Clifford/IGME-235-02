@@ -8,6 +8,50 @@
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
+    <header>
+        <img src="" alt="">
+        <h1>MTG Deck Builder</h1>
+        <nav id="siteNav">
+            <div id="home">home</div>
+            <div id="my decks">decks</div>
+        </nav>
+    </header>
     
+    <main>
+        <div id="decks">
+            <div id="myDecks"></div>
+            <div id="addNew"></div>
+        </div>
+        <div id="cardSearch">
+            <div id="filters">
+                <input type="text" id="searchTerm">
+                    
+                <div id="mana">
+                    <input type="checkbox" id="white" name="white">
+                    <input type="checkbox" id="black" name="black">
+                    <input type="checkbox" id="red" name="red">
+                    <input type="checkbox" id="blue" name="blue">
+                    <input type="checkbox" id="green" name="green">
+                </div>
+    
+                <input type="number" id="cost">
+                
+                <input type="button" id="searchButton">
+            </div>
+            <div id="cards">
+                <nav id="cardNav">
+                    <input type="button" id="first">
+                    <input type="button" id="previous">
+                    <span id="pageNum">1</span>
+                    <input type="button" id="next">
+                    <input type="button" id="last">
+                </nav>
+            </div>
+        </div>
+        
+        <div id="deckContents">
+            <span id="deckName"></span>
+        </div>
+    </main>
 </body>
 </html>
