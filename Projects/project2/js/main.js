@@ -199,6 +199,11 @@ function dataLoaded(e){
             let cardDisplay = document.createElement("div");
             cardDisplay.className = "cardDisplay";
             cardDisplay.innerHTML = `<img src='${results[i].image_uris.png}' alt='${results[i].name}'>`;
+            // save all the card object's data to the element so it can be accessed easily when the element is clicked
+            cardDisplay.dataset.cardObj = JSON.stringify(results[i]);
+
+            //give these elements an onclick function
+            cardDisplay.onclick = cardClick;
         
             // add these cards to the grid, inserted before the nav element
             cardGrid.appendChild(cardDisplay);
@@ -209,5 +214,9 @@ function dataLoaded(e){
 
 function dataError(e){
     console.log("An error occurred");
+}
+
+function cardClick(e){
+    console.log(e.currentTarget.dataset.cardObj)
 }
 
