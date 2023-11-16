@@ -115,7 +115,7 @@ function deleteDeck(){
 
 function updateDeckContentsDisplay()
 {
-    let contentDisplay = document.querySelector("#deckContents");
+    let contentWindow = document.querySelector("#deckContents");
     let deckInfo = document.querySelector("#deckInfo");
 
     // update the info
@@ -127,7 +127,52 @@ function updateDeckContentsDisplay()
     // description is the third child
     deckInfo.children[2].innerHTML = selectedDeck.value.description;
 
+    // clear all of the card displays
+    for(let i = 0; i < contentWindow.children.length; i++)
+    {
+        if(contentWindow.children[i].className == "deckCard")
+        {
+            contentWindow.removeChild(contentWindow.children[i]);
+            i--; // list is live
+        }
+    }
+
     //loop through each card in the selected deck and create a new cardInDeckDisplay
+    for(let i = 0; i < selectedDeck.value.cards.length; i++)
+    {
+        let display = document.createElement("div");
+        display.className = "deckCard"
+        display.innerHTML = selectedDeck.value.cards[i].name;
+        let removeButton = document.createElement("button");
+        removeButton.className = "removeCard";
+        removeButton.innerHTML = "-";
+        removeButton.onclick = function(){
+            removeCard(selectedDeck.value.cards[i])
+        }
+        display.appendChild(removeButton);
+
+        contentWindow.appendChild(display);
+    }
+}
+
+function removeCard(card)
+{
+    // remove the selected deck from myDecks and local data
+    let index = selectedDeck.value.cards.findIndex(cardInDeck => cardInDeck.id === card.id);
+    selectedDeck.value.cards.splice(index, 1);
+    updateDeckContentsDisplay()
+
+    //update local storage
+    localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
+}
+
+function addCard(card)
+{
+    selectedDeck.value.cards.push(card);
+    updateDeckContentsDisplay()
+
+    //update local storage
+    localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 }
 
 /*
@@ -312,7 +357,10 @@ function dataLoaded(e){
             cardDisplay.dataset.cardObj = JSON.stringify(results[i]);
 
             //give these elements an onclick function
-            cardDisplay.onclick = cardClick;
+            cardDisplay.onclick = function(){
+                addCard(results[i]);
+            }
+            
         
             // add these cards to the grid, inserted before the nav element
             cardGrid.appendChild(cardDisplay);
@@ -325,7 +373,8 @@ function dataError(e){
     console.log("An error occurred");
 }
 
+/*
 function cardClick(e){
     console.log(e.currentTarget.dataset.cardObj)
 }
-
+*/
