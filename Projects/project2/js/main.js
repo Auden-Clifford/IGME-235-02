@@ -42,7 +42,7 @@ function ClearWindow()
 
     for (let i = 0; i < children.length; i++) {
         if (children[i].nodeName.toLowerCase() !== 'nav') {
-            myDiv.removeChild(children[i]);
+            cardWindow.removeChild(children[i]);
             i--;  // decrement the index as the nodeList is live
         }
     }
@@ -50,6 +50,8 @@ function ClearWindow()
 
 function Search()
 {
+    // clear all the cards from previous searches
+    ClearWindow();
     //get all the search filters
     let searchTerm = document.querySelector("#searchTerm");
     let manaType = document.querySelector("#mana");
@@ -91,7 +93,8 @@ function Search()
     if(searchTerm.value)
     {
         let term = searchTerm.value.trim();
-        url += `o:"${term}"`;
+        // this will get any cards that have matching phrases in the name or oracle text
+        url += `(o:"${term}"+or+name:"${term}")`;
     }
 
     
@@ -198,7 +201,7 @@ function dataLoaded(e){
             cardDisplay.innerHTML = `<img src='${results[i].image_uris.png}' alt='${results[i].name}'>`;
         
             // add these cards to the grid, inserted before the nav element
-            cardGrid.insertBefore(cardDisplay, cardGrid.children[-1]);
+            cardGrid.appendChild(cardDisplay);
             console.log("added a card");
         }
     }
