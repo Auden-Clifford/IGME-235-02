@@ -1,8 +1,9 @@
 window.onload = (e) => {
     // load some random cards
-    GetRandomCards();
+    //GetRandomCards();
 
-    document.querySelector("#addNew").onclick = addButtonClicked
+    document.querySelector("#addNew").onclick = addButtonClicked;
+    document.querySelector("#searchButton").onclick = Search;
 };
 
 function addButtonClicked(e){
@@ -51,13 +52,100 @@ function Search()
 {
     //get all the search filters
     let searchTerm = querySelector("#searchTerm");
-    let manaType = querySelector("#manaType");
+    let manaType = querySelector("#mana");
     let manaCost = querySelector("#cost");
+    let costCompare = querySelector("#costCompare");
     let cardType = querySelector("#cardType");
     let sortBy = querySelector("#sortBy");
+    let sortDirection = querySelector("#sortDirection");
 
     // start the url
     let url = "https://api.scryfall.com/cards/search?";
+
+    // set the sort order/direction parameters (unless default value is given)
+    if(sortBy.value != "default")
+    {
+        url += `order=${sortBy.value}`;
+    }
+    // unless there are no parameters, add "&"
+    if(url[-1] != "?")
+    {
+        url += "&";
+    }
+    if(sortDirection.value != "default")
+    {
+        url += `dir=${sortDirection.value}`;
+    }
+
+    // unless there are no parameters, add "&"
+    if(url[-1] != "?")
+    {
+        url += "&";
+    }
+
+    // add the search queries to the url
+    url += "q=";
+
+    // if a value was entered for the search term, add it to the search query
+    if(searchTerm.value)
+    {
+        let term = document.querySelector("#searchterm").value.trim();
+        url += `o:"${term}"`;
+    }
+
+    // unless this is the first query term, add "+"
+    if(url[-1] != "=")
+    {
+        url += "+";
+    }
+
+    // if any mana types are checked, add them to the query
+    if(Array.from(manaType.children).some(checkbox => checkbox.checked))
+    {
+        // paretheses to group with OR keyword
+        url += "(";
+        for(let i = 0; i < manaType.children.length; i++)
+        {
+            if(manaType.children[i].checked)
+            {
+                // add OR keyword (unless this is the first selected type)
+                if(url[-1] != "(")
+                {
+                    url += "+or+";
+                }
+                url += `c:${manaType.children[i].value}`;
+            }
+        }
+        // close parentheses grouping
+        url += ")";
+    }
+
+    // unless this is the first query term, add "+"
+    if(url[-1] != "=")
+    {
+        url += "+";
+    }
+
+    // if a mana value was entered, add it to the query
+    if(manaCost.value)
+    {
+        //get the correct cost comparison (<=, =, >=)
+        url += `mv${costCompare.value}${manaCost.value}`;
+    }
+
+    // unless this is the first query term, add "+"
+    if(url[-1] != "=")
+    {
+        url += "+";
+    }
+
+    // if a value for card type is selected, add it to the query
+    if(cardType.value != "default")
+    {
+        url += `t:${cardType.value}`;
+    }
+
+    console.log(url);
 }
 
 /*
