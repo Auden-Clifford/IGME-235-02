@@ -13,13 +13,12 @@
         <h1>MTG Deck Builder</h1>
         <nav id="siteNav">
             <div id="home">home</div>
-            <div id="my decks">decks</div>
+            <div id="myDecks">decks</div>
         </nav>
     </header>
     
     <main>
         <div id="decks">
-            <div id="myDecks"></div>
             <div id="addNew"></div>
         </div>
         <div id="cardSearch">
@@ -34,23 +33,62 @@
                     <input type="checkbox" id="green" name="green">
                 </div>
     
-                <input type="number" id="cost">
+                <select name="cardType" id="cardType">
+                    <option value="default">-- Mana Cost --</option>
+                    <option value="1">1</option>
+                    <option value="1">2</option>
+                    <option value="1">3</option>
+                    <option value="1">4</option>
+                    <option value="1">5</option>
+                    <option value="1">6</option>
+                    <option value="1">7</option>
+                    <option value="1">8</option>
+                    <option value="1">9</option>
+                    <option value="1">10</option>
+                    <option value="1">11</option>
+                    <option value="1">12</option>
+                </select>
+
+                <select name="cardType" id="cardType">
+                    <option value="default">-- Card Type --</option>
+                    <option value="artifact">Artifact</option>
+                    <option value="creature">Creature</option>
+                    <option value="enchantment">Enchantment</option>
+                    <option value="land">Land</option>
+                    <option value="instant">Instant</option>
+                    <option value="sorcery">Sorcery</option>
+                    <option value="planeswalker">Land</option>
+                </select>
+
+                <select name="sortBy" id="sortBy">
+                    <option value="default">-- Sort by --</option>
+                    <option value="name">Name</option>
+                    <option value="released">Release Date</option>
+                    <option value="rarity">Rarity</option>
+                    <option value="cmc">Mana Value</option>
+                    <option value="power">Power</option>
+                    <option value="toughness">Toughness</option>
+                </select>
                 
                 <input type="button" id="searchButton">
             </div>
             <div id="cards">
                 <nav id="cardNav">
-                    <input type="button" id="first">
-                    <input type="button" id="previous">
+                    <button type="button" id="first">&#60;&#60;</button>
+                    <button type="button" id="previous">&#60;</button>
                     <span id="pageNum">1</span>
-                    <input type="button" id="next">
-                    <input type="button" id="last">
+                    <button type="button" id="next">&#62;</button>
+                    <button type="button" id="last">&#62;&#62;</button>
                 </nav>
             </div>
         </div>
         
         <div id="deckContents">
-            <span id="deckName"></span>
+            <div id="deckName">
+                name <br>
+                <button type="button" id="rename">rename</button>
+                <button type="button" id="delete">delete</button>
+            </div>
         </div>
     </main>
 </body>
