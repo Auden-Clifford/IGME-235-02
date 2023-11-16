@@ -1,23 +1,55 @@
-window.onload = (e) => {
-    // load some random cards
-    //GetRandomCards();
+// attempt load saved decks
+const prefix = "awc6002";
+let myDecks = JSON.parse(localStorage.getItem(prefix + "myDecks"));
 
-    document.querySelector("#addNew").onclick = addButtonClicked;
+window.onload = (e) => {
+    // add any loaded decks to the window
+    if(myDecks)
+    {
+        let decksDisplay = document.querySelector("#decks");
+
+        for(let i = 0; i < myDecks.length; i++)
+        {
+            let newDeck = document.createElement("div");
+            newDeck.className = "deck";
+            // each deck should start with a unique name
+            newDeck.innerHTML = myDecks[i].name;
+            newDeck.dataset.deckIndex = i;
+
+            decksDisplay.insertBefore(newDeck, decksDisplay.children[0]);
+        }
+    }
+    // if there are none, create one
+    else
+    {
+        myDecks = [];
+        addDeck();
+    }
+    document.querySelector("#addNew").onclick = addDeck;
     document.querySelector("#searchButton").onclick = Search;
 };
 
-function addButtonClicked(e){
+function addDeck(){
     let decksDisplay = document.querySelector("#decks");
 
     // only allow user to create up to 5 decks
     if(decksDisplay.children.length < 6)
     {
-        let newDeck = document.createElement("div");
-        newDeck.class = "deck";
+        let newDeck = {
+            name: `new deck ${decksDisplay.children.length}`,
+            cards: []
+        }
+        myDecks.push(newDeck);
+        // set the local storage version equal to the newly updated decks
+        localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
+
+        // create an element to display the deck on screen
+        let newDeckElement = document.createElement("div");
+        newDeckElement.className = "deck";
         // each deck should start with a unique name
-        newDeck.innerHTML = `new deck ${decksDisplay.children.length}`
+        newDeckElement.innerHTML = newDeck.name;
     
-        decksDisplay.insertBefore(newDeck, decksDisplay.children[0]);
+        decksDisplay.insertBefore(newDeckElement, decksDisplay.children[0]);
     }
 }
 
