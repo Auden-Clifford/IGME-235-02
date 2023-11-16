@@ -1,56 +1,133 @@
+"use strict"
 // attempt load saved decks
 const prefix = "awc6002";
 let myDecks = JSON.parse(localStorage.getItem(prefix + "myDecks"));
+
+// define a script-scope varialble to represent the currently selected deck
+const selectedDeck = {
+    _value: {},
+    get value() {
+        return this._value;
+    },
+    set value(newValue) {
+        this._value = newValue;
+        
+        // update the display to show the newly selected deck
+        updateDeckContentsDisplay();
+    }
+};
 
 window.onload = (e) => {
     // add any loaded decks to the window
     if(myDecks)
     {
-        let decksDisplay = document.querySelector("#decks");
-
         for(let i = 0; i < myDecks.length; i++)
         {
-            let newDeck = document.createElement("div");
-            newDeck.className = "deck";
-            // each deck should start with a unique name
-            newDeck.innerHTML = myDecks[i].name;
-            newDeck.dataset.deckIndex = i;
-
-            decksDisplay.insertBefore(newDeck, decksDisplay.children[0]);
+            addDeck(myDecks[i].name, myDecks[i].description, myDecks[i].cards);
         }
+
+        // focus on the first deck in the list
+        selectedDeck.value = myDecks[0];
     }
     // if there are none, create one
     else
     {
         myDecks = [];
-        addDeck();
+        myDecks.push(addDeck("new deck 1", "a cool deck", []));
+        localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
     }
-    document.querySelector("#addNew").onclick = addDeck;
+    // assign some events
+    document.querySelector("#addNew").onclick = function() {
+        let decksDisplay = document.querySelector("#decks");
+        myDecks.push(addDeck(`new deck ${decksDisplay.children.length}`, "a cool deck", []));
+        localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
+    };
     document.querySelector("#searchButton").onclick = Search;
+    document.querySelector("#deleteDeck").onclick = deleteDeck;
 };
 
-function addDeck(){
+function addDeck(newName, newDescription, contents){
     let decksDisplay = document.querySelector("#decks");
 
     // only allow user to create up to 5 decks
     if(decksDisplay.children.length < 6)
     {
         let newDeck = {
-            name: `new deck ${decksDisplay.children.length}`,
-            cards: []
+            name: newName,
+            cards: contents,
+            description: newDescription
         }
-        myDecks.push(newDeck);
+        //myDecks.push(newDeck);
+        //focus on the deck we just created
+        selectedDeck.value = newDeck;
         // set the local storage version equal to the newly updated decks
-        localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
+        //localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 
         // create an element to display the deck on screen
         let newDeckElement = document.createElement("div");
         newDeckElement.className = "deck";
         // each deck should start with a unique name
         newDeckElement.innerHTML = newDeck.name;
+        // set it's onclick to change the selected deck
+        newDeckElement.onclick = function(e){
+            selectedDeck.value = newDeck;
+        }
     
         decksDisplay.insertBefore(newDeckElement, decksDisplay.children[0]);
+
+        return newDeck;
     }
+}
+
+function deleteDeck(){
+    
+    let decksDisplay = document.querySelector("#decks");
+
+    // seach all the deck elements until the matching deck is found
+    // then remove that element and bail from the loop
+    // the final element in the decks display area is not a deck
+    for(let i = 0; i < decksDisplay.children.length - 1; i++)
+    {
+        if(decksDisplay.children[i].innerHTML == selectedDeck.value.name)
+        {
+            decksDisplay.removeChild(decksDisplay.children[i]);
+            break;
+        }
+    }
+
+    // remove the selected deck from myDecks and local data
+    let index = myDecks.findIndex(deck => deck.name === selectedDeck.value.name);
+    myDecks.splice(index, 1);
+    
+    // ensure there is still at least one deck left in the the list
+    if(myDecks[0])
+    {
+        selectedDeck.value = myDecks[0];
+    }
+    else
+    {
+        myDecks.push(addDeck("new deck 1", "a cool deck", []));
+    }
+
+    //update local storage
+    localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
+}
+
+function updateDeckContentsDisplay()
+{
+    let contentDisplay = document.querySelector("#deckContents");
+    let deckInfo = document.querySelector("#deckInfo");
+
+    // update the info
+
+    // name is the first child
+    deckInfo.children[0].innerHTML = selectedDeck.value.name;
+    // count is the second child
+    deckInfo.children[1].innerHTML = selectedDeck.value.cards.length;
+    // description is the third child
+    deckInfo.children[2].innerHTML = selectedDeck.value.description;
+
+    //loop through each card in the selected deck and create a new cardInDeckDisplay
 }
 
 /*
