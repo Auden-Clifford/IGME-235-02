@@ -51,13 +51,13 @@ function ClearWindow()
 function Search()
 {
     //get all the search filters
-    let searchTerm = querySelector("#searchTerm");
-    let manaType = querySelector("#mana");
-    let manaCost = querySelector("#cost");
-    let costCompare = querySelector("#costCompare");
-    let cardType = querySelector("#cardType");
-    let sortBy = querySelector("#sortBy");
-    let sortDirection = querySelector("#sortDirection");
+    let searchTerm = document.querySelector("#searchTerm");
+    let manaType = document.querySelector("#mana");
+    let manaCost = document.querySelector("#cost");
+    let costCompare = document.querySelector("#costCompare");
+    let cardType = document.querySelector("#cardType");
+    let sortBy = document.querySelector("#sortBy");
+    let sortDirection = document.querySelector("#sortDirection");
 
     // start the url
     let url = "https://api.scryfall.com/cards/search?";
@@ -67,18 +67,19 @@ function Search()
     {
         url += `order=${sortBy.value}`;
     }
-    // unless there are no parameters, add "&"
-    if(url[-1] != "?")
-    {
-        url += "&";
-    }
+    
     if(sortDirection.value != "default")
     {
+        // unless this is the first parameter, add "&"
+        if(url.slice(-1) != "?")
+        {
+            url += "&";
+        }
         url += `dir=${sortDirection.value}`;
     }
 
-    // unless there are no parameters, add "&"
-    if(url[-1] != "?")
+    // unless this is the first parameter, add "&"
+    if(url.slice(-1) != "?")
     {
         url += "&";
     }
@@ -89,19 +90,20 @@ function Search()
     // if a value was entered for the search term, add it to the search query
     if(searchTerm.value)
     {
-        let term = document.querySelector("#searchterm").value.trim();
+        let term = searchTerm.value.trim();
         url += `o:"${term}"`;
     }
 
-    // unless this is the first query term, add "+"
-    if(url[-1] != "=")
-    {
-        url += "+";
-    }
+    
 
     // if any mana types are checked, add them to the query
     if(Array.from(manaType.children).some(checkbox => checkbox.checked))
     {
+        // unless this is the first query term, add "+"
+        if(url.slice(-1) != "=")
+        {
+            url += "+";
+        }
         // paretheses to group with OR keyword
         url += "(";
         for(let i = 0; i < manaType.children.length; i++)
@@ -109,7 +111,7 @@ function Search()
             if(manaType.children[i].checked)
             {
                 // add OR keyword (unless this is the first selected type)
-                if(url[-1] != "(")
+                if(url.slice(-1) != "(")
                 {
                     url += "+or+";
                 }
@@ -120,32 +122,31 @@ function Search()
         url += ")";
     }
 
-    // unless this is the first query term, add "+"
-    if(url[-1] != "=")
-    {
-        url += "+";
-    }
-
     // if a mana value was entered, add it to the query
     if(manaCost.value)
     {
+        // unless this is the first query term, add "+"
+        if(url.slice(-1) != "=")
+        {
+            url += "+";
+        }
         //get the correct cost comparison (<=, =, >=)
         url += `mv${costCompare.value}${manaCost.value}`;
-    }
-
-    // unless this is the first query term, add "+"
-    if(url[-1] != "=")
-    {
-        url += "+";
     }
 
     // if a value for card type is selected, add it to the query
     if(cardType.value != "default")
     {
+        // unless this is the first query term, add "+"
+        if(url.slice(-1) != "=")
+        {
+            url += "+";
+        }
         url += `t:${cardType.value}`;
     }
 
     console.log(url);
+    getData(url);
 }
 
 /*
@@ -168,7 +169,6 @@ function getData(url){
 }
 
 // callback functions
-
 function dataLoaded(e){
     let xhr = e.target;
 
@@ -177,10 +177,34 @@ function dataLoaded(e){
     // parse the text to a JavaScript object
     let obj = JSON.parse(xhr.responseText);
     
-    // print a bail if there are no results
+    // bail if there are no results
     if(!obj.data || obj.data.length == 0){
         //document.querySelector("#status").innerHTML = `<b>No results found for '${displayTerm}'</b>`;
         return;
     }
+
+    let results = obj.data;
+    console.log("results.length = " + results.length);
+
+    let cardGrid = document.querySelector("#cards");
+
+    for(let i = 0; i < results.length; i++)
+    {
+        // only display cards that have a standard image format
+        if(results[i].image_uris)
+        {
+            let cardDisplay = document.createElement("div");
+            cardDisplay.className = "cardDisplay";
+            cardDisplay.innerHTML = `<img src='${results[i].image_uris.png}' alt='${results[i].name}'>`;
+        
+            // add these cards to the grid, inserted before the nav element
+            cardGrid.insertBefore(cardDisplay, cardGrid.children[-1]);
+            console.log("added a card");
+        }
+    }
+}
+
+function dataError(e){
+    console.log("An error occurred");
 }
 

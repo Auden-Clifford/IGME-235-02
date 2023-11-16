@@ -1,7 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    height: 100vh;
+    box-sizing: border-box;
+    margin: 0;
+}
 header {
     display: flex;
     justify-content: space-between;
     border: 3px solid black;
+    height: 10%;
 }
 nav {
     display: flex;
@@ -10,15 +19,20 @@ nav {
 nav div {
     margin: 1em;
 }
+footer{
+    border: 3px solid black;
+    height: 5%;
+}
 
 main {
     display: grid;
-
     grid-template-areas: 
     "decks  contents"
     "cards  contents";
-
     grid-template-columns: 1fr 300px;
+    grid-template-rows: 25% 75%;
+
+    height: 85%;
 }
 #decks {
     grid-area: decks;
@@ -26,7 +40,7 @@ main {
     display: flex;
     align-items: center;
 
-    height: 200px;
+    height: 100%;
     border: 3px solid black;
 }
 #decks div {
@@ -37,15 +51,20 @@ main {
 }
 #cardSearch {
     grid-area: cards;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 } 
 #filters {
     display: flex;
 }
 #cards {
     display: grid;
-    grid-template-rows: repeat(2,minmax(290px, 1fr)) 20px;
-    grid-template-columns: repeat(6, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     border: 3px solid black;
+
+    overflow-y: auto; /* Enables vertical scrolling. */
+    height: 100%;
 }
 #cardNav {
     grid-area: -2 / 1 / -1 / -1;
@@ -60,4 +79,11 @@ main {
     border: 3px solid black;
     width: 100%;
     text-align: center;
+}
+
+.cardDisplay{
+    margin: 5px;
+}
+.cardDisplay img{
+    width: 100%;
 }
