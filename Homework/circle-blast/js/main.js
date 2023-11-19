@@ -92,8 +92,7 @@ function setup() {
     });
 	
 	// #7 - Load sprite sheet
-		
-	// #8 - Start update loop
+	
     // #8 - Start update loop
     app.ticker.add(gameLoop);
 	
@@ -207,6 +206,14 @@ function startGame(){
     gameOverScene.visible = false;
     gameScene.visible = true;
 
+    levelNum = 1;
+    score = 0;
+    life = 100;
+    increaseScoreBy(0);
+    decreaseLifeBy(0);
+    ship.x = 300;
+    ship.y = 550;
+    loadLevel();
 }
 
 function increaseScoreBy(value) {
@@ -232,8 +239,29 @@ function createCircles(numCircles){
     }
 }
 
+function loadLevel(){
+	createCircles(levelNum * 5);
+	paused = false;
+}
+
+function end(){
+    paused = true;
+    // clear level
+    circles.forEach(c=>gameScene.removeChild(c));
+    circles = [];
+
+    bullets.forEach(b=>gameScene.removeChild(b));
+    bullets = [];
+
+    explosions.forEach(e=>gameScene.removeChild(e));
+    explosions = [];
+
+    gameOverScene.visible = true;
+    gameScene.visible = false;
+}
+
 function gameLoop(){
-	// if (paused) return; // keep this commented out for now
+	if (paused) return; // keep this commented out for now
 	
 	// #1 - Calculate "delta time"
     // #1 - Calculate "delta time"
@@ -257,22 +285,45 @@ function gameLoop(){
     ship.x = clamp(newX, 0+w2,sceneWidth-w2);
     ship.y = clamp(newY,0+h2,sceneHeight-h2);
 	
-	
-	
 	// #3 - Move Circles
-	
+	for(let c of circles){
+        c.move(dt);
+        if(c.x <= c.radius || c.x >= sceneWidth-c.radius){
+            c.reflectX();
+            c.move(dt);
+        }
+        if(c.y <= c.radius || c.y >= sceneHeight-c.radius){
+            c.reflectY();
+            c.move(dt);
+        }
+    }
 	
 	// #4 - Move Bullets
 
 	
 	// #5 - Check for Collisions
-	
+	for(let c of circles){
+        // 5A - circle/bullet collision
+
+        // 5B - circle/ship collision
+        if(c.isAlive && rectsIntersect(c, ship)){
+            hitSound.play();
+            gameScene.removeChild(c);
+            c.isAlive = false;
+            decreaseLifeBy(20);
+        }
+    }
 	
 	// #6 - Now do some clean up
-	
+    bullets = bullets.filter(b=>b.isAlive);
+    circles = circles.filter(c=>c.isAlive);
+    explosions = explosions.filter(e=>e.playing);
 	
 	// #7 - Is game over?
-	
+    if (life <= 0){
+	    end();
+	    return; // return here so we skip #8 below
+    }
 	
 	// #8 - Load next level
 }
