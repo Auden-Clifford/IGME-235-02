@@ -17,9 +17,11 @@
         const WORD_MARGIN = 10;
         const WORD_SPACING = 8;
         const MAX_Z_INDEX = 1000;
-        
+
         window.onload = function(){
+            positionWords();
             setupStartingPoem();
+            setupDragging();
         }
 
         function setupStartingPoem(){
@@ -52,6 +54,67 @@
                 }
             }
             //otherwise function returns undefined
+        }
+
+        function positionWords(){
+            let doMousedown = function(e){
+                e.preventDefault();
+                selectedElement = e.target;
+                selectedElement.style.zIndex = MAX_Z_INDEX;
+            };
+
+            let allWords = document.querySelectorAll(".word");
+            let wordSpacing = WORD_SPACING;
+            let wordLeft = WORD_MARGIN;
+            let wordTop = TRAY_POSITION.y;
+
+            for(let word of allWords){
+                setPosition(word, wordLeft,wordTop);
+                let wordWidth = word.clientWidth;
+                wordLeft += wordWidth + wordSpacing;
+                if(wordLeft >= MAX_WORD_LEFT){
+                    wordLeft = WORD_MARGIN;
+                    wordTop += LINE_HEIGHT;
+                }
+
+                word.onmousedown = doMousedown;
+            }
+
+            document.querySelector("#title1").onmousedown = doMousedown
+            document.querySelector("#title2").onmousedown = doMousedown
+            document.querySelector("#title3").onmousedown = doMousedown
+            document.querySelector("#title4").onmousedown = doMousedown
+            document.querySelector("#title5").onmousedown = doMousedown
+        }
+
+        function setupDragging(){
+            document.onmousemove = function(e){
+                e.preventDefault();
+                if(selectedElement){
+                    let mousePos = getMousePos(document.body,e);
+
+                    // drag from middle of the word
+                    mousePos.x -= selectedElement.clientWidth/2;
+                    mousePos.y -= selectedElement.clientHeight/2;
+
+                    setPosition(selectedElement, mousePos.x,mousePos.y);
+                }
+            };
+
+            document.onmouseup = function(e){
+                if(selectedElement){
+                    selectedElement.style.zIndex = MAX_Z_INDEX -1;
+                }
+                selectedElement = null;
+            };
+        }
+
+        function getMousePos(parentElement, event){
+            let rect = parentElement.getBoundingClientRect();
+            return {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
         }
  	
  	} // End ES6 Block Scope
