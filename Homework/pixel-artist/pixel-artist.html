@@ -131,6 +131,10 @@
         e.preventDefault();
         mouseIsDown = false;
     }
+
+    document.querySelector("#colorChooser").onchange = (e) => {
+        color = e.target.value;
+    };
     
 </script>
 </body>
