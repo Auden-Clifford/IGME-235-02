@@ -1,0 +1,75 @@
+body{
+    background-color: #e0e0e0;
+}
+
+#container{
+    width:815px;
+}
+
+#fridge{
+    background: #ffffff;
+    cursor: pointer;
+    margin-left: 10px;
+    margin-top: 10px;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+    width:640px;
+    height:480px;
+    float:left;
+}
+
+#sidebar{
+    background: #f0f0f0;
+    float:left;
+    width:160px;
+    height:480px;
+    margin-top: 10px;
+    margin-left:5px;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+}
+
+.word,.titleWord{
+    position:absolute;
+    font-size:14px;
+    font-weight:bold;
+    font-family:courier,monospaced;
+    border: 1px solid #aaa;
+    border-bottom: 2px solid #222;
+    border-right: 2px solid #222;
+    background-color: #fefefe;
+    padding:2px 5px 1px 5px;
+    cursor:move;
+}
+
+/* Our Title Words */
+#title1{
+    top:8px;
+    left:665px;
+    font-size:22pt;
+    transform: rotate(7deg);
+}
+
+#title2{
+    top:55px;
+    left:680px;
+    font-size:22pt;
+    transform: rotate(-7deg);
+}
+
+#title3{
+    top:110px;
+    left:720px;
+    font-size:18pt;
+}
+
+#title4{
+    top:150px;
+    left:700px;
+    font-size:20pt;
+    transform: rotate(5deg);
+}
+
+#title5{
+    top:195px;
+    left:680px;
+    font-size:20pt;
+}
