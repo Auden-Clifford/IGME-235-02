@@ -86,13 +86,52 @@
 
     const cells = [];
 
-    for(let col = 0; col < numCols; col++){
-        let cell = span.cloneNode();
-        cell.style.left = `${col * (cellWidth+cellSpacing)}px`;
-        cell.style.top = "0";
-        container.appendChild(cell);
-        cells.push(cell);
+    for(let row = 0; row < numRows; row++)
+    {
+        cells.push([]);
+        for(let col = 0; col < numCols; col++){
+            let cell = span.cloneNode();
+            cell.style.left = `${col * (cellWidth+cellSpacing)}px`;
+            cell.style.top = `${row * (cellWidth+cellSpacing)}px`;
+            container.appendChild(cell);
+            cells[row][col] = cell;
+        }
     }
+
+    let color = "red";
+
+    container.onclick = fillCell;
+
+    function fillCell(e){
+        let rect = container.getBoundingClientRect();
+        let mouseX = e.clientX - rect.left;
+        let mouseY = e.clientY - rect.top;
+        let columnWidth = cellWidth+cellSpacing;
+        let col = Math.floor(mouseX/columnWidth);
+        let row = Math.floor(mouseY/columnWidth);
+        let selectedCell = cells[row][col];
+        selectedCell.className = 'cellSelected';
+        selectedCell.style.backgroundColor = color;
+        console.log(`${col},${row}`);
+    }
+
+    let mouseIsDown = false;
+
+    container.onmousemove = (e) => {
+        e.preventDefault();
+        if (mouseIsDown) fillCell(e);
+    };
+
+    container.onmousedown = (e) => {
+        e.preventDefault();
+        mouseIsDown = true;
+    };
+
+    window.onmouseup = (e) => {
+        e.preventDefault();
+        mouseIsDown = false;
+    }
+    
 </script>
 </body>
 </html>
