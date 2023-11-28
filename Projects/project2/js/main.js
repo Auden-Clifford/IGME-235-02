@@ -3,6 +3,9 @@
 const prefix = "awc6002";
 let myDecks = JSON.parse(localStorage.getItem(prefix + "myDecks"));
 
+let storedResults = [];
+let currentPage = 1;
+
 // define a script-scope varialble to represent the currently selected deck
 const selectedDeck = {
     _value: {},
@@ -36,6 +39,7 @@ window.onload = (e) => {
         myDecks.push(addDeck("new deck 1", "a cool deck", []));
         localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
     }
+
     // assign some events
     document.querySelector("#addNew").onclick = function() {
         let decksDisplay = document.querySelector("#decks");
@@ -44,6 +48,9 @@ window.onload = (e) => {
     };
     document.querySelector("#searchButton").onclick = Search;
     document.querySelector("#deleteDeck").onclick = deleteDeck;
+
+    document.querySelector("#next").onclick = nextPage;
+    document.querySelector("#previous").onclick = previousPage;
 };
 
 function addDeck(newName, newDescription, contents){
@@ -192,6 +199,7 @@ function GetRandomCards()
 function ClearWindow()
 {
     let cardWindow = document.querySelector("#cards");  // get the div
+    //cardWindow.childNodes.
     let children = cardWindow.childNodes;  // get the child nodes
 
     for (let i = 0; i < children.length; i++) {
@@ -205,10 +213,15 @@ function ClearWindow()
 function Search()
 {
     // clear all the cards from previous searches
-    ClearWindow();
+    //ClearWindow();
+
+    // clear data from past searches
+    storedResults = [];
+    currentPage = 1;
+
     //get all the search filters
     let searchTerm = document.querySelector("#searchTerm");
-    let manaType = document.querySelector("#mana");
+    let manaType = document.querySelector("#manaType");
     let manaCost = document.querySelector("#cost");
     let costCompare = document.querySelector("#costCompare");
     let cardType = document.querySelector("#cardType");
@@ -254,7 +267,7 @@ function Search()
     
 
     // if any mana types are checked, add them to the query
-    if(Array.from(manaType.children).some(checkbox => checkbox.checked))
+    if(Array.from(manaType.children).some(checkbox => checkbox.children[0].checked))
     {
         // unless this is the first query term, add "+"
         if(url.slice(-1) != "=")
@@ -265,14 +278,17 @@ function Search()
         url += "(";
         for(let i = 0; i < manaType.children.length; i++)
         {
-            if(manaType.children[i].checked)
+            // figure out if the checkbox is checked 
+            // (the checkbox is the first child of the manaType labels)
+            if(manaType.children[i].children[0].checked)
             {
                 // add OR keyword (unless this is the first selected type)
                 if(url.slice(-1) != "(")
                 {
                     url += "+or+";
                 }
-                url += `c:${manaType.children[i].value}`;
+                // get the value contained within the checkbox
+                url += `c:${manaType.children[i].children[0].value}`;
             }
         }
         // close parentheses grouping
@@ -340,6 +356,43 @@ function dataLoaded(e){
         return;
     }
 
+    // store results
+    storedResults.push(obj);
+
+    displayResults(obj);
+}
+
+// display the contents of the given object to the card area
+function displayResults(obj){
+    // clear the window & reset page display
+    document.querySelector("#cards").innerHTML = "";
+    document.querySelector("#pageNum").innerHTML = currentPage;
+
+    let firstPageButton = document.querySelector("#first");
+    let previousPageButton = document.querySelector("#previous");
+    let nextPageButton = document.querySelector("#next");
+    let lastPageButton = document.querySelector("#last");
+
+    // enable/disapbe previous page buttons
+    if(currentPage > 1) {
+        firstPageButton.disabled = false;
+        previousPageButton.disabled = false;
+    }
+    else {
+        firstPageButton.disabled = true;
+        previousPageButton.disabled = true;
+    }
+
+    // enable/disable next page buttons
+    if(obj.has_more) {
+        nextPageButton.disabled = false;
+        lastPageButton.disabled = false;
+    }
+    else {
+        nextPageButton.disabled = true;
+        lastPageButton.disabled = true;
+    }
+
     let results = obj.data;
     console.log("results.length = " + results.length);
 
@@ -371,6 +424,32 @@ function dataLoaded(e){
 
 function dataError(e){
     console.log("An error occurred");
+}
+
+function nextPage(){
+
+    // if we are at the last stored page and there are 
+    // still pages in the API request the next page
+    if(currentPage == storedResults.length && storedResults[currentPage - 1].has_more){
+        getData(storedResults[currentPage - 1].next_page)
+        currentPage++;
+    }
+    // if we aren't on the last stored page, display the next stored list
+    else if(currentPage < storedResults.length){
+        currentPage++;
+        displayResults(storedResults[currentPage-1]);
+    }
+    // if neither of these are true, we have reached the end of 
+    // the array and there are no further pages from the API
+    // do nothing
+}
+
+function previousPage(){
+    if(currentPage > 1)
+    {
+        currentPage--;
+        displayResults(storedResults[currentPage - 1]);
+    }
 }
 
 /*

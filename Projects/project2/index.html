@@ -23,22 +23,47 @@
         </div>
         <div id="cardSearch">
             <div id="filters">
-                <input type="text" id="searchTerm">
+
+                <div id="term">
+                    <label for="searchTerm">Search:</label>
+                    <input type="text" id="searchTerm">
+                </div>
+                
                     
-                <div id="mana">
-                    <input type="checkbox" id="white" value="white">
-                    <input type="checkbox" id="black" value="black">
-                    <input type="checkbox" id="red" value="red">
-                    <input type="checkbox" id="blue" value="blue">
-                    <input type="checkbox" id="green" value="green">
+                <div id="manaType">
+                    <label id="white" class="manaSelector">
+                        <input type="checkbox" value="white">
+                        <span></span>
+                    </label>
+                    <label id="black"  class="manaSelector">
+                        <input type="checkbox" value="black">
+                        <span></span>
+                    </label>
+                    <label id="red"  class="manaSelector">
+                        <input type="checkbox" value="red">
+                        <span></span>
+                    </label>
+                    <label id="blue"  class="manaSelector">
+                        <input type="checkbox" value="blue">
+                        <span></span>
+                    </label>
+                    <label id="green"  class="manaSelector">
+                        <input type="checkbox" value="green">
+                        <span></span>
+                    </label>
+                    
                 </div>
     
-                <input type="number" id="cost">
-                <select name="costCompare" id="costCompare">
-                    <option value="=">exactly</option>
-                    <option value="&#62;=">or greater</option>
-                    <option value="&#60;=">or less</option>
-                </select>
+                <div id="costFilters">
+                    <label for="cost">Mana Cost:</label>
+                    <input type="number" id="cost">
+                    <select name="costCompare" id="costCompare">
+                        <option value="=">exactly</option>
+                        <option value="&#62;=">or greater</option>
+                        <option value="&#60;=">or less</option>
+                    </select>
+                </div>
+                
 
                 <select name="cardType" id="cardType">
                     <option value="default">-- Card Type --</option>
@@ -51,21 +76,22 @@
                     <option value="planeswalker">Planeswalker</option>
                 </select>
 
-                <select name="sortBy" id="sortBy">
-                    <option value="default">-- Sort by --</option>
-                    <option value="name">Name</option>
-                    <option value="released">Release Date</option>
-                    <option value="rarity">Rarity</option>
-                    <option value="cmc">Mana Value</option>
-                    <option value="power">Power</option>
-                    <option value="toughness">Toughness</option>
-                </select>
-
-                <select name="sortDirection" id="sortDirection">
-                    <option value="default">-- Sort Direction --</option>
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </select>
+                <div id="sort">
+                    <select name="sortBy" id="sortBy">
+                        <option value="default">-- Sort by --</option>
+                        <option value="name">Name</option>
+                        <option value="released">Release Date</option>
+                        <option value="rarity">Rarity</option>
+                        <option value="cmc">Mana Value</option>
+                        <option value="power">Power</option>
+                        <option value="toughness">Toughness</option>
+                    </select>
+                    <select name="sortDirection" id="sortDirection">
+                        <option value="default">-- Sort Direction --</option>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </div>
                 
                 <button id="searchButton">Search</button>
 
