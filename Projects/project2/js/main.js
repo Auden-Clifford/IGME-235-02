@@ -4,7 +4,7 @@ const prefix = "awc6002";
 let myDecks = JSON.parse(localStorage.getItem(prefix + "myDecks"));
 
 let storedResults = [];
-let currentPage = 1;
+let currentPageNum = 1;
 
 // define a script-scope varialble to represent the currently selected deck
 const selectedDeck = {
@@ -49,8 +49,21 @@ window.onload = (e) => {
     document.querySelector("#searchButton").onclick = Search;
     document.querySelector("#deleteDeck").onclick = deleteDeck;
 
-    document.querySelector("#next").onclick = nextPage;
-    document.querySelector("#previous").onclick = previousPage;
+    let nextPageButton = document.querySelector("#next");
+    let previousPageButton = document.querySelector("#previous");
+    let firstPageButton = document.querySelector("#first");
+    let lastPageButton = document.querySelector("#last");
+
+    nextPageButton.onclick = nextPage;
+    previousPageButton.onclick = previousPage;
+    firstPageButton.onclick = firstPage;
+    lastPageButton.onclick = lastPage;
+
+    // disable all page buttons by default
+    nextPageButton.disabled = true;
+    previousPageButton = true;
+    firstPageButton = true;
+    lastPageButton = true;
 };
 
 function addDeck(newName, newDescription, contents){
@@ -135,6 +148,8 @@ function updateDeckContentsDisplay()
     deckInfo.children[2].innerHTML = selectedDeck.value.description;
 
     // clear all of the card displays
+    contentWindow.innerHTML = ""
+    /*
     for(let i = 0; i < contentWindow.children.length; i++)
     {
         if(contentWindow.children[i].className == "deckCard")
@@ -143,22 +158,56 @@ function updateDeckContentsDisplay()
             i--; // list is live
         }
     }
+    */
 
     //loop through each card in the selected deck and create a new cardInDeckDisplay
-    for(let i = 0; i < selectedDeck.value.cards.length; i++)
+    for(let card of selectedDeck.value.cards)
     {
-        let display = document.createElement("div");
-        display.className = "deckCard"
-        display.innerHTML = selectedDeck.value.cards[i].name;
-        let removeButton = document.createElement("button");
-        removeButton.className = "removeCard";
-        removeButton.innerHTML = "-";
-        removeButton.onclick = function(){
-            removeCard(selectedDeck.value.cards[i])
+        // find an existing display for this card if one exists
+        // checks the name of the card against the name stored in the fourth child of the display
+        let existingDisplay = Array.from(contentWindow.children).find(d => d.children[3].innerHTML == card.name)
+        
+        // if there is already a display for this card, increment it
+        if(existingDisplay)
+        {
+            let num = Number(existingDisplay.childNodes[0].innerHTML);
+            num++
+            existingDisplay.childNodes[0].innerHTML = num;
         }
-        display.appendChild(removeButton);
+        // otherwise, create a new display
+        else{
+            let display = document.createElement("div");
+            display.className = "deckCard"
+            //display.innerHTML = selectedDeck.value.cards[i].name;
 
-        contentWindow.appendChild(display);
+            let cardCount = document.createElement("span");
+            cardCount.className = "cardCount";
+            cardCount.innerHTML = "1";
+            display.appendChild(cardCount);
+
+            let removeButton = document.createElement("button");
+            removeButton.className = "removeCard";
+            removeButton.innerHTML = "-";
+            removeButton.onclick = function(){
+                removeCard(card);
+            }
+            display.appendChild(removeButton);
+
+            let addButton = document.createElement("button");
+            addButton.className = "addCard";
+            addButton.innerHTML = "+";
+            addButton.onclick = function(){
+                addCard(card);
+            }
+            display.appendChild(addButton);
+
+            let cardName = document.createElement("span");
+            cardName.className = "cardName";
+            cardName.innerHTML = card.name;
+            display.appendChild(cardName);
+
+            contentWindow.appendChild(display);
+        }
     }
 }
 
@@ -217,7 +266,7 @@ function Search()
 
     // clear data from past searches
     storedResults = [];
-    currentPage = 1;
+    currentPageNum = 1;
 
     //get all the search filters
     let searchTerm = document.querySelector("#searchTerm");
@@ -366,7 +415,7 @@ function dataLoaded(e){
 function displayResults(obj){
     // clear the window & reset page display
     document.querySelector("#cards").innerHTML = "";
-    document.querySelector("#pageNum").innerHTML = currentPage;
+    document.querySelector("#pageNum").innerHTML = currentPageNum;
 
     let firstPageButton = document.querySelector("#first");
     let previousPageButton = document.querySelector("#previous");
@@ -374,7 +423,7 @@ function displayResults(obj){
     let lastPageButton = document.querySelector("#last");
 
     // enable/disapbe previous page buttons
-    if(currentPage > 1) {
+    if(currentPageNum > 1) {
         firstPageButton.disabled = false;
         previousPageButton.disabled = false;
     }
@@ -430,14 +479,14 @@ function nextPage(){
 
     // if we are at the last stored page and there are 
     // still pages in the API request the next page
-    if(currentPage == storedResults.length && storedResults[currentPage - 1].has_more){
-        getData(storedResults[currentPage - 1].next_page)
-        currentPage++;
+    if(currentPageNum == storedResults.length && storedResults[currentPageNum - 1].has_more){
+        getData(storedResults[currentPageNum - 1].next_page)
+        currentPageNum++;
     }
     // if we aren't on the last stored page, display the next stored list
-    else if(currentPage < storedResults.length){
-        currentPage++;
-        displayResults(storedResults[currentPage-1]);
+    else if(currentPageNum < storedResults.length){
+        currentPageNum++;
+        displayResults(storedResults[currentPageNum-1]);
     }
     // if neither of these are true, we have reached the end of 
     // the array and there are no further pages from the API
@@ -445,11 +494,44 @@ function nextPage(){
 }
 
 function previousPage(){
-    if(currentPage > 1)
+    if(currentPageNum > 1)
     {
-        currentPage--;
-        displayResults(storedResults[currentPage - 1]);
+        currentPageNum--;
+        displayResults(storedResults[currentPageNum - 1]);
     }
+}
+
+function firstPage()
+{
+    if(currentPageNum != 1)
+    {
+        currentPageNum = 1;
+        displayResults(storedResults[0]);
+    }
+}
+
+async function lastPage()
+{
+    //ensure we are at the last saved page
+    currentPageNum = storedResults.length;
+
+    // keep track of the current page
+    let currentPage = storedResults[currentPageNum - 1];
+    //let dataTemp = currentPage;
+
+    while(currentPage.has_more)
+    {
+        // delay the request
+        await delay(75);
+
+        //
+        currentPage = await fetch(currentPage.next_page);
+        currentPage = await currentPage.json();
+        await storedResults.push(currentPage);
+        currentPageNum++;
+    }
+
+    await displayResults(currentPage);
 }
 
 /*
@@ -457,3 +539,9 @@ function cardClick(e){
     console.log(e.currentTarget.dataset.cardObj)
 }
 */
+
+// tell an async function to wait a 
+//certain amount of time before continuing
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
