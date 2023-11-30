@@ -56,6 +56,9 @@ window.onload = (e) => {
         //let decksDisplay = document.querySelector("#decks");
         myDecks.push(addDeck(validateDeckName("new deck"), "a cool deck", []));
         localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
+
+        // allow the user to name and describe the deck
+        toggleDeckEdit();
     };
     document.querySelector("#searchButton").onclick = Search;
     document.querySelector("#deleteDeck").onclick = deleteDeck;
@@ -88,25 +91,35 @@ function addDeck(newName, newDescription, contents){
             name: newName,
             cards: contents,
             description: newDescription,
+            thumbnail: null,
             editing: false
         }
-        //myDecks.push(newDeck);
-        //focus on the deck we just created
-        selectedDeck.value = newDeck;
+        
         // set the local storage version equal to the newly updated decks
         //localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 
         // create an element to display the deck on screen
         let newDeckElement = document.createElement("div");
         newDeckElement.className = "deck";
-        // each deck should start with a unique name
-        newDeckElement.innerHTML = newDeck.name;
+
+        // give the deck a starting name
+        newDeckElement.innerHTML = `<span class="deckLabel">${newDeck.name}</span>`;
+
         // set it's onclick to change the selected deck
         newDeckElement.onclick = function(e){
+            // if the deck is is the middle of being edited, stop editing
+            if(selectedDeck.value.editing)
+            {
+                toggleDeckEdit();
+            }
             selectedDeck.value = newDeck;
         }
     
         decksDisplay.insertBefore(newDeckElement, decksDisplay.children[0]);
+
+        //myDecks.push(newDeck);
+        //focus on the deck we just created
+        selectedDeck.value = newDeck;
 
         return newDeck;
     }
@@ -121,7 +134,7 @@ function deleteDeck(){
     // the final element in the decks display area is not a deck
     for(let i = 0; i < decksDisplay.children.length - 1; i++)
     {
-        if(decksDisplay.children[i].innerHTML == selectedDeck.value.name)
+        if(decksDisplay.children[i].firstChild.innerHTML == selectedDeck.value.name)
         {
             decksDisplay.removeChild(decksDisplay.children[i]);
             break;
@@ -146,7 +159,7 @@ function deleteDeck(){
     localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 }
 
-function validateDeckName(name)
+function validateDeckName(name="new deck")
 {
     // clean the string
     name = name.trim();
@@ -197,7 +210,7 @@ function toggleDeckEdit()
     // find the deck thumbnail for the selected deck
     for(let deck of decksDisplay.children)
     {
-        if(deck.innerHTML == selectedDeck.value.name)
+        if(deck.className == "deck" && deck.firstChild.innerHTML == selectedDeck.value.name)
         {
             thumbnail = deck;
         }
@@ -206,7 +219,9 @@ function toggleDeckEdit()
     // if we are already editing the deck, save values and close editing
     if(selectedDeck.value.editing)
     {
-        
+        // clear the old name to prevent validation errors
+        selectedDeck.value.name ="";
+
         // save the values of the text inputs
         selectedDeck.value.name = validateDeckName(nameDisplay.firstChild.value);
         nameDisplay.innerHTML = selectedDeck.value.name;
@@ -218,7 +233,7 @@ function toggleDeckEdit()
         editButton.innerHTML = "Edit";
 
         // update deck thumbnail
-        thumbnail.innerHTML = selectedDeck.value.name;
+        thumbnail.firstChild.innerHTML = selectedDeck.value.name;
 
         // update local storage
         localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
@@ -248,7 +263,25 @@ function updateDeckContentsDisplay()
     let contentWindow = document.querySelector("#deckContents");
     let deckInfo = document.querySelector("#deckInfo");
 
-    // update the info
+    // update the deck thumbnail
+    let decksDisplay = document.querySelector("#decks");
+    let thumbnail;
+
+    // find the deck thumbnail for the selected deck
+    for(let deck of decksDisplay.children)
+    {
+        if(deck.className == "deck" && deck.firstChild.innerHTML == selectedDeck.value.name)
+        {
+            thumbnail = deck;
+        }
+    }
+
+    // if the deck has a thumbnail use it
+    if(selectedDeck._value.thumbnail)
+    {
+        thumbnail.style.backgroundImage = selectedDeck._value.thumbnail
+    }
+    
 
     // name is the first child
     deckInfo.children[0].innerHTML = selectedDeck.value.name;
@@ -275,7 +308,7 @@ function updateDeckContentsDisplay()
     {
         // find an existing display for this card if one exists
         // checks the name of the card against the name stored in the fourth child of the display
-        let existingDisplay = Array.from(contentWindow.children).find(d => d.children[3].innerHTML == card.name)
+        let existingDisplay = Array.from(contentWindow.children).find(d => d.children[3].firstChild.innerHTML == card.name)
         
         // if there is already a display for this card, increment it
         if(existingDisplay)
@@ -335,6 +368,22 @@ function removeCard(card)
 function addCard(card)
 {
     selectedDeck.value.cards.push(card);
+
+    // sort cards by title
+    selectedDeck.value.cards.sort(function(a, b) {
+        if(a.name < b.name)
+        {
+            return -1;
+        }
+        if(a.name > b.name)
+        {
+            return 1;
+        }
+        return 0;
+    });
+
+    selectedDeck._value.thumbnail = `url("${card.image_uris.art_crop}")`;
+
     updateDeckContentsDisplay()
 
     //update local storage

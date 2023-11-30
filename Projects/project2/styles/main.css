@@ -1,10 +1,13 @@
 * {
     box-sizing: border-box;
+    color: #FFFCF2;
 }
 body {
     height: 100vh;
     box-sizing: border-box;
     margin: 0;
+
+    background-color: #252422;
 }
 header {
     display: flex;
@@ -47,7 +50,9 @@ main {
     height: 150px;
     width: 150px;
     margin: 1em;
-    border: 3px solid black;
+
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 16px 16px 10px);
+    border: 3px solid #C7361B;
 }
 #cardSearch {
     grid-area: cards;
@@ -135,6 +140,26 @@ main {
     width: 2em;
 
     border-right: 1px solid black;
+}
+
+.deck {
+    display: flex;
+    flex-direction: column;
+
+    background-image: url("../media/Logo.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+}
+.deckLabel{
+    margin-top: auto;
+    display: inline-block;
+    
+    text-align: center;
+    background-color: #403D39;
+    color: #C7361B;
+
+    border-top: 3px solid #C7361B;
 }
 
 /*searchbar inputs*/
