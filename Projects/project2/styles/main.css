@@ -2,7 +2,6 @@
 
 * {
     box-sizing: border-box;
-    /*color: #FFFCF2;*/
 }
 body {
     height: 100vh;
@@ -29,6 +28,14 @@ header nav{
 h1 {
     font-family: "New Rocker";
     font-size: xxx-large;
+}
+h2 {
+    font-family: "New Rocker";
+    font-size: xx-large;
+    color: #C7361B;
+}
+h3 {
+    color: #C7361B;
 }
 header img {
     margin: 0 20px;
@@ -58,6 +65,9 @@ main {
     grid-template-rows: 25% 75%;
 
     height: 85%;
+}
+p, section {
+    color: #CCC5B9;
 }
 
 ::-webkit-scrollbar {
@@ -118,7 +128,8 @@ button:disabled {
     width: 150px;
     margin: 1em;
 
-    filter: drop-shadow(rgba(0, 0, 0, 0.6) 16px 16px 10px);
+    
+    box-shadow: rgba(0, 0, 0, 0.6) 16px 16px 10px;
 }
 .deck {
     
@@ -174,6 +185,7 @@ button:disabled {
     width: 11em;
     justify-content: space-between;
     margin: 5px auto;
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 16px 16px 10px);
 }
 #status {
     color: #C7361B;
@@ -183,6 +195,8 @@ button:disabled {
     margin: 5px auto;
     width: 15em;
     height: 3em;
+
+    filter: drop-shadow(rgba(0, 0, 0, 0.6) 16px 16px 10px);
 }
 #cards {
     display: grid;
@@ -348,7 +362,7 @@ button:disabled {
 #green span {background: url("../media/GreenMana.svg");}
 #green input:checked + span {background: url("../media/GreenMana_Selected.svg");}
 
-a:link {
+nav a:link {
     display: block;
     text-decoration: none;
     color: #CCC5B9;
@@ -357,7 +371,16 @@ a:link {
     padding: 2em;
     font-weight: bold;
 }
-a:visited {color: #252422;}
+nav a:visited {color: #252422;}
+nav a:focus {background-color: #CCC5B9; color: #C7361B;}
+nav a:hover {background-color: #CCC5B9; color: #C7361B;}
+nav a:active{background-color: #252422; color: #403D39;}
+
+a:link {
+    color: #C7361B;;
+    font-weight: bold;
+}
+a:visited {color: #403D39;}
 a:focus {background-color: #CCC5B9; color: #C7361B;}
 a:hover {background-color: #CCC5B9; color: #C7361B;}
 a:active{background-color: #252422; color: #403D39;}
