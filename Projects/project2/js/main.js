@@ -1,7 +1,7 @@
 "use strict"
 // attempt load saved decks
 const prefix = "awc6002-MTG-";
-let myDecks = JSON.parse(localStorage.getItem(prefix + "myDecks"));
+let myDecks = [];
 for(let deckIndex in myDecks)
 {
     if(!myDecks[deckIndex])
@@ -32,12 +32,14 @@ const selectedDeck = {
 };
 
 window.onload = (e) => {
+    let savedDecks = JSON.parse(localStorage.getItem(prefix + "myDecks"));
+
     // add any loaded decks to the window
-    if(myDecks)
+    if(savedDecks)
     {
-        for(let i = 0; i < myDecks.length; i++)
+        for(let i = 0; i < savedDecks.length; i++)
         {
-            addDeck(myDecks[i].name, myDecks[i].description, myDecks[i].cards);
+            myDecks.push(addDeck(savedDecks[i].name, savedDecks[i].description, savedDecks[i].cards, savedDecks[i].thumbnail));
         }
 
         // focus on the first deck in the list
@@ -46,7 +48,6 @@ window.onload = (e) => {
     // if there are none, create one
     else
     {
-        myDecks = [];
         myDecks.push(addDeck(validateDeckName("new deck"), "a cool deck", []));
         localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
     }
@@ -81,7 +82,7 @@ window.onload = (e) => {
     lastPageButton.disabled = true;
 };
 
-function addDeck(newName, newDescription, contents){
+function addDeck(newName, newDescription, contents, thumbnail=null){
     let decksDisplay = document.querySelector("#decks");
 
     // only allow user to create up to 5 decks
@@ -91,7 +92,7 @@ function addDeck(newName, newDescription, contents){
             name: newName,
             cards: contents,
             description: newDescription,
-            thumbnail: null,
+            thumbnail: thumbnail,
             editing: false
         }
         
@@ -277,9 +278,9 @@ function updateDeckContentsDisplay()
     }
 
     // if the deck has a thumbnail use it
-    if(selectedDeck._value.thumbnail)
+    if(selectedDeck.value.thumbnail)
     {
-        thumbnail.style.backgroundImage = selectedDeck._value.thumbnail
+        thumbnail.style.backgroundImage = selectedDeck.value.thumbnail
     }
     
 
@@ -308,7 +309,7 @@ function updateDeckContentsDisplay()
     {
         // find an existing display for this card if one exists
         // checks the name of the card against the name stored in the fourth child of the display
-        let existingDisplay = Array.from(contentWindow.children).find(d => d.children[3].firstChild.innerHTML == card.name)
+        let existingDisplay = Array.from(contentWindow.children).find(d => d.children[3].innerHTML == card.name)
         
         // if there is already a display for this card, increment it
         if(existingDisplay)
@@ -382,7 +383,7 @@ function addCard(card)
         return 0;
     });
 
-    selectedDeck._value.thumbnail = `url("${card.image_uris.art_crop}")`;
+    selectedDeck.value.thumbnail = `url("${card.image_uris.art_crop}")`;
 
     updateDeckContentsDisplay()
 
@@ -526,8 +527,16 @@ function Search()
         url += `t:${cardType.value}`;
     }
 
-    console.log(url);
-    getData(url);
+    // if nothing has been added to the url, ask for searc specification
+    if(url == "https://api.scryfall.com/cards/search?q=")
+    {
+        document.querySelector("#status").innerHTML = "Please enter some search information."
+        console.log("no query entered!")
+    }
+    else{
+        console.log(url);
+        getData(url);
+    }
 }
 
 /*
@@ -543,6 +552,8 @@ function getData(url){
 
     // set onerror handler
     xhr.onerror = dataError;
+
+    document.querySelector("#status").innerHTML = `<b>Searching...</b>`;
 
     // open connection and send the request
     xhr.open("GET", url);
@@ -560,9 +571,11 @@ function dataLoaded(e){
     
     // bail if there are no results
     if(!obj.data || obj.data.length == 0){
-        //document.querySelector("#status").innerHTML = `<b>No results found for '${displayTerm}'</b>`;
+        document.querySelector("#status").innerHTML = `<b>No results</b>`;
         return;
     }
+
+    
 
     // store results
     storedResults.push(obj);
@@ -628,10 +641,13 @@ function displayResults(obj){
             console.log("added a card");
         }
     }
+
+    document.querySelector("#status").innerHTML = `<b>Showing Results:</b>`;
 }
 
 function dataError(e){
     console.log("An error occurred");
+    document.querySelector("#status").innerHTML = `<b>An error occured.</b>`;
 }
 
 function nextPage(){

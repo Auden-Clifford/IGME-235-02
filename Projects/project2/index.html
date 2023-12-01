@@ -9,12 +9,8 @@
 </head>
 <body>
     <header>
-        <img src="" alt="">
+        <img src="media/Logo.svg" alt="">
         <h1>MTG Deck Builder</h1>
-        <nav id="siteNav">
-            <div id="home">home</div>
-            <div id="myDecks">decks</div>
-        </nav>
     </header>
     
     <main>
@@ -92,17 +88,20 @@
                         <option value="desc">Descending</option>
                     </select>
                 </div>
-                
-                <button id="searchButton">Search</button>
-
-                <nav id="cardNav">
-                    <button type="button" id="first">&#60;&#60;</button>
-                    <button type="button" id="previous">&#60;</button>
-                    <span id="pageNum">1</span>
-                    <button type="button" id="next">&#62;</button>
-                    <button type="button" id="last">&#62;&#62;</button>
-                </nav>
             </div>
+
+            <button id="searchButton">Search</button>
+
+            <nav id="cardNav">
+                <button type="button" id="first">&#60;&#60;</button>
+                <button type="button" id="previous">&#60;</button>
+                <span id="pageNum">1</span>
+                <button type="button" id="next">&#62;</button>
+                <button type="button" id="last">&#62;&#62;</button>
+            </nav>
+
+            <div id="status"></div>
+
             <div id="cards">
             </div>
         </div>
