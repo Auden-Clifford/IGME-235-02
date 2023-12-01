@@ -2,6 +2,7 @@
 // attempt load saved decks
 const prefix = "awc6002-MTG-";
 let myDecks = [];
+// check for null decks 
 for(let deckIndex in myDecks)
 {
     if(!myDecks[deckIndex])
@@ -14,23 +15,8 @@ for(let deckIndex in myDecks)
     }
 }
 
+// get the last search from storage
 let lastSearch = JSON.parse(localStorage.getItem(prefix + "lastSearch"));
-
-/*
-{
-    term,
-    white,
-    black,
-    red,
-    blue,
-    green,
-    manaCost,
-    costCompare,
-    cardType,
-    sortBy,
-    sortDirection
-}
-*/
 
 let storedResults = [];
 let currentPageNum = 1;
@@ -38,6 +24,8 @@ let currentPageNum = 1;
 // define a script-scope varialble to represent the currently selected deck
 const selectedDeck = {
     _value: {},
+    // getter/setter for this variable so that each time
+    // the focus changes the display can be automatically updated
     get value() {
         return this._value;
     },
@@ -73,7 +61,7 @@ window.onload = (e) => {
 
     // assign some events
     document.querySelector("#addNew").onclick = function() {
-        //let decksDisplay = document.querySelector("#decks");
+        // creates a new deck when the "new deck" button is clicked
         myDecks.push(addDeck(validateDeckName("new deck"), "a cool deck", []));
         localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 
