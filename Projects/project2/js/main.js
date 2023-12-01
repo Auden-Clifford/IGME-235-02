@@ -14,6 +14,24 @@ for(let deckIndex in myDecks)
     }
 }
 
+let lastSearch = JSON.parse(localStorage.getItem(prefix + "lastSearch"));
+
+/*
+{
+    term,
+    white,
+    black,
+    red,
+    blue,
+    green,
+    manaCost,
+    costCompare,
+    cardType,
+    sortBy,
+    sortDirection
+}
+*/
+
 let storedResults = [];
 let currentPageNum = 1;
 
@@ -32,6 +50,7 @@ const selectedDeck = {
 };
 
 window.onload = (e) => {
+    // load decks from local storage
     let savedDecks = JSON.parse(localStorage.getItem(prefix + "myDecks"));
 
     // add any loaded decks to the window
@@ -61,7 +80,7 @@ window.onload = (e) => {
         // allow the user to name and describe the deck
         toggleDeckEdit();
     };
-    document.querySelector("#searchButton").onclick = Search;
+    document.querySelector("#searchButton").onclick = search;
     document.querySelector("#deleteDeck").onclick = deleteDeck;
     document.querySelector("#editDeck").onclick = toggleDeckEdit;
 
@@ -80,6 +99,62 @@ window.onload = (e) => {
     previousPageButton.disabled = true;
     firstPageButton.disabled = true;
     lastPageButton.disabled = true;
+
+    // if a search was saved to local storage, search it now
+    if(lastSearch)
+    {
+        //get all the search filters
+        let searchTerm = document.querySelector("#searchTerm");
+        let manaType = document.querySelector("#manaType");
+        let manaCost = document.querySelector("#cost");
+        let costCompare = document.querySelector("#costCompare");
+        let cardType = document.querySelector("#cardType");
+        let sortBy = document.querySelector("#sortBy");
+        let sortDirection = document.querySelector("#sortDirection");
+
+        // change the values of search widgets to match the last search
+        if(lastSearch.term)
+        {
+            searchTerm.value = lastSearch.term;
+        }
+        if(lastSearch.colors)
+        {
+            for(let typeSelector of manaType.children)
+            {
+                for(let color of lastSearch.colors)
+                {
+                    // if the saved color matches the value of the button, the button is checked
+                    if(typeSelector.children[0].value == color)
+                    {
+                        typeSelector.children[0].checked = true;
+                    }
+                }
+            }
+        }
+        if(lastSearch.manaCost)
+        {
+            manaCost.value = lastSearch.manaCost;
+        }
+        if(lastSearch.costCompare)
+        {
+            costCompare.value = lastSearch.costCompare;
+        }
+        if(lastSearch.cardType)
+        {
+            cardType.value = lastSearch.cardType;
+        }
+        if(lastSearch.sortBy)
+        {
+            sortBy.value = lastSearch.sortBy;
+        }
+        if(lastSearch.sortDirection)
+        {
+            sortDirection.value = lastSearch.sortDirection;
+        }
+
+        // after all the values are entered, search
+        search();
+    }
 };
 
 function addDeck(newName, newDescription, contents, thumbnail=null){
@@ -419,10 +494,10 @@ function ClearWindow()
     }
 }
 
-function Search()
+function search()
 {
-    // clear all the cards from previous searches
-    //ClearWindow();
+    // clear the last search
+    lastSearch = {}
 
     // clear data from past searches
     storedResults = [];
@@ -444,6 +519,9 @@ function Search()
     if(sortBy.value != "default")
     {
         url += `order=${sortBy.value}`;
+
+        // save value
+        lastSearch.sortBy = sortBy.value;
     }
     
     if(sortDirection.value != "default")
@@ -454,6 +532,8 @@ function Search()
             url += "&";
         }
         url += `dir=${sortDirection.value}`;
+
+        lastSearch.sortDirection = sortDirection.value;
     }
 
     // unless this is the first parameter, add "&"
@@ -471,6 +551,8 @@ function Search()
         let term = searchTerm.value.trim();
         // this will get any cards that have matching phrases in the name or oracle text
         url += `(o:"${term}"+or+name:"${term}")`;
+
+        lastSearch.term = searchTerm.value;
     }
 
     
@@ -478,6 +560,8 @@ function Search()
     // if any mana types are checked, add them to the query
     if(Array.from(manaType.children).some(checkbox => checkbox.children[0].checked))
     {
+        lastSearch.colors = [];
+
         // unless this is the first query term, add "+"
         if(url.slice(-1) != "=")
         {
@@ -498,6 +582,8 @@ function Search()
                 }
                 // get the value contained within the checkbox
                 url += `c:${manaType.children[i].children[0].value}`;
+                
+                lastSearch.colors.push(manaType.children[i].children[0].value);
             }
         }
         // close parentheses grouping
@@ -514,6 +600,9 @@ function Search()
         }
         //get the correct cost comparison (<=, =, >=)
         url += `mv${costCompare.value}${manaCost.value}`;
+
+        lastSearch.manaCost = manaCost.value;
+        lastSearch.costCompare = costCompare.value;
     }
 
     // if a value for card type is selected, add it to the query
@@ -525,6 +614,8 @@ function Search()
             url += "+";
         }
         url += `t:${cardType.value}`;
+
+        lastSearch.cardType = cardType.value;
     }
 
     // if nothing has been added to the url, ask for searc specification
@@ -536,6 +627,9 @@ function Search()
     else{
         console.log(url);
         getData(url);
+        
+        // save this search to local storage
+        localStorage.setItem(prefix + "lastSearch", JSON.stringify(lastSearch));
     }
 }
 
