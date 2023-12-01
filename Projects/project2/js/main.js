@@ -436,18 +436,7 @@ function removeCard(card)
     // sort cards by title
     selectedDeck.value.cards.sort((a, b) => a.name.localeCompare(b.name));
     
-    /*sort(function(a, b) {
-        if(a.name < b.name)
-        {
-            return -1;
-        }
-        if(a.name > b.name)
-        {
-            return 1;
-        }
-        return 0;
-    });
-    */
+    // display new card list
     updateDeckContentsDisplay()
 
     //update local storage
@@ -456,7 +445,8 @@ function removeCard(card)
 
 /*
 * adds a given card to the selected deck and tells the deck display to update
-*
+* sorts cards aphabetically
+* sets the thumbnail to the new card's art
 */
 function addCard(card)
 {
@@ -475,6 +465,7 @@ function addCard(card)
         return 0;
     });
 
+    // the thumbnail of the deck is the image of the last selected card
     selectedDeck.value.thumbnail = `url("${card.image_uris.art_crop}")`;
 
     updateDeckContentsDisplay()
@@ -484,39 +475,14 @@ function addCard(card)
 }
 
 /*
-fills the card window with a random assortment of cards
-function GetRandomCards()
-{
-    for(let i = 0; i < 12; i++)
-    {
-        getData("https://api.scryfall.com/cards/random");
-    }
-}
+* creates an API search url based on the values entered into search widgets
 */
-
-/*
-    clears everything except the navigation buttons from the card display window
-*/
-function ClearWindow()
-{
-    let cardWindow = document.querySelector("#cards");  // get the div
-    //cardWindow.childNodes.
-    let children = cardWindow.childNodes;  // get the child nodes
-
-    for (let i = 0; i < children.length; i++) {
-        if (children[i].nodeName.toLowerCase() !== 'nav') {
-            cardWindow.removeChild(children[i]);
-            i--;  // decrement the index as the nodeList is live
-        }
-    }
-}
-
 function search()
 {
     // clear the last search
     lastSearch = {}
 
-    // clear data from past searches
+    // clear card data from past searches
     storedResults = [];
     currentPageNum = 1;
 
@@ -540,7 +506,6 @@ function search()
         // save value
         lastSearch.sortBy = sortBy.value;
     }
-    
     if(sortDirection.value != "default")
     {
         // unless this is the first parameter, add "&"
@@ -571,8 +536,6 @@ function search()
 
         lastSearch.term = searchTerm.value;
     }
-
-    
 
     // if any mana types are checked, add them to the query
     if(Array.from(manaType.children).some(checkbox => checkbox.children[0].checked))
@@ -639,10 +602,8 @@ function search()
     if(url == "https://api.scryfall.com/cards/search?q=")
     {
         document.querySelector("#status").innerHTML = "Please enter some search information."
-        console.log("no query entered!")
     }
     else{
-        console.log(url);
         getData(url);
         
         // save this search to local storage
@@ -798,12 +759,27 @@ function firstPage()
 
 async function lastPage()
 {
+    let nextPageButton = document.querySelector("#next");
+    let previousPageButton = document.querySelector("#previous");
+    let firstPageButton = document.querySelector("#first");
+    let lastPageButton = document.querySelector("#last");
+
     //ensure we are at the last saved page
     currentPageNum = storedResults.length;
 
     // keep track of the current page
     let currentPage = storedResults[currentPageNum - 1];
-    //let dataTemp = currentPage;
+    
+    // report status and clear search
+    document.querySelector("#status").innerHTML = `<b>loading...</b>`;
+    document.querySelector("#cards").innerHTML = "";
+
+    // disable all buttons during loading
+    nextPageButton.disabled = true;
+    previousPageButton.disabled = true;
+    firstPageButton.disabled = true;
+    lastPageButton.disabled = true;
+
 
     while(currentPage.has_more)
     {
@@ -818,6 +794,12 @@ async function lastPage()
     }
 
     await displayResults(currentPage);
+
+    // re-enable all buttons after loading
+    nextPageButton.disabled = false;
+    previousPageButton.disabled = false;
+    firstPageButton.disabled = false;
+    lastPageButton.disabled = false;
 }
 
 /*
