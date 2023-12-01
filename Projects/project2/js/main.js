@@ -612,8 +612,7 @@ function search()
 }
 
 /*
-Requests the card data from the api, then calls a 
-function that fills in the window using the data
+* sends an API request with the given url
 */
 function getData(url){
     // create XHR object
@@ -632,11 +631,12 @@ function getData(url){
     xhr.send();
 }
 
-// callback functions
+/*
+* when the API response occurs, this code parses the object we recieved, 
+* if no data was recived, it reports this and bails
+*/
 function dataLoaded(e){
     let xhr = e.target;
-
-    console.log(xhr.responseText);
 
     // parse the text to a JavaScript object
     let obj = JSON.parse(xhr.responseText);
@@ -647,15 +647,15 @@ function dataLoaded(e){
         return;
     }
 
-    
-
     // store results
     storedResults.push(obj);
 
     displayResults(obj);
 }
 
-// display the contents of the given object to the card area
+/*
+* displays the contents of the given results object in the card display area
+*/
 function displayResults(obj){
     // clear the window & reset page display
     document.querySelector("#cards").innerHTML = "";
@@ -687,7 +687,6 @@ function displayResults(obj){
     }
 
     let results = obj.data;
-    console.log("results.length = " + results.length);
 
     let cardGrid = document.querySelector("#cards");
 
@@ -707,23 +706,26 @@ function displayResults(obj){
                 addCard(results[i]);
             }
             
-        
             // add these cards to the grid, inserted before the nav element
             cardGrid.appendChild(cardDisplay);
-            console.log("added a card");
         }
     }
 
     document.querySelector("#status").innerHTML = `<b>Showing Results:</b>`;
 }
 
+/*
+* If an API request results in an error it is reported to the user
+*/
 function dataError(e){
-    console.log("An error occurred");
     document.querySelector("#status").innerHTML = `<b>An error occured.</b>`;
 }
 
+/*
+* displays the next page in the results for the user's query
+* allows for paging through API and stored results
+*/
 function nextPage(){
-
     // if we are at the last stored page and there are 
     // still pages in the API request the next page
     if(currentPageNum == storedResults.length && storedResults[currentPageNum - 1].has_more){
@@ -740,6 +742,9 @@ function nextPage(){
     // do nothing
 }
 
+/*
+* displays the previous page in storedResults
+*/
 function previousPage(){
     if(currentPageNum > 1)
     {
@@ -748,6 +753,9 @@ function previousPage(){
     }
 }
 
+/*
+* jumps to the first page in storedResults
+*/
 function firstPage()
 {
     if(currentPageNum != 1)
@@ -757,6 +765,10 @@ function firstPage()
     }
 }
 
+/*
+* jumps to the last page in the API results by asycronously requesting 
+* each next page until there are no longer any to request
+*/
 async function lastPage()
 {
     let nextPageButton = document.querySelector("#next");
@@ -803,13 +815,9 @@ async function lastPage()
 }
 
 /*
-function cardClick(e){
-    console.log(e.currentTarget.dataset.cardObj)
-}
+* tells an async function to wait a 
+* given amount of time before continuing
 */
-
-// tell an async function to wait a 
-//certain amount of time before continuing
 function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
