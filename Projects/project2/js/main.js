@@ -46,7 +46,7 @@ window.onload = (e) => {
     {
         for(let i = 0; i < savedDecks.length; i++)
         {
-            myDecks.push(addDeck(savedDecks[i].name, savedDecks[i].description, savedDecks[i].cards, savedDecks[i].thumbnail));
+            myDecks.push(createDeck(savedDecks[i].name, savedDecks[i].description, savedDecks[i].cards, savedDecks[i].thumbnail));
         }
 
         // focus on the first deck in the list
@@ -55,14 +55,14 @@ window.onload = (e) => {
     // if there are none, create one
     else
     {
-        myDecks.push(addDeck(validateDeckName("new deck"), "a cool deck", []));
+        myDecks.push(createDeck(validateDeckName("new deck"), "a cool deck", []));
         localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
     }
 
     // assign some events
     document.querySelector("#addNew").onclick = function() {
         // creates a new deck when the "new deck" button is clicked
-        myDecks.push(addDeck(validateDeckName("new deck"), "a cool deck", []));
+        myDecks.push(createDeck(validateDeckName("new deck"), "a cool deck", []));
         localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 
         // allow the user to name and describe the deck
@@ -107,6 +107,7 @@ window.onload = (e) => {
         }
         if(lastSearch.colors)
         {
+            // check each selector against each saved value
             for(let typeSelector of manaType.children)
             {
                 for(let color of lastSearch.colors)
@@ -145,50 +146,50 @@ window.onload = (e) => {
     }
 };
 
-function addDeck(newName, newDescription, contents, thumbnail=null){
+/*
+* creates a new deck given a name,description, card contents, and a thumbnail
+* sets selectedDeck to the new deck
+* returns the created deck
+*/
+function createDeck(newName, newDescription, contents, thumbnail=null){
     let decksDisplay = document.querySelector("#decks");
 
-    // only allow user to create up to 5 decks
-    if(decksDisplay.children.length < 6)
-    {
-        let newDeck = {
-            name: newName,
-            cards: contents,
-            description: newDescription,
-            thumbnail: thumbnail,
-            editing: false
-        }
-        
-        // set the local storage version equal to the newly updated decks
-        //localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
-
-        // create an element to display the deck on screen
-        let newDeckElement = document.createElement("div");
-        newDeckElement.className = "deck";
-
-        // give the deck a starting name
-        newDeckElement.innerHTML = `<span class="deckLabel">${newDeck.name}</span>`;
-
-        // set it's onclick to change the selected deck
-        newDeckElement.onclick = function(e){
-            // if the deck is is the middle of being edited, stop editing
-            if(selectedDeck.value.editing)
-            {
-                toggleDeckEdit();
-            }
-            selectedDeck.value = newDeck;
-        }
-    
-        decksDisplay.insertBefore(newDeckElement, decksDisplay.children[0]);
-
-        //myDecks.push(newDeck);
-        //focus on the deck we just created
-        selectedDeck.value = newDeck;
-
-        return newDeck;
+    let newDeck = {
+        name: newName,
+        cards: contents,
+        description: newDescription,
+        thumbnail: thumbnail,
+        editing: false
     }
+
+    // create an element to display the deck on screen
+    let newDeckElement = document.createElement("div");
+    newDeckElement.className = "deck";
+
+    // give the deck a starting name
+    newDeckElement.innerHTML = `<span class="deckLabel">${newDeck.name}</span>`;
+
+    // set it's onclick to change the selected deck
+    newDeckElement.onclick = function(e){
+        // if the deck is is the middle of being edited, stop editing
+        if(selectedDeck.value.editing)
+        {
+            toggleDeckEdit();
+        }
+        selectedDeck.value = newDeck;
+    }
+    
+    decksDisplay.insertBefore(newDeckElement, decksDisplay.children[0]);
+
+    //focus on the deck we just created
+    selectedDeck.value = newDeck;
+
+    return newDeck;
 }
 
+/*
+* deletes the currently selected deck, creates a new deck if there are none left
+*/
 function deleteDeck(){
     
     let decksDisplay = document.querySelector("#decks");
@@ -216,13 +217,18 @@ function deleteDeck(){
     }
     else
     {
-        myDecks.push(addDeck(validateDeckName("new deck"), "a cool deck", []));
+        myDecks.push(createDeck(validateDeckName("new deck"), "a cool deck", []));
     }
 
     //update local storage
     localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 }
 
+/*
+* checks a given deck name against all other deck names to ensure it is unique
+* if the name is not unique it adds a number to the end or inrements an existing number
+* recursively checks the newly created name again
+*/
 function validateDeckName(name="new deck")
 {
     // clean the string
@@ -262,6 +268,11 @@ function validateDeckName(name="new deck")
     return name;
 }
 
+/*
+* toggles deck editing mode on/off
+* creates text fields to edit the deck's name and description when opened
+* saves the values of the text fields and replaces name and description when closed
+*/
 function toggleDeckEdit()
 {
     let nameDisplay = document.querySelector("#name");
@@ -322,6 +333,10 @@ function toggleDeckEdit()
     }
 }
 
+/*
+* updates the window that displays the deck's contents & info
+* triggered whenever a new card is added
+*/
 function updateDeckContentsDisplay()
 {
     let contentWindow = document.querySelector("#deckContents");
@@ -340,7 +355,7 @@ function updateDeckContentsDisplay()
         }
     }
 
-    // if the deck has a thumbnail use it
+    // if the deckobject has a thumbnail image, use it
     if(selectedDeck.value.thumbnail)
     {
         thumbnail.style.backgroundImage = selectedDeck.value.thumbnail
@@ -356,16 +371,6 @@ function updateDeckContentsDisplay()
 
     // clear all of the card displays
     contentWindow.innerHTML = ""
-    /*
-    for(let i = 0; i < contentWindow.children.length; i++)
-    {
-        if(contentWindow.children[i].className == "deckCard")
-        {
-            contentWindow.removeChild(contentWindow.children[i]);
-            i--; // list is live
-        }
-    }
-    */
 
     //loop through each card in the selected deck and create a new cardInDeckDisplay
     for(let card of selectedDeck.value.cards)
@@ -418,17 +423,41 @@ function updateDeckContentsDisplay()
     }
 }
 
+/*
+* removes a given card from the selected deck and tells the deck display to update
+* sorts remaining cards alphabeticaly
+*/
 function removeCard(card)
 {
     // remove the selected deck from myDecks and local data
     let index = selectedDeck.value.cards.findIndex(cardInDeck => cardInDeck.id === card.id);
     selectedDeck.value.cards.splice(index, 1);
+
+    // sort cards by title
+    selectedDeck.value.cards.sort((a, b) => a.name.localeCompare(b.name));
+    
+    /*sort(function(a, b) {
+        if(a.name < b.name)
+        {
+            return -1;
+        }
+        if(a.name > b.name)
+        {
+            return 1;
+        }
+        return 0;
+    });
+    */
     updateDeckContentsDisplay()
 
     //update local storage
     localStorage.setItem(prefix + "myDecks", JSON.stringify(myDecks));
 }
 
+/*
+* adds a given card to the selected deck and tells the deck display to update
+*
+*/
 function addCard(card)
 {
     selectedDeck.value.cards.push(card);
