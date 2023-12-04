@@ -643,6 +643,7 @@ function dataLoaded(e){
     
     // bail if there are no results
     if(!obj.data || obj.data.length == 0){
+        document.querySelector("#cards").innerHTML = "";
         document.querySelector("#status").innerHTML = `<b>No results</b>`;
         return;
     }
