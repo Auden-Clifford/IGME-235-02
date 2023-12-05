@@ -1,6 +1,10 @@
-class Ship extends PIXI.Sprite {
-    constructor(x = 0, y = 0) {
-        super(app.loader.resources["images/spaceship.png"].texture);
+class Player extends PIXI.Sprite {
+    constructor(radius, color=0xFFFF00, x = 0, y = 0) {
+        super();
+        this.beginFill(color);
+        this.drawCircle(0,0,radius);
+        this.endFill();
+        //super(app.loader.resources["images/spaceship.png"].texture);
         this.anchor.set(.5, .5); // position, scaling, rotating etc are now from center of sprite
         this.scale.set(0.1);
         this.x = x;
@@ -8,7 +12,7 @@ class Ship extends PIXI.Sprite {
     }
 }
 
-class Circle extends PIXI.Graphics{
+class Zombie extends PIXI.Graphics{
     constructor(radius, color=0xFF0000, x=0, y=0){
         super();
         this.beginFill(color);
@@ -57,4 +61,10 @@ class Bullet extends PIXI.Graphics{
         this.x += this.fwd.x * this.speed * dt;
         this.y += this.fwd.y * this.speed * dt;
     }
+}
+
+// idea: objects like Player & zombie store class instances like PhysicsObject and Agent within them as properties, similar to component-based arcitecture
+class PhysicsObject 
+{
+
 }
