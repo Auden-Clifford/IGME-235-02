@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="57.201 91.0996 306.3627 188.7047" width="306.3627" height="188.7047" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <pattern id="pattern-1-0" patternTransform="matrix(0.192386, 0, 0, 0.213777, 129.949917, 64.5587)" xlink:href="#pattern-1"/>
+    <pattern id="pattern-1" viewBox="0 0 16 16" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="100" height="100" bx:pinned="true">
+      <rect width="16" height="16" style="stroke: rgba(126, 126, 126, 0); fill: rgb(171, 171, 171);"/>
+      <path d="M 56.744 32.119 L 58.367 36.71 L 56.744 41.301 L 55.121 36.71 Z" style="transform-box: fill-box; transform-origin: 50% 50%; fill: rgb(146, 146, 146); stroke: rgba(0, 0, 0, 0);" transform="matrix(0.707095, 0.707119, -0.707095, 0.707118, -45.639, -31.815966)" bx:shape="n-gon 56.744 36.71 1.623 4.591 4 0 1@dfff5add"/>
+      <path d="M 56.744 32.119 L 58.367 36.71 L 56.744 41.301 L 55.121 36.71 Z" style="transform-origin: 56.744px 36.71px; fill: rgb(146, 146, 146); stroke: rgba(0, 0, 0, 0);" transform="matrix(0.707095, 0.707119, -0.707095, 0.707118, -51.850109, -25.604691)" bx:shape="n-gon 56.744 36.71 1.623 4.591 4 0 1@dfff5add"/>
+      <ellipse style="fill: rgb(146, 146, 146); stroke: rgba(0, 0, 0, 0);" cx="8.072" cy="8.263" rx="1.299" ry="1.299"/>
+    </pattern>
+  </defs>
+  <g transform="matrix(1.0494799613952637, 0, 0, 1.0548410415649414, -10.316224098205566, -9.50270938873291)" style="">
+    <rect style="stroke: rgba(0, 0, 0, 0); fill: rgb(98, 152, 57);" x="64.334" y="95.372" width="286.117" height="77.314" rx="10" ry="10"/>
+  </g>
+  <g>
+    <rect style="fill: rgb(221, 213, 115); stroke: rgba(0, 0, 0, 0);" x="64.334" y="95.372" width="286.117" height="77.314" rx="10" ry="10"/>
+  </g>
+  <rect style="stroke-linejoin: round; stroke-width: 2px; stroke: rgba(0, 0, 0, 0.537); fill: url('#pattern-1-0'); paint-order: fill; transform-origin: 178.773px 115.637px;" x="71.217" y="85.33" width="215.113" height="60.615" transform="matrix(0.999065101147, -0.043242998421, 0.043242998421, 0.999065101147, 26.362486914016, 17.576466002877)"/>
+  <text style="fill: rgb(51, 51, 51); font-family: Impact; font-size: 61px; white-space: pre; transform-origin: 200.751px 130.362px;" x="144.47" y="154.628" transform="matrix(0.99862998724, -0.052336014807, 0.052336014807, 0.99862998724, 0.000087825863, 2.821724970018)">SHOP</text>
+</svg>

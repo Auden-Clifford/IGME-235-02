@@ -64,7 +64,59 @@ class Bullet extends PIXI.Graphics{
 }
 
 // idea: objects like Player & zombie store class instances like PhysicsObject and Agent within them as properties, similar to component-based arcitecture
-class PhysicsObject 
-{
+class PhysicsObject {
+    constructor (posX=0, posY=0, radius, coefFriction){
+        this.position = new Victor(posX,posY);
+        this.velocity = new Victor(0,0);
+        this.direction = new Victor(0,1);
+        this.acceleration = new Victor(0,0);
 
+        this.radius = radius;
+        this.coefFriction = coefFriction;
+    }
+
+    /*
+    * Gets this object's mass (equal to it's area)
+    */
+    getMass = function () {
+        return Math.PI * Math.pow(radius, 2); 
+    }
+
+    /*
+    * Gets this object's direction (equal to it's normalized velocity)
+    */
+    getDirection = function () {
+        return velocity.clone().normalize();
+    }
+
+    /*
+    * applies a force vector to this object's acceleration factoring in the object's mass
+    */
+    applyForce = function(force)
+    {
+        this.acceleration.add(force.divideScalar(this.getMass()));
+    }
+
+    /*
+    * applies a force oposite to the object's velocity
+    */
+    applyFriction = function()
+    {
+        let friction = this.velocity.clone().invert();
+        friction.normalize();
+        friction.multiplySacalar(this.coefFriction);
+        this.applyForce(friction);
+    }
+
+    /*
+    * detects whether this object is intersecting another
+    */
+    detectIntersection(otherObject)
+    {
+        // ensure this object is not being checked against itself
+        if(this !== otherObject)
+        {
+            return this.position.distance(otherObject.position) <= this.radius + otherObject.radius ? true : false
+        }
+    }
 }

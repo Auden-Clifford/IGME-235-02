@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="116.2188 58.0382 55.3743 54.3546" width="55.3743" height="54.3546" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <rect x="121.353" y="60.374" width="49.67" height="49.654" rx="10" ry="10" style="fill: rgb(221, 213, 115); stroke: rgba(0, 0, 0, 0); transform-origin: 146.188px 85.201px;" transform="matrix(0.994816124439, -0.101696014404, 0.120066002011, 0.992937803268, -2.282038019453, 0.014459505141)"/>
+  <rect x="122.178" y="64.052" width="43.454" height="43.454" rx="10" ry="10" style="stroke: rgba(0, 0, 0, 0); fill: rgb(98, 152, 57);"/>
+  <path d="M 140.858 69.526 H 146.953 V 81.716 H 159.142 V 87.811 H 146.953 V 100 H 140.858 V 87.811 H 128.668 V 81.716 H 140.858 Z" style="fill: rgb(216, 216, 216); stroke: rgba(0, 0, 0, 0); transform-origin: 143.905px 84.763px;" transform="matrix(0.813445091248, 0.58164191246, -0.58164191246, 0.813445091248, -0.000011033551, -0.00006056402)" bx:shape="cross 128.668 69.526 30.474 30.474 6.095 6.095 0.5 1@fe4071a8"/>
+</svg>

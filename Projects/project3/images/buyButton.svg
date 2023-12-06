@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="29.3116 18.1006 101.0857 49.1459" width="101.0857" height="49.1459" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <pattern id="pattern-1-1" patternTransform="matrix(0.147855, 0, 0, 0.164785, 28.216501, -7.924999)" xlink:href="#pattern-1"/>
+    <pattern id="pattern-1" viewBox="0 0 16 16" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="100" height="100" bx:pinned="true">
+      <rect width="16" height="16" style="stroke: rgba(126, 126, 126, 0); fill: rgb(171, 171, 171);"/>
+      <path d="M 56.744 32.119 L 58.367 36.71 L 56.744 41.301 L 55.121 36.71 Z" style="transform-box: fill-box; transform-origin: 50% 50%; fill: rgb(146, 146, 146); stroke: rgba(0, 0, 0, 0);" transform="matrix(0.707095, 0.707119, -0.707095, 0.707118, -45.639, -31.815966)" bx:shape="n-gon 56.744 36.71 1.623 4.591 4 0 1@dfff5add"/>
+      <path d="M 56.744 32.119 L 58.367 36.71 L 56.744 41.301 L 55.121 36.71 Z" style="transform-origin: 56.744px 36.71px; fill: rgb(146, 146, 146); stroke: rgba(0, 0, 0, 0);" transform="matrix(0.707095, 0.707119, -0.707095, 0.707118, -51.850109, -25.604691)" bx:shape="n-gon 56.744 36.71 1.623 4.591 4 0 1@dfff5add"/>
+      <ellipse style="fill: rgb(146, 146, 146); stroke: rgba(0, 0, 0, 0);" cx="8.072" cy="8.263" rx="1.299" ry="1.299"/>
+    </pattern>
+  </defs>
+  <rect x="220.663" y="54.803" width="90.318" height="45.072" rx="10" ry="10" style="fill: rgb(221, 213, 115); stroke: rgba(0, 0, 0, 0); transform-origin: 265.822px 77.339px;" transform="matrix(0.998721122742, -0.050568006933, 0.241462036967, 0.989055097103, -185.967569664077, -34.665492416153)"/>
+  <rect x="40.189" y="23.538" width="79.325" height="39.29" rx="10" ry="10" style="stroke: rgba(0, 0, 0, 0); fill: rgb(98, 152, 57);"/>
+  <rect x="52.483" y="28.829" width="51.467" height="26.492" style="fill: url('#pattern-1-1'); stroke: rgba(0, 0, 0, 0.537); stroke-linejoin: round; stroke-width: 2px;"/>
+  <text style="fill: rgb(51, 51, 51); font-family: Impact; font-size: 27px; white-space: pre;" x="56.782" y="52.797">BUY</text>
+</svg>

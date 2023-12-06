@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 100 500 200" width="500" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="200" y="100" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+  <rect x="300" y="100" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 327.426 139.641 C 323.908 135.936 312.961 140.724 310.496 126.097"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 328.555 140.206 C 331.552 136.006 316.13 135.989 321.783 114.246"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-linecap: round; stroke-width: 2px;" d="M 327.99 139.642 C 332.487 131.056 332.964 128.975 343.791 124.969"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 361.598 187.579 C 364.595 183.379 355.38 180.541 358.776 171.213"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-linecap: round; stroke-width: 2px;" d="M 361.033 187.015 C 365.53 178.429 375.6 172.397 381.913 174.599"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-width: 4px; stroke-linecap: round;" d="M 312.19 144.971 C 316.687 136.385 329.015 146.155 349.436 138.763"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-width: 4px; stroke-linecap: round;" d="M 340.971 190.118 C 345.679 186.073 354.612 193.396 384.424 187.861"/>
+  <rect x="400" y="100" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 427.426 139.641 C 423.908 135.936 412.961 140.724 410.496 126.097"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 428.555 140.206 C 431.552 136.006 416.13 135.989 421.783 114.246"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-linecap: round; stroke-width: 2px;" d="M 427.99 139.642 C 432.487 131.056 432.964 128.975 443.791 124.969"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-width: 4px; stroke-linecap: round;" d="M 412.19 144.971 C 416.687 136.385 429.015 146.155 449.436 138.763"/>
+  <rect x="100" y="100" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+  <rect y="100" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 61.598 187.579 C 64.595 183.379 55.38 180.541 58.776 171.213"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-linecap: round; stroke-width: 2px;" d="M 61.033 187.015 C 65.53 178.429 75.6 172.397 81.913 174.599"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-width: 4px; stroke-linecap: round;" d="M 40.971 190.118 C 45.679 186.073 54.612 193.396 84.424 187.861"/>
+  <rect x="100" y="200" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 121.331 239.641 C 117.813 235.936 106.866 240.724 104.401 226.097"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 122.46 240.206 C 125.457 236.006 110.035 235.989 115.688 214.246"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-linecap: round; stroke-width: 2px;" d="M 121.895 239.642 C 126.392 231.056 126.869 228.975 137.696 224.969"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-width: 4px; stroke-linecap: round;" d="M 106.095 244.971 C 110.592 236.385 122.92 246.155 143.341 238.763"/>
+  <rect y="200" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);" x="300"/>
+  <path style="fill: rgba(146, 211, 97, 0); stroke: rgb(98, 152, 57); stroke-linecap: round; stroke-width: 2px;" d="M 361.598 281.747 C 364.595 277.547 355.38 274.709 358.776 265.381"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-linecap: round; stroke-width: 2px;" d="M 361.033 281.183 C 365.53 272.597 375.6 266.565 381.913 268.767"/>
+  <path style="stroke: rgb(98, 152, 57); fill: rgba(146, 211, 97, 0); stroke-width: 4px; stroke-linecap: round;" d="M 340.971 284.286 C 345.679 280.241 354.612 287.564 384.424 282.029"/>
+  <rect x="200" y="200" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+  <rect y="200" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);" x="400"/>
+  <rect y="200" width="100" height="100" style="stroke: rgba(0, 0, 0, 0); fill: rgb(146, 211, 97);"/>
+</svg>
