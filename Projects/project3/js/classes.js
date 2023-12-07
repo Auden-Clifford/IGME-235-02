@@ -1,14 +1,30 @@
-class Player extends PIXI.Sprite {
-    constructor(radius, color=0xFFFF00, x = 0, y = 0) {
+class Player extends PIXI.Graphics {
+    constructor(x = 0, y = 0, radius=25, color=0xFFFF00) {
         super();
+        this.physics = new PhysicsObject(x,y,radius,10,5);
         this.beginFill(color);
         this.drawCircle(0,0,radius);
         this.endFill();
         //super(app.loader.resources["images/spaceship.png"].texture);
-        this.anchor.set(.5, .5); // position, scaling, rotating etc are now from center of sprite
-        this.scale.set(0.1);
-        this.x = x;
-        this.y = y;
+        //this.anchor.set(.5, .5); // position, scaling, rotating etc are now from center of sprite
+        //this.scale.set(0.1);
+
+        this.x = this.physics.position.x;
+        this.y = this.physics.position.y;
+    }
+
+    update(vector, deltaTime)
+    {
+        let desiredVel = vector.normalize() * this.physics.maxSpeed;
+        let force = desiredVel.subtract(this.physics.velocity);
+        this.physics.applyForce(force);
+
+        // allow physics to update
+        this.physics.update(deltaTime);
+
+        // set the player's position to match it's physics object
+        this.x = this.physics.position.x;
+        this.y = this.physics.position.y;
     }
 }
 
@@ -65,34 +81,35 @@ class Bullet extends PIXI.Graphics{
 
 // idea: objects like Player & zombie store class instances like PhysicsObject and Agent within them as properties, similar to component-based arcitecture
 class PhysicsObject {
-    constructor (posX=0, posY=0, radius, coefFriction){
+    constructor (posX=0, posY=0, radius, maxSpeed, coefFriction){
         this.position = new Victor(posX,posY);
         this.velocity = new Victor(0,0);
         this.direction = new Victor(0,1);
         this.acceleration = new Victor(0,0);
 
         this.radius = radius;
+        this.maxSpeed = maxSpeed;
         this.coefFriction = coefFriction;
     }
 
     /*
     * Gets this object's mass (equal to it's area)
     */
-    getMass = function () {
+    getMass() {
         return Math.PI * Math.pow(radius, 2); 
     }
 
     /*
     * Gets this object's direction (equal to it's normalized velocity)
     */
-    getDirection = function () {
+    getDirection() {
         return velocity.clone().normalize();
     }
 
     /*
     * applies a force vector to this object's acceleration factoring in the object's mass
     */
-    applyForce = function(force)
+    applyForce(force)
     {
         this.acceleration.add(force.divideScalar(this.getMass()));
     }
@@ -100,7 +117,7 @@ class PhysicsObject {
     /*
     * applies a force oposite to the object's velocity
     */
-    applyFriction = function()
+    applyFriction()
     {
         let friction = this.velocity.clone().invert();
         friction.normalize();
@@ -118,5 +135,34 @@ class PhysicsObject {
         {
             return this.position.distance(otherObject.position) <= this.radius + otherObject.radius ? true : false
         }
+    }
+
+    /*
+    * Gets this object's position a given number of seconds in the future
+    */
+    getFuturePosition(time)
+    {
+        return this.position.clone().add(this.velocity.multiplySacalar(time));
+    }
+
+    update(deltaTime=1/60)
+    {
+        // apply a friction force
+        applyFriction();
+
+        // add acceleration to velocity
+        velocity.add(acceleration.multiplySacalar(deltaTime));
+
+        // cap velocity at max
+        if(velocity.length() > maxSpeed)
+        {
+            velocity.normalize().multiplySacalar(maxSpeed);
+        }
+
+        // calculate position
+        position.add(velocity.multiplySacalar(deltaTime));
+
+        // reset acceleration
+        acceleration.multiplySacalar(0);
     }
 }

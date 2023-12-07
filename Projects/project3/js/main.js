@@ -44,7 +44,7 @@ let stage;
 // game variables
 let startScene;
 let helpScene;
-let gameScene,guy,pointsLabel,healthLabel,timeLabel, waveLabel,shootSound,hitSound;
+let gameScene,player,pointsLabel,healthLabel,timeLabel, waveLabel,shootSound,hitSound;
 let shopScene, fireSpeedLabel, moveSpeedLabel, healthModLabel, shopPointsLabel;
 let gameOverScene, gameOverKillsLabel, gameOverTimeLevel, gameOverWaveLevel;
 
@@ -92,8 +92,12 @@ function Setup()
     // Create labels for all 3 scenes
     createLabelsAndButtons();
 
+    // #5 - Create player
+    player = new Player();
+    gameScene.addChild(player);
+
     // create test object
-    guy = new PhysicsObject();
+    //guy = new PhysicsObject();
 
     // Start update loop
     app.ticker.add(gameLoop);
@@ -380,6 +384,7 @@ function createLabelsAndButtons()
 //scene change functions
 function startGame(){
     startScene.visible = false;
+    helpScene.visible = false;
     gameOverScene.visible = false;
     gameScene.visible = true;
     shopScene.visible = false;
@@ -391,8 +396,8 @@ function startGame(){
     health = 100;
     increaseScoreBy(0);
     decreaseLifeBy(0);
-    //ship.x = 300;
-    //ship.y = 550;
+    player.x = 300;
+    player.y = 550;
     loadLevel();
 }
 
@@ -480,4 +485,18 @@ function fireBullet(e){
 
 // game loop
 function gameLoop(){
+    switch(currentState)
+    {
+        case GameState.Game:
+            // calculate "delta time"
+            let dt = 1/app.ticker.FPS;
+            if(dt > 1/12) dt=1/12;
+        break;
+        case GameState.GameOver:
+        break;
+        case GameState.Shop:
+        break;
+        case GameState.Start:
+        break; 
+    }
 }
