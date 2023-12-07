@@ -1,7 +1,9 @@
+//const Victor = require("./victor");
+
 class Player extends PIXI.Graphics {
     constructor(x = 0, y = 0, radius=25, color=0xFFFF00) {
         super();
-        this.physics = new PhysicsObject(x,y,radius,700,500);
+        this.physics = new PhysicsObject(x,y,radius,500,500);
         this.beginFill(color);
         this.drawCircle(0,0,radius);
         this.endFill();
@@ -13,7 +15,7 @@ class Player extends PIXI.Graphics {
         this.y = this.physics.position.y;
     }
 
-    update(vector, deltaTime)
+    update(vector, deltaTime=1/60)
     {
         // if a movement vector was submitted, update position
         if(vector.length() > 0)
@@ -33,31 +35,76 @@ class Player extends PIXI.Graphics {
 }
 
 class Zombie extends PIXI.Graphics{
-    constructor(radius, color=0xFF0000, x=0, y=0){
+    constructor(x=0, y=0, radius=25, color=0xFF0000, health=50, speed=250, damage=10, attackSpeed=1, separateRadius=150){
         super();
+        // physics setup
+        this.physics = new PhysicsObject(x,y,radius,speed,500);
+
         this.beginFill(color);
-        this.drawCircle(0,0,radius);
+        this.drawCircle(0,0,this.physics.radius);
         this.endFill();
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
+        this.x = this.physics.position.x;
+        this.y = this.physics.position.y;
+        //this.radius = radius;
+
         // variables
-        this.fwd = getRandomUnitVector();
-        this.speed = 50;
         this.isAlive = true;
+        this.health = health;
+        this.damage = damage;
+        this.attackSpeed = attackSpeed;
+        this.separateRadius = separateRadius;
+        this.maxForce = 400;
     }
 
-    move(dt=1/60){
-        this.x += this.fwd.x * this.speed * dt;
-        this.y += this.fwd.y * this.speed * dt;
+    seek(targetPos) {
+        let desiredVel = (targetPos.clone().subtract(this.physics.position)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
     }
 
-    reflectX(){
-        this.fwd.x *= -1;
+    flee(targetPos) {
+        let desiredVel = (this.physics.position.clone().subtract(targetPos)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
     }
 
-    reflectY(){
-        this.fwd.y *= -1;
+    separate(otherObjects)
+    {
+        let sum = new Victor(0,0);
+        let count = 0;
+
+        for(let object of otherObjects)
+        {
+            //check for others within separation distance
+            if(object !== this && this.physics.position.distance(object.physics.position) < this.separateRadius)
+            {
+                // add a flee force scaled by the distance between the objects
+                sum.add(this.flee(object.physics.position).divideScalar(this.physics.position.distance(object.physics.position)))
+                count++;
+            }
+        }
+
+        // don't devide if there were zero other objets
+        if(count > 0)
+        {
+            sum.divideScalar(count);
+        }
+
+        return sum;
+    }
+
+    update(target, zombies, deltaTime=1/60)
+    {
+        // apply a seek force toward the given target
+        let sum = new Victor(0,0);
+        sum.add(this.seek(target.physics.position));
+        sum.add(this.separate(zombies).multiplyScalar(10));
+        this.physics.applyForce(sum);
+
+        // allow physics to update
+        this.physics.update(deltaTime);
+
+        // set the player's position to match it's physics object
+        this.x = this.physics.position.x;
+        this.y = this.physics.position.y;
     }
 }
 

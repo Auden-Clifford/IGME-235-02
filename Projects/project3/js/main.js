@@ -162,7 +162,7 @@ function Setup()
     createLabelsAndButtons();
 
     // #5 - Create player
-    player = new Player();
+    player = new Player(sceneWidth / 2,sceneHeight - 200);
     gameScene.addChild(player);
 
     // create test object
@@ -465,9 +465,9 @@ function startGame(){
     health = 100;
     increaseScoreBy(0);
     decreaseLifeBy(0);
-    player.x = 300;
-    player.y = 550;
-    loadLevel();
+    //player.x = 300;
+    //player.y = 550;
+    newWave();
 }
 
 function openHelp(){
@@ -545,10 +545,36 @@ function buyHealth() {
 }
 
 // game control functions
-function loadLevel(){
+function spawnZombies(num){
+    for(let i = 0; i < num; i++)
+    {
+        let y = Math.random() * sceneHeight;
+        let x = 0;
+        
+        // half of the zombies go to each side
+        if(i % 2 == 0)
+        {
+            x = sceneWidth;
+        }
+
+        let z = new Zombie(x,y);
+        zombies.push(z);
+        gameScene.addChild(z);
+    }
 }
 
 function fireBullet(e){
+}
+
+function newWave(){
+    waveNum++;
+    // spawn up to waveNum * 2 zombies, but never less than waveNum
+    spawnZombies(waveNum + Math.random() * waveNum);
+}
+
+//utilities
+function clamp(val, min, max){
+    return val < min ? min : (val > max ? max : val);
 }
 
 
@@ -588,10 +614,20 @@ function gameLoop(){
             // update the player's position
             player.update(mov,dt);
 
+            //keep player on screen
+            player.physics.position.x = clamp(player.physics.position.x,0+player.physics.radius,sceneWidth-player.physics.radius);
+            player.physics.position.y = clamp(player.physics.position.y,0+player.physics.radius,sceneHeight-player.physics.radius);
+
             // report player position & physics position
-            console.log(`${player.x}, ${player.y}`);
+            //console.log(`${player.x}, ${player.y}`);
             console.log(player.physics.position);
-            console.log(player.physics.velocity.length())
+            //console.log(player.physics.velocity.length())
+
+            // move zombies
+            for(let zombie of zombies)
+            {
+                zombie.update(player, zombies, dt);
+            }
         break;
         case GameState.GameOver:
         break;
