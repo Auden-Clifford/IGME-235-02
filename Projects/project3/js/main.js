@@ -47,8 +47,8 @@ let stage;
 let startScene;
 let helpScene;
 let gameScene,player,pointsLabel,healthLabel,timeLabel, waveLabel,shootSound,hitSound, respawnTimer;
-let shopScene, fireSpeedLabel, moveSpeedLabel, healthModLabel, shopPointsLabel;
-let gameOverScene, gameOverKillsLabel, gameOverTimeLevel, gameOverWaveLevel;
+let shopScene, fireSpeedLabel, moveSpeedLabel, healthShopLabel, shopPointsLabel;
+let gameOverScene, gameOverKillsLabel, gameOverTimeLabel, gameOverWaveLabel;
 
 let bullets = [];
 let zombies = [];
@@ -56,6 +56,7 @@ let points = 0;
 //let health = 100;
 let waveNum = 0;
 let time = 0;
+let kills = 0;
 let currentState = GameState.Start;
 
 //let shootSpeedMultiplier = 1;
@@ -436,11 +437,11 @@ function createLabelsAndButtons()
     buyHealthutton.on('pointerout', e => e.currentTarget.alpha = 1.0);
     shopScene.addChild(buyHealthutton); 
 
-    healthModLabel = new PIXI.Text(`Health \n$${healthCost} | ${player.healthMultiplier}x`);
-    healthModLabel.style = textStyle;
-    healthModLabel.x = 130;
-    healthModLabel.y = 400;
-    shopScene.addChild(healthModLabel);
+    healthShopLabel = new PIXI.Text(`Health \n$${healthCost} | ${player.healthMultiplier}x`);
+    healthShopLabel.style = textStyle;
+    healthShopLabel.x = 130;
+    healthShopLabel.y = 400;
+    shopScene.addChild(healthShopLabel);
 
     shopPointsLabel = new PIXI.Text(`Points: ${points}`);
     shopPointsLabel.style = titleTextStyle;
@@ -456,6 +457,27 @@ function createLabelsAndButtons()
     gameOverTitle.x = (sceneWidth / 2) - (gameOverTitle.width / 2);
     gameOverTitle.y = 10;
     gameOverScene.addChild(gameOverTitle);
+
+    // time
+    gameOverTimeLabel = new PIXI.Text("Time:    0:00");
+    gameOverTimeLabel.style = textStyle;
+    gameOverTimeLabel.x = sceneWidth / 2 - gameOverTimeLabel.width / 2;
+    gameOverTimeLabel.y = 200;
+    gameOverScene.addChild(gameOverTimeLabel);
+
+    // wave
+    gameOverWaveLabel = new PIXI.Text("Wave:    1");
+    gameOverWaveLabel.style = textStyle;
+    gameOverWaveLabel.x = sceneWidth / 2 - gameOverTimeLabel.width / 2;
+    gameOverWaveLabel.y = 250;
+    gameOverScene.addChild(gameOverWaveLabel);
+
+    // kills
+    gameOverKillsLabel = new PIXI.Text("Kills:     1");
+    gameOverKillsLabel.style = textStyle;
+    gameOverKillsLabel.x = sceneWidth / 2 - gameOverTimeLabel.width / 2;
+    gameOverKillsLabel.y = 300;
+    gameOverScene.addChild(gameOverKillsLabel);
 
     // retry button
     let retryButton = new PIXI.Sprite.from(app.loader.resources["images/retryButton.svg"].texture);
@@ -495,15 +517,18 @@ function startGame(){
     waveNum = 0;
     points = 0;
     time = 0;
-    //health = 100;
+    kills = 0;
+
     increaseScoreBy(0);
-    //decreaseLifeBy(0);
+
     player.physics.position.x = sceneWidth / 2;
     player.physics.position.y = sceneHeight - 200;
 
     player.attackSpeed = 1;
     player.speedMultiplier = 1;
+    player.physics.maxSpeed = player.startSpeed;
     player.healthMultiplier = 1;
+    player.maxHealth = player.startHealth;
 
     // clear everything
     for(let z of zombies)
@@ -568,6 +593,20 @@ function gameOver() {
     shopScene.visible = false;
 
     currentState = GameState.GameOver;
+
+    let totalseconds = Math.floor(time);
+    let minutes = Math.floor(totalseconds / 60)
+    let seconds = totalseconds % 60;
+    let formatSeconds = seconds < 10 ? '0' + seconds : seconds;
+
+    gameOverTimeLabel.text = `Time:    ${minutes}:${formatSeconds}`
+    gameOverTimeLabel.x = sceneWidth / 2 - gameOverTimeLabel.width / 2;
+
+    gameOverWaveLabel.text = `Wave:    ${waveNum}`;
+    gameOverWaveLabel.x = sceneWidth / 2 - gameOverTimeLabel.width / 2;
+
+    gameOverKillsLabel.text = `Kills:     ${kills}`;
+    gameOverKillsLabel.x = sceneWidth / 2 - gameOverTimeLabel.width / 2;
 }
 
 // value control functions
@@ -607,13 +646,18 @@ function buySpeed() {
         increaseScoreBy(-moveSpeedCost);
         moveSpeedCost++;
         moveSpeedLabel.text = `Movement Speed \n$${moveSpeedCost} | ${player.speedMultiplier}x`;
-
-        console.log(player.startSpeed);
-        console.log(player.physics.maxSpeed);
     }
 }
 function buyHealth() {
-
+    if(points >= healthCost)
+    {
+        player.healthMultiplier += 0.5;
+        player.healthMultiplier = Math.round(player.healthMultiplier * 10) / 10;
+        player.maxHealth = player.startHealth * player.healthMultiplier;
+        increaseScoreBy(-healthCost);
+        healthCost++;
+        healthShopLabel.text = `Health \n$${healthCost} | ${player.healthMultiplier}x`;
+    }
 }
 
 // game control functions
@@ -688,7 +732,7 @@ function gameLoop(){
                 mov.addScalarX(1);
             }
 
-            if(shooting)
+            if(shooting && player.health > 0)
             {
                 let mousePosition = new Victor(
                     app.renderer.plugins.interaction.mouse.global.x,
@@ -754,7 +798,7 @@ function gameLoop(){
             }
 
             // update labels
-            healthLabel.text = `Health: ${player.health}`;
+            healthLabel.text = `Health: ${Math.max(0,player.health)}`;
 
             let totalseconds = Math.floor(time);
             let minutes = Math.floor(totalseconds / 60)

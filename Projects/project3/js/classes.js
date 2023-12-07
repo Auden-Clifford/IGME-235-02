@@ -67,7 +67,7 @@ class Player extends PIXI.Graphics {
         // increment timers
         this.attackTimer -= deltaTime;
 
-        // only allow movement/attack when player
+        // only allow movement when player is alive
         if(this.health > 0)
         {
             this.visible = true;
@@ -198,6 +198,7 @@ class Zombie extends PIXI.Graphics{
         {
             this.isAlive = false;
             increaseScoreBy(this.points);
+            kills++;
             gameScene.removeChild(this);
         }
     }
