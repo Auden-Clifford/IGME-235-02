@@ -46,14 +46,14 @@ let stage;
 // game variables
 let startScene;
 let helpScene;
-let gameScene,player,pointsLabel,healthLabel,timeLabel, waveLabel,shootSound,hitSound;
+let gameScene,player,pointsLabel,healthLabel,timeLabel, waveLabel,shootSound,hitSound, respawnTimer;
 let shopScene, fireSpeedLabel, moveSpeedLabel, healthModLabel, shopPointsLabel;
 let gameOverScene, gameOverKillsLabel, gameOverTimeLevel, gameOverWaveLevel;
 
 let bullets = [];
 let zombies = [];
 let points = 0;
-let health = 100;
+//let health = 100;
 let waveNum = 1;
 let time = 0;
 let currentState = GameState.Start;
@@ -71,6 +71,7 @@ let keyA = false;
 let keyS = false;
 let keyD = false;
 let keyEsc = false;
+let shooting = false;
 
 function Setup() 
 {
@@ -133,6 +134,15 @@ function Setup()
             //console.log("released Esc");
         }
     });
+    app.view.addEventListener('mousedown', function(e){
+        // senses when the user brings the mouse down on the canvas
+        //console.log('started shooting');
+        shooting = true;
+    });
+    window.addEventListener('mouseup', function(e){
+        // senses when the user releases the mouse
+        shooting = false;
+    });
 
 	stage = app.stage;
 	// Create the `start` scene
@@ -172,7 +182,7 @@ function Setup()
     app.ticker.add(gameLoop);
 
     // Start listening for click events on the canvas
-    app.view.onclick = fireBullet;
+    //app.view.onclick = fireBullet;
 }
 
 function createLabelsAndButtons()
@@ -309,7 +319,7 @@ function createLabelsAndButtons()
     healthLabel.x = 10;
     healthLabel.y = 5;
     gameScene.addChild(healthLabel);
-    decreaseLifeBy(0);
+    //decreaseLifeBy(0);
 
     // make a time label
     timeLabel = new PIXI.Text("Time:    0:00");
@@ -336,6 +346,19 @@ function createLabelsAndButtons()
     shopButton.on('pointerover', e => e.target.alpha = 0.7);
     shopButton.on('pointerout', e => e.currentTarget.alpha = 1.0);
     gameScene.addChild(shopButton);
+
+    // respawn timer
+    respawnTimer = new PIXI.Text("3");
+    respawnTimer.style = new PIXI.TextStyle({
+        fill: 0xFF0000,
+        fontSize: 72,
+        fontFamily: 'MV Boli',
+        stroke: 0xFFFFFF,
+        strokeThickness: 2
+    });
+    respawnTimer.x = sceneWidth / 2 - respawnTimer.width / 2;
+    respawnTimer.y = sceneHeight / 2 - respawnTimer.height / 2;
+    gameScene.addChild(respawnTimer);
 
     let gameOverButton = new PIXI.Sprite.from(app.loader.resources["images/closeButton.svg"].texture);
     //startButton.style = buttonStyle;
@@ -462,9 +485,9 @@ function startGame(){
 
     waveNum = 1;
     points = 0;
-    health = 100;
+    //health = 100;
     increaseScoreBy(0);
-    decreaseLifeBy(0);
+    //decreaseLifeBy(0);
     //player.x = 300;
     //player.y = 550;
     newWave();
@@ -527,12 +550,14 @@ function increaseScoreBy(value) {
     pointsLabel.x = sceneWidth - pointsLabel.width - 10;
 }
 
-function decreaseLifeBy(value)
+/*
+function updateLifeDisplay()
 {
-    health -= value;
+    
     //health = parseInt(health);
-    healthLabel.text = `Health: ${health}`;
+    healthLabel.text = `Health: ${player.health}`;
 }
+*/
 
 function buyShootSpeed() {
 
@@ -563,8 +588,10 @@ function spawnZombies(num){
     }
 }
 
+/*
 function fireBullet(e){
 }
+*/
 
 function newWave(){
     waveNum++;
@@ -609,6 +636,16 @@ function gameLoop(){
             {
                 mov.addScalarX(1);
             }
+
+            if(shooting)
+            {
+                let mousePosition = new Victor(
+                    app.renderer.plugins.interaction.mouse.global.x,
+                    app.renderer.plugins.interaction.mouse.global.y
+                );
+                
+                player.shoot(mousePosition);
+            }
             
 
             // update the player's position
@@ -620,14 +657,27 @@ function gameLoop(){
 
             // report player position & physics position
             //console.log(`${player.x}, ${player.y}`);
-            console.log(player.physics.position);
+            //console.log(player.physics.position);
             //console.log(player.physics.velocity.length())
 
-            // move zombies
+            // move zombies & check thier collisions
             for(let zombie of zombies)
             {
                 zombie.update(player, zombies, dt);
+
+                if(zombie.physics.detectIntersection(player.physics))
+                {
+                    zombie.attack(player);
+                }
             }
+
+            // Move Bullets
+	        for (let b of bullets){
+		        b.move(dt);
+	        }       
+
+            // update health display
+            healthLabel.text = `Health: ${player.health}`;
         break;
         case GameState.GameOver:
         break;
