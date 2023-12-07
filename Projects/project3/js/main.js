@@ -552,7 +552,25 @@ function gameLoop(){
             // calculate player's movement vector
             let mov = new Victor(0,0);
 
-            if()
+            if(keyW)
+            {
+                mov.addScalarY(-1);
+            }
+            if(keyS)
+            {
+                mov.addScalarY(1);
+            }
+            if(keyA)
+            {
+                mov.addScalarX(-1);
+            }
+            if(keyD)
+            {
+                mov.addScalarX(1);
+            }
+
+            // update the player's position
+            player.update(mov,dt);
         break;
         case GameState.GameOver:
         break;
