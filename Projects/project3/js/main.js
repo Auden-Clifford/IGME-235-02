@@ -1,5 +1,7 @@
 "use strict";
 
+const Victor = require("./victor");
+
 const app = new PIXI.Application(
     {
         width: 1100,
@@ -63,8 +65,63 @@ let moveSpeedCost = 1;
 let healthMultiplier = 1;
 let healthCost = 10;
 
+// control variables
+let keyW = false;
+let keyA = false;
+let keyS = false;
+let keyD = false;
+let keyEsc = false;
+
 function Setup() 
 {
+    //add control sening to key events
+    window.onkeydown = function(e) {
+        // function senses whether W,A,S,D, or ESC are pressed and reports to program
+        if(e.key ==='w' || e.key === 'W')
+        {
+            keyW = true;
+        }
+        if(e.key ==='a' || e.key === 'A')
+        {
+            keyA = true;
+        }
+        if(e.key ==='s' || e.key === 'S')
+        {
+            keyS = true;
+        }
+        if(e.key ==='d' || e.key === 'D')
+        {
+            keyD = true;
+        }
+        if(e.key ==='Escape')
+        {
+            keyEsc = true;
+        }
+    }
+    window.onkeydown = function(e) {
+        // function senses whether W,A,S,D, or ESC are released and reports to program
+        if(e.key ==='w' || e.key === 'W')
+        {
+            keyW = false;
+        }
+        if(e.key ==='a' || e.key === 'A')
+        {
+            keyA = false;
+        }
+        if(e.key ==='s' || e.key === 'S')
+        {
+            keyS = false;
+        }
+        if(e.key ==='d' || e.key === 'D')
+        {
+            keyD = false;
+        }
+        if(e.key ==='Escape')
+        {
+            keyEsc = false;
+        }
+    }
+
 	stage = app.stage;
 	// Create the `start` scene
     startScene = new PIXI.Container();
@@ -491,6 +548,11 @@ function gameLoop(){
             // calculate "delta time"
             let dt = 1/app.ticker.FPS;
             if(dt > 1/12) dt=1/12;
+
+            // calculate player's movement vector
+            let mov = new Victor(0,0);
+
+            if()
         break;
         case GameState.GameOver:
         break;
