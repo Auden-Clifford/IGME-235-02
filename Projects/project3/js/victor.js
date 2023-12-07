@@ -674,7 +674,7 @@ Victor.prototype.normalize = function () {
 	var length = this.length();
 
 	if (length === 0) {
-		this.x = 1;
+		this.x = 0;
 		this.y = 0;
 	} else {
 		this.divide(Victor(length, length));

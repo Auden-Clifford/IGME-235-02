@@ -1,7 +1,7 @@
 class Player extends PIXI.Graphics {
     constructor(x = 0, y = 0, radius=25, color=0xFFFF00) {
         super();
-        this.physics = new PhysicsObject(x,y,radius,10,5);
+        this.physics = new PhysicsObject(x,y,radius,700,500);
         this.beginFill(color);
         this.drawCircle(0,0,radius);
         this.endFill();
@@ -15,9 +15,13 @@ class Player extends PIXI.Graphics {
 
     update(vector, deltaTime)
     {
-        let desiredVel = vector.normalize() * this.physics.maxSpeed;
-        let force = desiredVel.subtract(this.physics.velocity);
-        this.physics.applyForce(force);
+        // if a movement vector was submitted, update position
+        if(vector.length() > 0)
+        {
+            let desiredVel = vector.normalize().multiplyScalar(this.physics.maxSpeed);
+            let force = desiredVel.subtract(this.physics.velocity);
+            this.physics.applyForce(force);
+        }
 
         // allow physics to update
         this.physics.update(deltaTime);
@@ -93,10 +97,10 @@ class PhysicsObject {
     }
 
     /*
-    * Gets this object's mass (equal to it's area)
+    * Gets this object's mass (equal to 1/100 it's area)
     */
     getMass() {
-        return Math.PI * Math.pow(radius, 2); 
+        return Math.PI * Math.pow(this.radius / 100, 2); 
     }
 
     /*
@@ -121,7 +125,12 @@ class PhysicsObject {
     {
         let friction = this.velocity.clone().invert();
         friction.normalize();
-        friction.multiplySacalar(this.coefFriction);
+        friction.multiplyScalar(this.coefFriction);
+        // force of friction cannot exceed velocity
+        if(friction.length() > this.velocity.length())
+        {
+            friction.normalize().multiplyScalar(this.velocity.length());
+        }
         this.applyForce(friction);
     }
 
@@ -148,21 +157,21 @@ class PhysicsObject {
     update(deltaTime=1/60)
     {
         // apply a friction force
-        applyFriction();
+        this.applyFriction();
 
         // add acceleration to velocity
-        velocity.add(acceleration.multiplySacalar(deltaTime));
+        this.velocity.add(this.acceleration.clone().multiplyScalar(deltaTime));
 
         // cap velocity at max
-        if(velocity.length() > maxSpeed)
+        if(this.velocity.length() > this.maxSpeed)
         {
-            velocity.normalize().multiplySacalar(maxSpeed);
+            this.velocity.normalize().multiplyScalar(maxSpeed);
         }
 
         // calculate position
-        position.add(velocity.multiplySacalar(deltaTime));
+        this.position.add(this.velocity.clone().multiplyScalar(deltaTime));
 
         // reset acceleration
-        acceleration.multiplySacalar(0);
+        this.acceleration.multiplyScalar(0);
     }
 }

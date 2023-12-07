@@ -1,6 +1,6 @@
 "use strict";
 
-const Victor = require("./victor");
+//const Victor = require("./victor");
 
 const app = new PIXI.Application(
     {
@@ -75,52 +75,64 @@ let keyEsc = false;
 function Setup() 
 {
     //add control sening to key events
-    window.onkeydown = function(e) {
+    window.addEventListener('keydown', function(e) {
         // function senses whether W,A,S,D, or ESC are pressed and reports to program
+        //console.log("a key was pressed");
         if(e.key ==='w' || e.key === 'W')
         {
             keyW = true;
+            //console.log("pressed W");
         }
         if(e.key ==='a' || e.key === 'A')
         {
             keyA = true;
+            //console.log("pressed A");
         }
         if(e.key ==='s' || e.key === 'S')
         {
             keyS = true;
+            //console.log("pressed S");
         }
         if(e.key ==='d' || e.key === 'D')
         {
             keyD = true;
+            //console.log("pressed D");
         }
         if(e.key ==='Escape')
         {
             keyEsc = true;
+            //console.log("pressed Esc");
         }
-    }
-    window.onkeydown = function(e) {
-        // function senses whether W,A,S,D, or ESC are released and reports to program
+    });
+    window.addEventListener('keyup', function(e) {
+        // function senses whether W,A,S,D, or ESC are pressed and reports to program
+        //console.log("a key was released");
         if(e.key ==='w' || e.key === 'W')
         {
             keyW = false;
+            //console.log("released W");
         }
         if(e.key ==='a' || e.key === 'A')
         {
             keyA = false;
+            //console.log("released A");
         }
         if(e.key ==='s' || e.key === 'S')
         {
             keyS = false;
+            //console.log("released S");
         }
         if(e.key ==='d' || e.key === 'D')
         {
             keyD = false;
+            //console.log("released D");
         }
         if(e.key ==='Escape')
         {
             keyEsc = false;
+            //console.log("released Esc");
         }
-    }
+    });
 
 	stage = app.stage;
 	// Create the `start` scene
@@ -552,6 +564,9 @@ function gameLoop(){
             // calculate player's movement vector
             let mov = new Victor(0,0);
 
+            //test movement, player goes down and to the right
+            //let mov = new Victor(1,1);
+
             if(keyW)
             {
                 mov.addScalarY(-1);
@@ -568,9 +583,15 @@ function gameLoop(){
             {
                 mov.addScalarX(1);
             }
+            
 
             // update the player's position
             player.update(mov,dt);
+
+            // report player position & physics position
+            console.log(`${player.x}, ${player.y}`);
+            console.log(player.physics.position);
+            console.log(player.physics.velocity.length())
         break;
         case GameState.GameOver:
         break;
