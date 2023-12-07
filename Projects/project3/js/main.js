@@ -54,15 +54,15 @@ let bullets = [];
 let zombies = [];
 let points = 0;
 //let health = 100;
-let waveNum = 1;
+let waveNum = 0;
 let time = 0;
 let currentState = GameState.Start;
 
-let shootSpeedMultiplier = 1;
+//let shootSpeedMultiplier = 1;
 let shootSpeedCost = 5;
-let moveSpeedMultiplier = 1;
+//let moveSpeedMultiplier = 1;
 let moveSpeedCost = 1;
-let healthMultiplier = 1;
+//let healthMultiplier = 1;
 let healthCost = 10;
 
 // control variables
@@ -168,11 +168,13 @@ function Setup()
     shopScene.visible = false;
     stage.addChild(shopScene);
 
+    // Create player
+    player = new Player(sceneWidth / 2,sceneHeight - 200);
+    
     // Create labels for all 3 scenes
     createLabelsAndButtons();
 
-    // #5 - Create player
-    player = new Player(sceneWidth / 2,sceneHeight - 200);
+    // add palyer on top
     gameScene.addChild(player);
 
     // create test object
@@ -400,11 +402,11 @@ function createLabelsAndButtons()
     buyShootSpeedButton.on('pointerout', e => e.currentTarget.alpha = 1.0);
     shopScene.addChild(buyShootSpeedButton); 
 
-    let shootSpeedShopTag = new PIXI.Text(`Fire Speed \n$${shootSpeedCost} | ${shootSpeedMultiplier}x`);
-    shootSpeedShopTag.style = textStyle;
-    shootSpeedShopTag.x = 130;
-    shootSpeedShopTag.y = 200;
-    shopScene.addChild(shootSpeedShopTag);
+    fireSpeedLabel = new PIXI.Text(`Fire Speed \n$${shootSpeedCost} | ${player.attackSpeed}x`);
+    fireSpeedLabel.style = textStyle;
+    fireSpeedLabel.x = 130;
+    fireSpeedLabel.y = 200;
+    shopScene.addChild(fireSpeedLabel);
 
     let buyMoveSpeedButton = new PIXI.Sprite.from(app.loader.resources["images/buyButton.svg"].texture);
     //startButton.style = buttonStyle;
@@ -417,11 +419,11 @@ function createLabelsAndButtons()
     buyMoveSpeedButton.on('pointerout', e => e.currentTarget.alpha = 1.0);
     shopScene.addChild(buyMoveSpeedButton); 
 
-    let moveSpeedShopTag = new PIXI.Text(`Fire Speed \n$${moveSpeedCost} | ${moveSpeedMultiplier}x`);
-    moveSpeedShopTag.style = textStyle;
-    moveSpeedShopTag.x = 130;
-    moveSpeedShopTag.y = 300;
-    shopScene.addChild(moveSpeedShopTag);
+    moveSpeedLabel = new PIXI.Text(`Fire Speed \n$${moveSpeedCost} | ${player.speedMultiplier}x`);
+    moveSpeedLabel.style = textStyle;
+    moveSpeedLabel.x = 130;
+    moveSpeedLabel.y = 300;
+    shopScene.addChild(moveSpeedLabel);
 
     let buyHealthutton = new PIXI.Sprite.from(app.loader.resources["images/buyButton.svg"].texture);
     //startButton.style = buttonStyle;
@@ -434,11 +436,11 @@ function createLabelsAndButtons()
     buyHealthutton.on('pointerout', e => e.currentTarget.alpha = 1.0);
     shopScene.addChild(buyHealthutton); 
 
-    let healthShopTag = new PIXI.Text(`Fire Speed \n$${healthCost} | ${healthMultiplier}x`);
-    healthShopTag.style = textStyle;
-    healthShopTag.x = 130;
-    healthShopTag.y = 400;
-    shopScene.addChild(healthShopTag);
+    healthModLabel = new PIXI.Text(`Fire Speed \n$${healthCost} | ${player.healthMultiplier}x`);
+    healthModLabel.style = textStyle;
+    healthModLabel.x = 130;
+    healthModLabel.y = 400;
+    shopScene.addChild(healthModLabel);
 
     // set up 'gameOverScene'
     // game over title
@@ -483,8 +485,9 @@ function startGame(){
 
     currentState = GameState.Game;
 
-    waveNum = 1;
+    waveNum = 0;
     points = 0;
+    time = 0;
     //health = 100;
     increaseScoreBy(0);
     //decreaseLifeBy(0);
@@ -560,7 +563,8 @@ function updateLifeDisplay()
 */
 
 function buyShootSpeed() {
-
+    player.attackSpeed += 0.2;
+    fireSpeedLabel.text = `Fire Speed \n$${shootSpeedCost} | ${player.attackSpeed}x`;
 }
 function buySpeed() {
 
@@ -595,6 +599,7 @@ function fireBullet(e){
 
 function newWave(){
     waveNum++;
+    waveLabel.text = `Wave:    ${waveNum}`
     // spawn up to waveNum * 2 zombies, but never less than waveNum
     spawnZombies(waveNum + Math.random() * waveNum);
 }
@@ -613,6 +618,9 @@ function gameLoop(){
             // calculate "delta time"
             let dt = 1/app.ticker.FPS;
             if(dt > 1/12) dt=1/12;
+
+            // save game time
+            time += dt;
 
             // calculate player's movement vector
             let mov = new Victor(0,0);
@@ -669,15 +677,47 @@ function gameLoop(){
                 {
                     zombie.attack(player);
                 }
+
+                for(let b of bullets)
+                {
+                    if(b.detectIntersection(zombie.physics))
+                    {
+                        console.log("hit detected");
+                        zombie.health -= b.damage;
+                        gameScene.removeChild(b);
+                        b.isAlive = false;
+                    }
+
+                    // kill bullets that move offscreen
+                    if(b.y < -10 || b.y > sceneHeight + 10 || b.x < -10 || b.x > sceneWidth + 10)
+                    {
+                        b.isAlive = false;
+                    }
+                }
             }
 
             // Move Bullets
 	        for (let b of bullets){
 		        b.move(dt);
-	        }       
+	        }
+            
+            // some clean up
+            bullets = bullets.filter(b=>b.isAlive);
+            zombies = zombies.filter(z=>z.isAlive);
 
-            // update health display
+            // load next level
+            if(zombies.length == 0) {
+                newWave();
+            }
+
+            // update labels
             healthLabel.text = `Health: ${player.health}`;
+
+            let totalseconds = Math.floor(time);
+            let minutes = Math.floor(totalseconds / 60)
+            let seconds = totalseconds % 60;
+            let formatSeconds = seconds < 10 ? '0' + seconds : seconds;
+            timeLabel.text = `Time:    ${minutes}:${formatSeconds}`;
         break;
         case GameState.GameOver:
         break;

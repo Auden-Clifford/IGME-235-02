@@ -18,7 +18,7 @@ class Player extends PIXI.Graphics {
         this.maxHealth = 100;
         this.healthMultiplier = 1;
         this.speed = this.physics.maxSpeed;
-        this.speed = 1;
+        this.speedMultiplier = 1;
         this.attackSpeed = 1;
         this.respawnTime = 3;
 
@@ -96,7 +96,7 @@ class Player extends PIXI.Graphics {
 }
 
 class Zombie extends PIXI.Graphics{
-    constructor(x=0, y=0, radius=25, color=0xFF0000, health=50, speed=250, damage=10, attackSpeed=1, separateRadius=150){
+    constructor(x=0, y=0, radius=25, color=0xFF0000, health=50, speed=50, damage=10, points=3, attackSpeed=1, separateRadius=150){
         super();
         // physics setup
         this.physics = new PhysicsObject(x,y,radius,speed,500);
@@ -112,6 +112,7 @@ class Zombie extends PIXI.Graphics{
         this.isAlive = true;
         this.health = health;
         this.damage = damage;
+        this.points = points;
         this.attackSpeed = attackSpeed;
         this.separateRadius = separateRadius;
         this.maxForce = 400;
@@ -190,14 +191,23 @@ class Zombie extends PIXI.Graphics{
         // set the player's position to match it's physics object
         this.x = this.physics.position.x;
         this.y = this.physics.position.y;
+
+        // check for death
+        if(this.health < 0)
+        {
+            this.isAlive = false;
+            increaseScoreBy(this.points);
+            gameScene.removeChild(this);
+        }
     }
 }
 
 class Bullet extends PIXI.Graphics{
     constructor(color=0xFFFFFF, x=0, y=0, fwd){
         super();
+        this.radius = 6;
         this.beginFill(color);
-        this.drawRect(-6,-6,6,6);
+        this.drawCircle(0,0,this.radius);
         this.endFill();
         this.vPosition = new Victor(x,y);
 
@@ -208,6 +218,7 @@ class Bullet extends PIXI.Graphics{
         this.fwd = fwd;
         this.speed = 800;
         this.isAlive = true;
+        this.damage = 20;
         Object.seal(this);
     }
 
@@ -217,6 +228,18 @@ class Bullet extends PIXI.Graphics{
         this.x = this.vPosition.x;
         this.y = this.vPosition.y;
         //console.log(this.position);
+    }
+
+    /*
+    * detects whether this object is intersecting another
+    */
+    detectIntersection(otherObject)
+    {
+        // ensure this object is not being checked against itself
+        if(this !== otherObject)
+        {
+            return this.vPosition.distance(otherObject.position) <= this.radius + otherObject.radius ? true : false
+        }
     }
 }
 
