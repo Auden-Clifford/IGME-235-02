@@ -1,7 +1,7 @@
 class Player extends PIXI.Graphics {
     constructor(x = 0, y = 0, radius=25, color=0xFFFF00) {
         super();
-        this.physics = new PhysicsObject(x,y,radius,500,500);
+        this.physics = new PhysicsObject(x,y,radius,250,500);
         this.beginFill(color);
         this.drawCircle(0,0,radius);
         this.endFill();
@@ -14,10 +14,11 @@ class Player extends PIXI.Graphics {
 
         //variables
         //this.alive = true;
-        this.health = 100;
-        this.maxHealth = 100;
+        this.startHealth = 100;
+        this.health = this.startHealth;
+        this.maxHealth = this.startHealth;
         this.healthMultiplier = 1;
-        this.speed = this.physics.maxSpeed;
+        this.startSpeed = this.physics.maxSpeed;
         this.speedMultiplier = 1;
         this.attackSpeed = 1;
         this.respawnTime = 3;
@@ -218,7 +219,7 @@ class Bullet extends PIXI.Graphics{
         this.fwd = fwd;
         this.speed = 800;
         this.isAlive = true;
-        this.damage = 20;
+        this.damage = 30;
         Object.seal(this);
     }
 

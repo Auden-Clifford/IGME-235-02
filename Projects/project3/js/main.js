@@ -313,7 +313,7 @@ function createLabelsAndButtons()
     pointsLabel.x = sceneWidth - pointsLabel.width - 10;
     pointsLabel.y = 5;
     gameScene.addChild(pointsLabel);
-    increaseScoreBy(0);
+    
 
     //make a life label
     healthLabel = new PIXI.Text();
@@ -419,7 +419,7 @@ function createLabelsAndButtons()
     buyMoveSpeedButton.on('pointerout', e => e.currentTarget.alpha = 1.0);
     shopScene.addChild(buyMoveSpeedButton); 
 
-    moveSpeedLabel = new PIXI.Text(`Fire Speed \n$${moveSpeedCost} | ${player.speedMultiplier}x`);
+    moveSpeedLabel = new PIXI.Text(`Movement Speed \n$${moveSpeedCost} | ${player.speedMultiplier}x`);
     moveSpeedLabel.style = textStyle;
     moveSpeedLabel.x = 130;
     moveSpeedLabel.y = 300;
@@ -436,11 +436,18 @@ function createLabelsAndButtons()
     buyHealthutton.on('pointerout', e => e.currentTarget.alpha = 1.0);
     shopScene.addChild(buyHealthutton); 
 
-    healthModLabel = new PIXI.Text(`Fire Speed \n$${healthCost} | ${player.healthMultiplier}x`);
+    healthModLabel = new PIXI.Text(`Health \n$${healthCost} | ${player.healthMultiplier}x`);
     healthModLabel.style = textStyle;
     healthModLabel.x = 130;
     healthModLabel.y = 400;
     shopScene.addChild(healthModLabel);
+
+    shopPointsLabel = new PIXI.Text(`Points: ${points}`);
+    shopPointsLabel.style = titleTextStyle;
+    shopPointsLabel.x = sceneWidth - shopPointsLabel.width - 10;
+    shopPointsLabel.y = sceneHeight - 50;
+    shopScene.addChild(shopPointsLabel);
+    increaseScoreBy(0);
 
     // set up 'gameOverScene'
     // game over title
@@ -491,8 +498,25 @@ function startGame(){
     //health = 100;
     increaseScoreBy(0);
     //decreaseLifeBy(0);
-    //player.x = 300;
-    //player.y = 550;
+    player.physics.position.x = sceneWidth / 2;
+    player.physics.position.y = sceneHeight - 200;
+
+    player.attackSpeed = 1;
+    player.speedMultiplier = 1;
+    player.healthMultiplier = 1;
+
+    // clear everything
+    for(let z of zombies)
+    {
+        gameScene.removeChild(z);
+    }
+    zombies = [];
+    for(let b of bullets)
+    {
+        gameScene.removeChild(b);
+    }
+    bullets = [];
+
     newWave();
 }
 
@@ -551,6 +575,8 @@ function increaseScoreBy(value) {
     points += value;
     pointsLabel.text = `Points: ${points}`;
     pointsLabel.x = sceneWidth - pointsLabel.width - 10;
+    shopPointsLabel.text = `Points: ${points}`;
+    shopPointsLabel.x = sceneWidth - shopPointsLabel.width - 10;
 }
 
 /*
@@ -563,11 +589,28 @@ function updateLifeDisplay()
 */
 
 function buyShootSpeed() {
-    player.attackSpeed += 0.2;
-    fireSpeedLabel.text = `Fire Speed \n$${shootSpeedCost} | ${player.attackSpeed}x`;
+    if(points >= shootSpeedCost)
+    {
+        player.attackSpeed += 0.2;
+        player.attackSpeed = Math.round(player.attackSpeed * 10) / 10;
+        increaseScoreBy(-shootSpeedCost);
+        shootSpeedCost++;
+        fireSpeedLabel.text = `Fire Speed \n$${shootSpeedCost} | ${player.attackSpeed}x`;
+    } 
 }
 function buySpeed() {
+    if(points >= moveSpeedCost)
+    {
+        player.speedMultiplier += 0.1;
+        player.speedMultiplier = Math.round(player.speedMultiplier * 10) / 10;
+        player.physics.maxSpeed = player.startSpeed * player.speedMultiplier;
+        increaseScoreBy(-moveSpeedCost);
+        moveSpeedCost++;
+        moveSpeedLabel.text = `Movement Speed \n$${moveSpeedCost} | ${player.speedMultiplier}x`;
 
+        console.log(player.startSpeed);
+        console.log(player.physics.maxSpeed);
+    }
 }
 function buyHealth() {
 
