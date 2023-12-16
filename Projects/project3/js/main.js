@@ -4,8 +4,8 @@
 
 const app = new PIXI.Application(
     {
-        width: 1100,
-        height: 800
+        width: 1024,
+        height: 758
     });
 document.body.appendChild(app.view);
 

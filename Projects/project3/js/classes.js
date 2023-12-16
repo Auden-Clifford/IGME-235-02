@@ -99,8 +99,9 @@ class Player extends PIXI.Graphics {
 class Zombie extends PIXI.Graphics{
     constructor(x=0, y=0, radius=25, color=0xFF0000, health=50, speed=50, damage=10, points=3, attackSpeed=1, separateRadius=150){
         super();
-        // physics setup
+        // physics & AI setup
         this.physics = new PhysicsObject(x,y,radius,speed,500);
+        this.agent = new Agent(this.physics);
 
         this.beginFill(color);
         this.drawCircle(0,0,this.physics.radius);
@@ -122,50 +123,6 @@ class Zombie extends PIXI.Graphics{
         this.attackTimer = 0;
     }
 
-    /*
-    * returns a force vector that seeks a target position
-    */
-    seek(targetPos) {
-        let desiredVel = (targetPos.clone().subtract(this.physics.position)).normalize().multiplyScalar(this.physics.maxSpeed);
-        return desiredVel.subtract(this.physics.velocity);
-    }
-
-    /*
-    * returns a force vector that flees from a target position
-    */
-    flee(targetPos) {
-        let desiredVel = (this.physics.position.clone().subtract(targetPos)).normalize().multiplyScalar(this.physics.maxSpeed);
-        return desiredVel.subtract(this.physics.velocity);
-    }
-
-    /*
-    * returns a force vector that separates this object from others
-    */
-    separate(otherObjects)
-    {
-        let sum = new Victor(0,0);
-        let count = 0;
-
-        for(let object of otherObjects)
-        {
-            //check for others within separation distance
-            if(object !== this && this.physics.position.distance(object.physics.position) < this.separateRadius)
-            {
-                // add a flee force scaled by the distance between the objects
-                sum.add(this.flee(object.physics.position).divideScalar(this.physics.position.distance(object.physics.position)))
-                count++;
-            }
-        }
-
-        // don't devide if there were zero other objets
-        if(count > 0)
-        {
-            sum.divideScalar(count);
-        }
-
-        return sum;
-    }
-
     attack(target)
     {
         if(this.attackTimer < 0)
@@ -182,8 +139,8 @@ class Zombie extends PIXI.Graphics{
 
         // apply a seek force toward the given target
         let sum = new Victor(0,0);
-        sum.add(this.seek(target.physics.position));
-        sum.add(this.separate(zombies).multiplyScalar(50));
+        sum.add(this.agent.seek(target.physics.position));
+        sum.add(this.agent.separate(zombies).multiplyScalar(50));
         this.physics.applyForce(sum);
 
         // allow physics to update
@@ -201,6 +158,55 @@ class Zombie extends PIXI.Graphics{
             kills++;
             gameScene.removeChild(this);
         }
+    }
+}
+
+class Survivor extends PIXI.Graphics{
+    constructor(x=0, y=0, radius=25, health=100, speed=50, separateRadius=150){
+        super();
+        // physics & AI setup
+        this.physics = new PhysicsObject(x,y,radius,speed,500);
+        this.agent = new Agent(this.physics);
+
+        this.beginFill(0x219EBC);
+        this.drawCircle(0,0,this.physics.radius);
+        this.endFill();
+        this.x = this.physics.position.x;
+        this.y = this.physics.position.y;
+        //this.radius = radius;
+
+        // variables
+        this.isAlive = true;
+        this.health = health;
+        this.separateRadius = separateRadius;
+        this.maxForce = 400;
+    }
+
+    update(survivors, zombies, deltaTime=1/60)
+    {
+        // apply a seek force toward the given target
+        let sum = new Victor(0,0);
+        // stay bound within a circle at the center of 
+        //the screen w/ a diameter of 1/3 the screen width
+        sum.add(this.agent.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 6))
+        // separate from other survivors
+        sum.add(this.agent.separate(survivors));
+
+        // get the closest zombie
+        let closest;
+        let closestDist = Infinity; // start with large number
+        for(let zombie of zombies)
+        {
+            let distSq = this.physics.position.distanceSq(zombie.physics.position);
+            if( distSq < closestDist)
+            {
+                closestDist = distSq;
+                closest = zombie;
+            }
+        }
+
+        // flee from it
+        this.agent.flee(closest.physics.position);
     }
 }
 
@@ -335,5 +341,66 @@ class PhysicsObject {
 
         // reset acceleration
         this.acceleration.multiplyScalar(0);
+    }
+}
+
+class Agent {
+    constructor(physics)
+    {
+        this.physics = physics;
+    }
+
+    /*
+    * returns a force vector that seeks a target position
+    */
+    seek(targetPos) {
+        let desiredVel = (targetPos.clone().subtract(this.physics.position)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
+    }
+
+    /*
+    * returns a force vector that flees from a target position
+    */
+    flee(targetPos) {
+        let desiredVel = (this.physics.position.clone().subtract(targetPos)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
+    }
+
+    /*
+    * returns a force vector that separates this object from others
+    */
+    separate(otherObjects)
+    {
+        let sum = new Victor(0,0);
+        let count = 0;
+
+        for(let object of otherObjects)
+        {
+            //check for others within separation distance
+            if(object !== this && this.physics.position.distance(object.physics.position) < this.separateRadius)
+            {
+                // add a flee force scaled by the distance between the objects
+                sum.add(this.flee(object.physics.position).divideScalar(this.physics.position.distance(object.physics.position)))
+                count++;
+            }
+        }
+
+        // don't devide if there were zero other objets
+        if(count > 0)
+        {
+            sum.divideScalar(count);
+        }
+
+        return sum;
+    }
+
+    stayInBounds(position, radius)
+    {
+        // if the agent leaves the radius, apply force 
+        // to return to the radius (scaled by distance)
+        if(this.physics.position.distance(position) > radius)
+        {
+            this.seek(position) * this.physics.position.distance(position)
+        }
     }
 }
