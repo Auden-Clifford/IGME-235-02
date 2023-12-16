@@ -771,13 +771,45 @@ function gameLoop(){
             // move zombies & check thier collisions
             for(let zombie of zombies)
             {
-                zombie.update(player, zombies, dt);
+                // zombies find and follow the closest survivor/player
+                let closestTarget;
+                let closestDist = Infinity; // start with large number
 
+                // find the closest survivor
+                for(let survivor of survivors)
+                {
+                    let distSq = zombie.physics.position.distanceSq(survivor.physics.position);
+                    if( distSq < closestDist)
+                    {
+                        closestDist = distSq;
+                        closestTarget = survivor;
+                    }
+                }
+
+                // check if the player is closer
+                let distSq = zombie.physics.position.distanceSq(player.physics.position);
+                if( distSq < closestDist)
+                {
+                    closestDist = distSq;
+                    closestTarget = player;
+                }
+
+                zombie.update(closestTarget, zombies, dt);
+
+                // detect survivor/player collisions
                 if(zombie.physics.detectIntersection(player.physics))
                 {
                     zombie.attack(player);
                 }
+                for(let survivor of survivors)
+                {
+                    if(zombie.physics.detectIntersection(survivor.physics))
+                    {
+                        zombie.attack(survivor);
+                    }
+                }
 
+                // detect bullet collisions
                 for(let b of bullets)
                 {
                     if(b.detectIntersection(zombie.physics))
@@ -810,6 +842,11 @@ function gameLoop(){
             bullets = bullets.filter(b=>b.isAlive);
             zombies = zombies.filter(z=>z.isAlive);
             survivors = survivors.filter(s=>s.isAlive);
+
+            // end the game if no survivors remain
+            if(survivors.length == 0){
+                gameOver();
+            }
 
             // load next level
             if(zombies.length == 0) {

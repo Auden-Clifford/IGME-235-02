@@ -190,7 +190,7 @@ class Survivor extends PIXI.Graphics{
         //the screen w/ a diameter of 1/3 the screen width
         sum.add(this.agent.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 10).multiplyScalar(100))
         // separate from other survivors
-        sum.add(this.agent.separate(survivors).multiplyScalar(50));
+        sum.add(this.agent.separate(survivors).multiplyScalar(10));
 
         // separate extra hard from zombies
         sum.add(this.agent.separate(zombies).multiplyScalar(100))
