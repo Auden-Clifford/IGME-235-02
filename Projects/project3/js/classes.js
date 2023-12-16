@@ -101,7 +101,7 @@ class Zombie extends PIXI.Graphics{
         super();
         // physics & AI setup
         this.physics = new PhysicsObject(x,y,radius,speed,500);
-        this.agent = new Agent(this.physics);
+        this.agent = new Agent(this.physics, separateRadius);
 
         this.beginFill(color);
         this.drawCircle(0,0,this.physics.radius);
@@ -146,7 +146,7 @@ class Zombie extends PIXI.Graphics{
         // allow physics to update
         this.physics.update(deltaTime);
 
-        // set the player's position to match it's physics object
+        // set the zimbie's position to match it's physics object
         this.x = this.physics.position.x;
         this.y = this.physics.position.y;
 
@@ -162,11 +162,11 @@ class Zombie extends PIXI.Graphics{
 }
 
 class Survivor extends PIXI.Graphics{
-    constructor(x=0, y=0, radius=25, health=100, speed=50, separateRadius=150){
+    constructor(x=0, y=0, radius=25, health=100, speed=100, separateRadius=150){
         super();
         // physics & AI setup
         this.physics = new PhysicsObject(x,y,radius,speed,500);
-        this.agent = new Agent(this.physics);
+        this.agent = new Agent(this.physics, separateRadius);
 
         this.beginFill(0x219EBC);
         this.drawCircle(0,0,this.physics.radius);
@@ -188,10 +188,13 @@ class Survivor extends PIXI.Graphics{
         let sum = new Victor(0,0);
         // stay bound within a circle at the center of 
         //the screen w/ a diameter of 1/3 the screen width
-        sum.add(this.agent.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 6))
+        sum.add(this.agent.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 10).multiplyScalar(100))
         // separate from other survivors
-        sum.add(this.agent.separate(survivors));
+        sum.add(this.agent.separate(survivors).multiplyScalar(50));
 
+        // separate extra hard from zombies
+        sum.add(this.agent.separate(zombies).multiplyScalar(100))
+        /*
         // get the closest zombie
         let closest;
         let closestDist = Infinity; // start with large number
@@ -206,7 +209,31 @@ class Survivor extends PIXI.Graphics{
         }
 
         // flee from it
-        this.agent.flee(closest.physics.position);
+        sum.add(this.agent.flee(closest.physics.position));
+        */
+
+        // cap force at max
+        if(sum.length() > this.maxForce)
+        {
+            sum.normalize().multiplyScalar(this.maxForce);
+        }
+
+        // apply forces
+        this.physics.applyForce(sum);
+
+        // allow physics to update
+        this.physics.update(deltaTime);
+
+        // set the player's position to match it's physics object
+        this.x = this.physics.position.x;
+        this.y = this.physics.position.y;
+
+        // check for death
+        if(this.health < 0)
+        {
+            this.isAlive = false;
+            gameScene.removeChild(this);
+        }
     }
 }
 
@@ -345,9 +372,10 @@ class PhysicsObject {
 }
 
 class Agent {
-    constructor(physics)
+    constructor(physics, separateRadius)
     {
         this.physics = physics;
+        this.separateRadius = separateRadius;
     }
 
     /*
@@ -396,11 +424,15 @@ class Agent {
 
     stayInBounds(position, radius)
     {
+        let force = new Victor(0,0);
+
         // if the agent leaves the radius, apply force 
         // to return to the radius (scaled by distance)
         if(this.physics.position.distance(position) > radius)
         {
-            this.seek(position) * this.physics.position.distance(position)
+            force = this.seek(position).multiplyScalar(this.physics.position.distance(position));
         }
+
+        return force;
     }
 }

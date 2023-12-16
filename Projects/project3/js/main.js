@@ -52,6 +52,7 @@ let gameOverScene, gameOverKillsLabel, gameOverTimeLabel, gameOverWaveLabel;
 
 let bullets = [];
 let zombies = [];
+let survivors = [];
 let points = 0;
 //let health = 100;
 let waveNum = 0;
@@ -541,6 +542,18 @@ function startGame(){
         gameScene.removeChild(b);
     }
     bullets = [];
+    for(let s of survivors)
+    {
+        gameScene.removeChild(s);
+    }
+    survivors = [];
+
+    for(let i = 0; i < 10; i++)
+    {
+        let s = new Survivor(Math.random() * sceneHeight, Math.random() * sceneWidth);
+        survivors.push(s);
+        gameScene.addChild(s);
+    }
 
     newWave();
 }
@@ -787,10 +800,16 @@ function gameLoop(){
 	        for (let b of bullets){
 		        b.move(dt);
 	        }
+
+            // Move Survivors
+            for(let s of survivors){
+                s.update(survivors, zombies, dt);
+            }
             
             // some clean up
             bullets = bullets.filter(b=>b.isAlive);
             zombies = zombies.filter(z=>z.isAlive);
+            survivors = survivors.filter(s=>s.isAlive);
 
             // load next level
             if(zombies.length == 0) {
