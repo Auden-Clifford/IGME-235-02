@@ -1,3 +1,96 @@
+// idea: objects like Player & zombie store class instances like PhysicsObject and Agent within them as properties, similar to component-based arcitecture
+class PhysicsObject {
+    constructor (posX=0, posY=0, radius, maxSpeed, coefFriction){
+        this.position = new Victor(posX,posY);
+        this.velocity = new Victor(0,0);
+        this.direction = new Victor(0,1);
+        this.acceleration = new Victor(0,0);
+
+        this.radius = radius;
+        this.maxSpeed = maxSpeed;
+        this.coefFriction = coefFriction;
+    }
+
+    /*
+    * Gets this object's mass (equal to 1/100 it's area)
+    */
+    getMass() {
+        return Math.PI * Math.pow(this.radius / 100, 2); 
+    }
+
+    /*
+    * Gets this object's direction (equal to it's normalized velocity)
+    */
+    getDirection() {
+        return velocity.clone().normalize();
+    }
+
+    /*
+    * applies a force vector to this object's acceleration factoring in the object's mass
+    */
+    applyForce(force)
+    {
+        this.acceleration.add(force.divideScalar(this.getMass()));
+    }
+
+    /*
+    * applies a force oposite to the object's velocity
+    */
+    applyFriction()
+    {
+        let friction = this.velocity.clone().invert();
+        friction.normalize();
+        friction.multiplyScalar(this.coefFriction);
+        // force of friction cannot exceed velocity
+        if(friction.length() > this.velocity.length())
+        {
+            friction.normalize().multiplyScalar(this.velocity.length());
+        }
+        this.applyForce(friction);
+    }
+
+    /*
+    * detects whether this object is intersecting another
+    */
+    detectIntersection(otherObject)
+    {
+        // ensure this object is not being checked against itself
+        if(this !== otherObject)
+        {
+            return this.position.distance(otherObject.position) <= this.radius + otherObject.radius ? true : false
+        }
+    }
+
+    /*
+    * Gets this object's position a given number of seconds in the future
+    */
+    getFuturePosition(time)
+    {
+        return this.position.clone().add(this.velocity.multiplySacalar(time));
+    }
+
+    update(deltaTime=1/60)
+    {
+        // apply a friction force
+        this.applyFriction();
+
+        // add acceleration to velocity
+        this.velocity.add(this.acceleration.clone().multiplyScalar(deltaTime));
+
+        // cap velocity at max
+        if(this.velocity.length() > this.maxSpeed)
+        {
+            this.velocity.normalize().multiplyScalar(this.maxSpeed);
+        }
+
+        // calculate position
+        this.position.add(this.velocity.clone().multiplyScalar(deltaTime));
+
+        // reset acceleration
+        this.acceleration.multiplyScalar(0);
+    }
+}
+
 class Player extends PIXI.Graphics {
     constructor(x = 0, y = 0, radius=25, color=0xFFFF00) {
         super();
@@ -96,19 +189,88 @@ class Player extends PIXI.Graphics {
     }
 }
 
-class Zombie extends PIXI.Graphics{
-    constructor(x=0, y=0, radius=25, color=0xFF0000, health=50, speed=50, damage=10, points=3, attackSpeed=1, separateRadius=150){
+class Agent extends PIXI.Graphics {
+    constructor(x=0, y=0, radius=25, color=0xFF0000, maxSpeed=50, maxForce=400, coefFriction=500, separateRadius=150)
+    {
         super();
-        // physics & AI setup
-        this.physics = new PhysicsObject(x,y,radius,speed,500);
-        this.agent = new Agent(this.physics, separateRadius);
+        // store a physics component
+        this.physics = new PhysicsObject(x,y,radius,maxSpeed,coefFriction);
 
+        // create the graphic
         this.beginFill(color);
         this.drawCircle(0,0,this.physics.radius);
         this.endFill();
+
+        // set the PIXI graphics position equal to the victor vector position
         this.x = this.physics.position.x;
         this.y = this.physics.position.y;
-        //this.radius = radius;
+
+        this.separateRadius = separateRadius;
+        this.maxForce = maxForce;
+    }
+
+    /*
+    * returns a force vector that seeks a target position
+    */
+    seek(targetPos) {
+        let desiredVel = (targetPos.clone().subtract(this.physics.position)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
+    }
+
+    /*
+    * returns a force vector that flees from a target position
+    */
+    flee(targetPos) {
+        let desiredVel = (this.physics.position.clone().subtract(targetPos)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
+    }
+
+    /*
+    * returns a force vector that separates this object from others
+    */
+    separate(otherObjects)
+    {
+        let sum = new Victor(0,0);
+        let count = 0;
+
+        for(let object of otherObjects)
+        {
+            //check for others within separation distance
+            if(object !== this && this.physics.position.distance(object.physics.position) < this.separateRadius)
+            {
+                // add a flee force scaled by the distance between the objects
+                sum.add(this.flee(object.physics.position).divideScalar(this.physics.position.distance(object.physics.position)))
+                count++;
+            }
+        }
+
+        // don't devide if there were zero other objets
+        if(count > 0)
+        {
+            sum.divideScalar(count);
+        }
+
+        return sum;
+    }
+
+    stayInBounds(position, radius)
+    {
+        let force = new Victor(0,0);
+
+        // if the agent leaves the radius, apply force 
+        // to return to the radius (scaled by distance)
+        if(this.physics.position.distance(position) > radius)
+        {
+            force = this.seek(position).multiplyScalar(this.physics.position.distance(position));
+        }
+
+        return force;
+    }
+}
+
+class Zombie extends Agent{
+    constructor(x=0, y=0, radius=25, color=0xFF0000, speed=50, maxForce=400, coefFriction=500, separateRadius=150, health=50, damage=10, points=3, attackSpeed=1, ){
+        super(x,y,radius,color,speed,maxForce,coefFriction);
 
         // variables
         this.isAlive = true;
@@ -116,8 +278,6 @@ class Zombie extends PIXI.Graphics{
         this.damage = damage;
         this.points = points;
         this.attackSpeed = attackSpeed;
-        this.separateRadius = separateRadius;
-        this.maxForce = 400;
 
         // timers
         this.attackTimer = 0;
@@ -139,8 +299,8 @@ class Zombie extends PIXI.Graphics{
 
         // apply a seek force toward the given target
         let sum = new Victor(0,0);
-        sum.add(this.agent.seek(target.physics.position));
-        sum.add(this.agent.separate(zombies).multiplyScalar(50));
+        sum.add(this.seek(target.physics.position));
+        sum.add(this.separate(zombies).multiplyScalar(50));
         this.physics.applyForce(sum);
 
         // allow physics to update
@@ -161,25 +321,13 @@ class Zombie extends PIXI.Graphics{
     }
 }
 
-class Survivor extends PIXI.Graphics{
-    constructor(x=0, y=0, radius=25, health=100, speed=100, separateRadius=150){
-        super();
-        // physics & AI setup
-        this.physics = new PhysicsObject(x,y,radius,speed,500);
-        this.agent = new Agent(this.physics, separateRadius);
-
-        this.beginFill(0x219EBC);
-        this.drawCircle(0,0,this.physics.radius);
-        this.endFill();
-        this.x = this.physics.position.x;
-        this.y = this.physics.position.y;
-        //this.radius = radius;
+class Survivor extends Agent{
+    constructor(x=0, y=0, radius=25, speed=100, maxForce=400, coefFriction=500, separateRadius=150, health=100, ){
+        super(x,y,radius,0x219EBC,speed,maxForce,coefFriction);
 
         // variables
         this.isAlive = true;
         this.health = health;
-        this.separateRadius = separateRadius;
-        this.maxForce = 400;
     }
 
     update(survivors, zombies, deltaTime=1/60)
@@ -188,12 +336,12 @@ class Survivor extends PIXI.Graphics{
         let sum = new Victor(0,0);
         // stay bound within a circle at the center of 
         //the screen w/ a diameter of 1/3 the screen width
-        sum.add(this.agent.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 10).multiplyScalar(100))
+        sum.add(this.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 10).multiplyScalar(100))
         // separate from other survivors
-        sum.add(this.agent.separate(survivors).multiplyScalar(10));
+        sum.add(this.separate(survivors).multiplyScalar(10));
 
         // separate extra hard from zombies
-        sum.add(this.agent.separate(zombies).multiplyScalar(100))
+        sum.add(this.separate(zombies).multiplyScalar(100))
         /*
         // get the closest zombie
         let closest;
@@ -278,161 +426,5 @@ class Bullet extends PIXI.Graphics{
     }
 }
 
-// idea: objects like Player & zombie store class instances like PhysicsObject and Agent within them as properties, similar to component-based arcitecture
-class PhysicsObject {
-    constructor (posX=0, posY=0, radius, maxSpeed, coefFriction){
-        this.position = new Victor(posX,posY);
-        this.velocity = new Victor(0,0);
-        this.direction = new Victor(0,1);
-        this.acceleration = new Victor(0,0);
 
-        this.radius = radius;
-        this.maxSpeed = maxSpeed;
-        this.coefFriction = coefFriction;
-    }
 
-    /*
-    * Gets this object's mass (equal to 1/100 it's area)
-    */
-    getMass() {
-        return Math.PI * Math.pow(this.radius / 100, 2); 
-    }
-
-    /*
-    * Gets this object's direction (equal to it's normalized velocity)
-    */
-    getDirection() {
-        return velocity.clone().normalize();
-    }
-
-    /*
-    * applies a force vector to this object's acceleration factoring in the object's mass
-    */
-    applyForce(force)
-    {
-        this.acceleration.add(force.divideScalar(this.getMass()));
-    }
-
-    /*
-    * applies a force oposite to the object's velocity
-    */
-    applyFriction()
-    {
-        let friction = this.velocity.clone().invert();
-        friction.normalize();
-        friction.multiplyScalar(this.coefFriction);
-        // force of friction cannot exceed velocity
-        if(friction.length() > this.velocity.length())
-        {
-            friction.normalize().multiplyScalar(this.velocity.length());
-        }
-        this.applyForce(friction);
-    }
-
-    /*
-    * detects whether this object is intersecting another
-    */
-    detectIntersection(otherObject)
-    {
-        // ensure this object is not being checked against itself
-        if(this !== otherObject)
-        {
-            return this.position.distance(otherObject.position) <= this.radius + otherObject.radius ? true : false
-        }
-    }
-
-    /*
-    * Gets this object's position a given number of seconds in the future
-    */
-    getFuturePosition(time)
-    {
-        return this.position.clone().add(this.velocity.multiplySacalar(time));
-    }
-
-    update(deltaTime=1/60)
-    {
-        // apply a friction force
-        this.applyFriction();
-
-        // add acceleration to velocity
-        this.velocity.add(this.acceleration.clone().multiplyScalar(deltaTime));
-
-        // cap velocity at max
-        if(this.velocity.length() > this.maxSpeed)
-        {
-            this.velocity.normalize().multiplyScalar(this.maxSpeed);
-        }
-
-        // calculate position
-        this.position.add(this.velocity.clone().multiplyScalar(deltaTime));
-
-        // reset acceleration
-        this.acceleration.multiplyScalar(0);
-    }
-}
-
-class Agent {
-    constructor(physics, separateRadius)
-    {
-        this.physics = physics;
-        this.separateRadius = separateRadius;
-    }
-
-    /*
-    * returns a force vector that seeks a target position
-    */
-    seek(targetPos) {
-        let desiredVel = (targetPos.clone().subtract(this.physics.position)).normalize().multiplyScalar(this.physics.maxSpeed);
-        return desiredVel.subtract(this.physics.velocity);
-    }
-
-    /*
-    * returns a force vector that flees from a target position
-    */
-    flee(targetPos) {
-        let desiredVel = (this.physics.position.clone().subtract(targetPos)).normalize().multiplyScalar(this.physics.maxSpeed);
-        return desiredVel.subtract(this.physics.velocity);
-    }
-
-    /*
-    * returns a force vector that separates this object from others
-    */
-    separate(otherObjects)
-    {
-        let sum = new Victor(0,0);
-        let count = 0;
-
-        for(let object of otherObjects)
-        {
-            //check for others within separation distance
-            if(object !== this && this.physics.position.distance(object.physics.position) < this.separateRadius)
-            {
-                // add a flee force scaled by the distance between the objects
-                sum.add(this.flee(object.physics.position).divideScalar(this.physics.position.distance(object.physics.position)))
-                count++;
-            }
-        }
-
-        // don't devide if there were zero other objets
-        if(count > 0)
-        {
-            sum.divideScalar(count);
-        }
-
-        return sum;
-    }
-
-    stayInBounds(position, radius)
-    {
-        let force = new Victor(0,0);
-
-        // if the agent leaves the radius, apply force 
-        // to return to the radius (scaled by distance)
-        if(this.physics.position.distance(position) > radius)
-        {
-            force = this.seek(position).multiplyScalar(this.physics.position.distance(position));
-        }
-
-        return force;
-    }
-}
