@@ -28,14 +28,17 @@ app.loader.
         "images/title.svg",
         "images/playButton.svg",
         "images/closeButton.svg",
-        "images/grass.svg",
+        "images/S_Grass.png",
         "images/shopButton.svg",
         "images/shopTitle.svg",
         "images/buyButton.svg",
         "images/gameOverTitle.svg",
         "images/retryButton.svg",
         "images/quitButton.svg",
-        "images/S_Player.png"
+        "images/S_Player.png",
+        "images/S_Zombie.png",
+        "images/S_Survivor.png",
+        "images/S_Shot.png"
     ]);
 app.loader.onProgress.add(e => { console.log(`progress=${e.progress}`) });
 app.loader.onComplete.add(Setup);
@@ -47,9 +50,12 @@ let stage;
 // game variables
 let startScene;
 let helpScene;
-let gameScene,player,pointsLabel,healthLabel,timeLabel, waveLabel,shootSound,hitSound, respawnTimer;
+let gameScene,player,pointsLabel,healthLabel,timeLabel, waveLabel, respawnTimer;
 let shopScene, fireSpeedLabel, moveSpeedLabel, healthShopLabel, shopPointsLabel;
 let gameOverScene, gameOverKillsLabel, gameOverTimeLabel, gameOverWaveLabel;
+
+let clickSound, zombieHitSound, bulletHitSound, deathSound;
+let shootSounds = [];
 
 let bullets = [];
 let zombies = [];
@@ -177,11 +183,32 @@ function Setup()
     // Create labels for all 3 scenes
     createLabelsAndButtons();
 
-    // add palyer on top
+    // add player
     gameScene.addChild(player);
 
-    // create test object
-    //guy = new PhysicsObject();
+    // load sounds
+    shootSounds.push(new Howl({
+        src: ["sounds/SFX_Shoot1.wav"]
+    }))
+    shootSounds.push(new Howl({
+        src: ["sounds/SFX_Shoot2.wav"]
+    }))
+    shootSounds.push(new Howl({
+        src: ["sounds/SFX_Shoot3.wav"]
+    }))
+
+    clickSound = new Howl({
+        src: ["sounds/SFX_Click.wav"]
+    })
+    zombieHitSound = new Howl({
+        src: ["sounds/SFX_Hit.wav"]
+    })
+    bulletHitSound = new Howl({
+        src: ["sounds/SFX_BulletHit.wav"]
+    })
+    deathSound = new Howl({
+        src: ["sounds/SFX_Death.wav"]
+    })
 
     // Start update loop
     app.ticker.add(gameLoop);
@@ -307,7 +334,9 @@ function createLabelsAndButtons()
 
     // set up 'gameScene'
     // background 
-    let background = new PIXI.TilingSprite(app.loader.resources["images/grass.svg"].texture, sceneWidth, sceneHeight);
+    let background = new PIXI.TilingSprite(app.loader.resources["images/S_Grass.png"].texture, sceneWidth, sceneHeight);
+    background.tileScale.x = 0.2;
+    background.tileScale.y = 0.2;
     gameScene.addChild(background);
 
     // make score label
@@ -508,6 +537,9 @@ function createLabelsAndButtons()
 
 //scene change functions
 function startGame(){
+    // play button sound
+    clickSound.play();
+    // make correct scene visible
     startScene.visible = false;
     helpScene.visible = false;
     gameOverScene.visible = false;
@@ -516,6 +548,7 @@ function startGame(){
 
     currentState = GameState.Game;
 
+    // set up starting stats
     waveNum = 0;
     points = 0;
     time = 0;
@@ -549,9 +582,10 @@ function startGame(){
     }
     survivors = [];
 
+    // create new survivors
     for(let i = 0; i < 10; i++)
     {
-        let s = new Survivor(Math.random() * sceneHeight, Math.random() * sceneWidth);
+        let s = new Survivor(Math.random() * sceneHeight, Math.random() * sceneWidth, "images/S_Survivor.png");
         survivors.push(s);
         gameScene.addChild(s);
     }
@@ -560,6 +594,9 @@ function startGame(){
 }
 
 function openHelp(){
+    // play button sound
+    clickSound.play();
+    // make correct scene visible
     startScene.visible = false;
     helpScene.visible = true;
     gameOverScene.visible = false;
@@ -570,6 +607,9 @@ function openHelp(){
 }
 
 function backToTitle(){
+    // play button sound
+    clickSound.play();
+    // make correct scene visible
     startScene.visible = true;
     helpScene.visible = false;
     gameOverScene.visible = false;
@@ -580,6 +620,9 @@ function backToTitle(){
 }
 
 function openShop(){
+    // play button sound
+    clickSound.play();
+    // make correct scene visible
     startScene.visible = false;
     helpScene.visible = false;
     gameOverScene.visible = false;
@@ -590,6 +633,9 @@ function openShop(){
 }
 
 function backToGame(){
+    // play button sound
+    clickSound.play();
+    // make correct scene visible
     startScene.visible = false;
     helpScene.visible = false;
     gameOverScene.visible = false;
@@ -687,7 +733,7 @@ function spawnZombies(num){
             x = sceneWidth;
         }
 
-        let z = new Zombie(x,y);
+        let z = new Zombie(x,y,"images/S_Zombie.png");
         zombies.push(z);
         gameScene.addChild(z);
     }
@@ -746,19 +792,21 @@ function gameLoop(){
                 mov.addScalarX(1);
             }
 
+
+            //get a vector mouse position
+            let mousePosition = new Victor(
+                app.renderer.plugins.interaction.mouse.global.x,
+                app.renderer.plugins.interaction.mouse.global.y
+            );
+
             if(shooting && player.health > 0)
             {
-                let mousePosition = new Victor(
-                    app.renderer.plugins.interaction.mouse.global.x,
-                    app.renderer.plugins.interaction.mouse.global.y
-                );
-                
                 player.shoot(mousePosition);
             }
             
 
             // update the player's position
-            player.update(mov,dt);
+            player.update(mov,mousePosition,dt);
 
             //keep player on screen
             player.physics.position.x = clamp(player.physics.position.x,0+player.physics.radius,sceneWidth-player.physics.radius);
@@ -787,9 +835,9 @@ function gameLoop(){
                     }
                 }
 
-                // check if the player is closer
+                // check if the player is closer & alive
                 let distSq = zombie.physics.position.distanceSq(player.physics.position);
-                if( distSq < closestDist)
+                if( distSq < closestDist && player.health > 0)
                 {
                     closestDist = distSq;
                     closestTarget = player;
@@ -798,7 +846,7 @@ function gameLoop(){
                 zombie.update(closestTarget, zombies, dt);
 
                 // detect survivor/player collisions
-                if(zombie.physics.detectIntersection(player.physics))
+                if(zombie.physics.detectIntersection(player.physics) && player.health > 0)
                 {
                     zombie.attack(player);
                 }
@@ -819,6 +867,9 @@ function gameLoop(){
                         zombie.health -= b.damage;
                         gameScene.removeChild(b);
                         b.isAlive = false;
+
+                        // play hit sound
+                        bulletHitSound.play();
                     }
 
                     // kill bullets that move offscreen

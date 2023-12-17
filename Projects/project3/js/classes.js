@@ -22,7 +22,7 @@ class PhysicsObject {
     * Gets this object's direction (equal to it's normalized velocity)
     */
     getDirection() {
-        return velocity.clone().normalize();
+        return this.velocity.clone().normalize();
     }
 
     /*
@@ -91,17 +91,22 @@ class PhysicsObject {
     }
 }
 
-class Agent extends PIXI.Graphics {
-    constructor(x=0, y=0, radius=25, color=0xFF0000, maxSpeed=50, maxForce=400, coefFriction=500, separateRadius=150)
+class Agent extends PIXI.Sprite {
+    constructor(x=0, y=0, sprite, radius=25, maxSpeed=50, maxForce=400, coefFriction=500, separateRadius=150)
     {
-        super();
+        //set up sprite
+        super(app.loader.resources[sprite].texture);
+        this.anchor.set(.5, .5);
+        this.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST
+
+        // scale sprite to fit radius
+        let scaleWidth = (radius * 2) / this.width;
+        let scaleHeight = (radius * 2) / this.height;
+        // use the larger scale factor
+        this.scale.set(Math.max(scaleWidth,scaleHeight));
+
         // store a physics component
         this.physics = new PhysicsObject(x,y,radius,maxSpeed,coefFriction);
-
-        // create the graphic
-        this.beginFill(color);
-        this.drawCircle(0,0,this.physics.radius);
-        this.endFill();
 
         // set the PIXI graphics position equal to the victor vector position
         this.x = this.physics.position.x;
@@ -168,6 +173,12 @@ class Agent extends PIXI.Graphics {
 
         return force;
     }
+
+    rotateSprite()
+    {
+        // rotate the sprite to face the movement direction
+        this.rotation = this.physics.getDirection().angle() - Math.PI / 2;
+    }
 }
 
 class Player extends PIXI.Sprite {
@@ -175,17 +186,16 @@ class Player extends PIXI.Sprite {
         //set up sprite
         super(app.loader.resources["images/S_Player.png"].texture);
         this.anchor.set(.5, .5);
+        this.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST
+
+        // scale player sprite to fit radius
+        let scaleWidth = (radius * 2) / this.width;
+        let scaleHeight = (radius * 2) / this.height;
+        // use the larger scale factor
+        this.scale.set(Math.max(scaleWidth,scaleHeight));
 
         // set up physics
         this.physics = new PhysicsObject(x,y,radius,250,500);
-        /*
-        this.beginFill(color);
-        this.drawCircle(0,0,radius);
-        this.endFill();
-        */
-        //super(app.loader.resources["images/spaceship.png"].texture);
-        //this.anchor.set(.5, .5); // position, scaling, rotating etc are now from center of sprite
-        //this.scale.set(0.1);
 
         // set the sptite position equal to vector position
         this.x = this.physics.position.x;
@@ -209,6 +219,11 @@ class Player extends PIXI.Sprite {
 
     respawn(deltaTime)
     {
+        // if this is the first second of respawn, play the death sound
+        if(this.respawnTimer == this.respawnTime)
+        {
+            deathSound.play();
+        }
         // decrease this timer only while the function is called
         this.respawnTimer -= deltaTime;
         this.visible = false;
@@ -231,17 +246,22 @@ class Player extends PIXI.Sprite {
         {
             if(this.attackTimer < 0)
             {
-                let b = new Bullet(0xFFFFFF, this.physics.position.x, this.physics.position.y, mousePosition.subtract(this.physics.position).normalize());
+                let b = new Bullet("images/S_Shot.png", this.physics.position.x, this.physics.position.y, mousePosition.clone().subtract(this.physics.position).normalize());
                 bullets.push(b);
                 gameScene.addChild(b);
 
                 // reset timer
                 this.attackTimer = 1/this.attackSpeed;
+                
+                for(let sound of shootSounds)
+                {
+                    sound.play();
+                }
             }
         }
     }
 
-    update(vector, deltaTime=1/60)
+    update(vector, mousePosition, deltaTime=1/60)
     {
         // increment timers
         this.attackTimer -= deltaTime;
@@ -251,6 +271,9 @@ class Player extends PIXI.Sprite {
         {
             this.visible = true;
             respawnTimer.visible = false;
+
+            // rotate the sprite to face tha camera
+            this.rotation = mousePosition.clone().subtract(this.physics.position).angle() - Math.PI / 2;
 
             // if a movement vector was submitted, update position
             if(vector.length() > 0)
@@ -276,8 +299,8 @@ class Player extends PIXI.Sprite {
 }
 
 class Zombie extends Agent{
-    constructor(x=0, y=0, radius=25, color=0xFF0000, speed=50, maxForce=400, coefFriction=500, separateRadius=150, health=50, damage=10, points=3, attackSpeed=1, ){
-        super(x,y,radius,color,speed,maxForce,coefFriction);
+    constructor(x=0, y=0, sprite, radius=25, color=0xFF0000, speed=50, maxForce=400, coefFriction=500, separateRadius=150, health=50, damage=10, points=3, attackSpeed=1, ){
+        super(x,y,sprite,radius,speed,maxForce,coefFriction);
 
         // variables
         this.isAlive = true;
@@ -296,11 +319,15 @@ class Zombie extends Agent{
         {
             target.health -= this.damage;
             this.attackTimer = 1/this.attackSpeed;
+            zombieHitSound.play();
         }
     }
 
     update(target, zombies, deltaTime=1/60)
     {
+        // rotate the sprite
+        this.rotateSprite();
+
         //incerment timers
         this.attackTimer -= deltaTime;
 
@@ -329,8 +356,8 @@ class Zombie extends Agent{
 }
 
 class Survivor extends Agent{
-    constructor(x=0, y=0, radius=25, speed=100, maxForce=400, coefFriction=500, separateRadius=150, health=100, ){
-        super(x,y,radius,0x219EBC,speed,maxForce,coefFriction);
+    constructor(x=0, y=0, sprite, radius=25, speed=100, maxForce=400, coefFriction=500, separateRadius=150, health=100, ){
+        super(x,y,sprite,radius,speed,maxForce,coefFriction);
 
         // variables
         this.isAlive = true;
@@ -339,11 +366,14 @@ class Survivor extends Agent{
 
     update(survivors, zombies, deltaTime=1/60)
     {
+        // rotate the sprite
+        this.rotateSprite()
+
         // apply a seek force toward the given target
         let sum = new Victor(0,0);
         // stay bound within a circle at the center of 
         //the screen w/ a diameter of 1/3 the screen width
-        sum.add(this.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 10).multiplyScalar(100))
+        sum.add(this.stayInBounds(new Victor(sceneWidth/2,sceneHeight/2), sceneWidth / 10))
         // separate from other survivors
         sum.add(this.separate(survivors).multiplyScalar(10));
 
@@ -388,27 +418,41 @@ class Survivor extends Agent{
         {
             this.isAlive = false;
             gameScene.removeChild(this);
+            deathSound.play();
         }
     }
 }
 
-class Bullet extends PIXI.Graphics{
-    constructor(color=0xFFFFFF, x=0, y=0, fwd){
-        super();
-        this.radius = 6;
-        this.beginFill(color);
-        this.drawCircle(0,0,this.radius);
-        this.endFill();
-        this.vPosition = new Victor(x,y);
+class Bullet extends PIXI.Sprite{
+    constructor(sprite, x=0, y=0, fwd){
 
+        //set up sprite
+        super(app.loader.resources[sprite].texture);
+        this.anchor.set(.5, .5);
+        this.texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST
+
+        this.radius = 6;
+
+        // scale sprite to fit radius
+        let scaleWidth = (this.radius * 2) / this.width;
+        let scaleHeight = (this.radius * 2) / this.height;
+        // use the larger scale factor
+        this.scale.set(Math.max(scaleWidth,scaleHeight));
+
+        // track the position as a victor vector
+        this.vPosition = new Victor(x,y);
         this.x = this.vPosition.x;
         this.y = this.vPosition.y;
 
         // variables
         this.fwd = fwd;
-        this.speed = 800;
+        this.speed = 1000;
         this.isAlive = true;
         this.damage = 30;
+
+        // set rotation to face fwd
+        this.rotation = this.fwd.angle() - Math.PI / 2;
+
         Object.seal(this);
     }
 
