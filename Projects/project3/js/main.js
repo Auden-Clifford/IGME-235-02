@@ -14,7 +14,7 @@ const sceneWidth = app.view.width;
 const sceneHeight = app.view.height;
 
 // game state enum
-const GameState = 
+const GameState =
 {
     Start: 0,
     Game: 1,
@@ -50,7 +50,7 @@ let stage;
 // game variables
 let startScene;
 let helpScene;
-let gameScene,player,pointsLabel,healthLabel,timeLabel, waveLabel, respawnTimer;
+let gameScene, player, pointsLabel, healthLabel, timeLabel, waveLabel, respawnTimer;
 let shopScene, fireSpeedLabel, moveSpeedLabel, healthShopLabel, shopPointsLabel;
 let gameOverScene, gameOverKillsLabel, gameOverTimeLabel, gameOverWaveLabel;
 
@@ -82,92 +82,81 @@ let keyD = false;
 let keyEsc = false;
 let shooting = false;
 
-function Setup() 
-{
+function Setup() {
     //add control sening to key events
-    window.addEventListener('keydown', function(e) {
+    window.addEventListener('keydown', function (e) {
         // function senses whether W,A,S,D, or ESC are pressed and reports to program
         //console.log("a key was pressed");
-        if(e.key ==='w' || e.key === 'W')
-        {
+        if (e.key === 'w' || e.key === 'W') {
             keyW = true;
             //console.log("pressed W");
         }
-        if(e.key ==='a' || e.key === 'A')
-        {
+        if (e.key === 'a' || e.key === 'A') {
             keyA = true;
             //console.log("pressed A");
         }
-        if(e.key ==='s' || e.key === 'S')
-        {
+        if (e.key === 's' || e.key === 'S') {
             keyS = true;
             //console.log("pressed S");
         }
-        if(e.key ==='d' || e.key === 'D')
-        {
+        if (e.key === 'd' || e.key === 'D') {
             keyD = true;
             //console.log("pressed D");
         }
-        if(e.key ==='Escape')
-        {
+        if (e.key === 'Escape') {
             keyEsc = true;
             //console.log("pressed Esc");
         }
     });
-    window.addEventListener('keyup', function(e) {
+    window.addEventListener('keyup', function (e) {
         // function senses whether W,A,S,D, or ESC are pressed and reports to program
         //console.log("a key was released");
-        if(e.key ==='w' || e.key === 'W')
-        {
+        if (e.key === 'w' || e.key === 'W') {
             keyW = false;
             //console.log("released W");
         }
-        if(e.key ==='a' || e.key === 'A')
-        {
+        if (e.key === 'a' || e.key === 'A') {
             keyA = false;
             //console.log("released A");
         }
-        if(e.key ==='s' || e.key === 'S')
-        {
+        if (e.key === 's' || e.key === 'S') {
             keyS = false;
             //console.log("released S");
         }
-        if(e.key ==='d' || e.key === 'D')
-        {
+        if (e.key === 'd' || e.key === 'D') {
             keyD = false;
             //console.log("released D");
         }
-        if(e.key ==='Escape')
-        {
+        if (e.key === 'Escape') {
             keyEsc = false;
             //console.log("released Esc");
         }
     });
-    app.view.addEventListener('mousedown', function(e){
+    app.view.addEventListener('mousedown', function (e) {
         // senses when the user brings the mouse down on the canvas
         //console.log('started shooting');
         shooting = true;
     });
-    window.addEventListener('mouseup', function(e){
+    window.addEventListener('mouseup', function (e) {
         // senses when the user releases the mouse
         shooting = false;
     });
 
-	stage = app.stage;
-	// Create the `start` scene
+    stage = app.stage;
+    // Create the `start` scene
     startScene = new PIXI.Container();
     stage.addChild(startScene);
 
     helpScene = new PIXI.Container();
     helpScene.visible = false;
     stage.addChild(helpScene);
-	
-	// Create the main `game` scene and make it invisible
+
+    // Create the main `game` scene and make it invisible
     gameScene = new PIXI.Container();
     gameScene.visible = false;
     stage.addChild(gameScene);
 
-	// Create the `gameOver` scene and make it invisible
+    // Create the `gameOver` scene and make it invisible
     gameOverScene = new PIXI.Container();
     gameOverScene.visible = false;
     stage.addChild(gameOverScene);
@@ -178,8 +167,8 @@ function Setup()
     stage.addChild(shopScene);
 
     // Create player
-    player = new Player(sceneWidth / 2,sceneHeight - 200);
-    
+    player = new Player(sceneWidth / 2, sceneHeight - 200);
+
     // Create labels for all 3 scenes
     createLabelsAndButtons();
 
@@ -217,8 +206,7 @@ function Setup()
     //app.view.onclick = fireBullet;
 }
 
-function createLabelsAndButtons()
-{
+function createLabelsAndButtons() {
     let textButtonStyle = new PIXI.TextStyle({
         fill: 0xddd573,
         fontSize: 48,
@@ -302,7 +290,7 @@ function createLabelsAndButtons()
 
     //rule bullets
     let controls = new PIXI.Text(
-        "W,A,S,D to move \nLEFT CLICK to shoot \nESC to open shop");
+        "W,A,S,D to move \nhold LEFT CLICK to shoot \nESC to open shop");
     controls.style = textStyle;
     controls.x = 10;
     controls.y = 100;
@@ -345,7 +333,7 @@ function createLabelsAndButtons()
     pointsLabel.x = sceneWidth - pointsLabel.width - 10;
     pointsLabel.y = 5;
     gameScene.addChild(pointsLabel);
-    
+
 
     //make a life label
     healthLabel = new PIXI.Text();
@@ -361,7 +349,7 @@ function createLabelsAndButtons()
     timeLabel.x = sceneWidth / 2 - timeLabel.width / 2
     timeLabel.y = 5;
     gameScene.addChild(timeLabel);
-    
+
     // make a wave label
     waveLabel = new PIXI.Text("Wave:    1");
     waveLabel.style = gameText;
@@ -432,7 +420,7 @@ function createLabelsAndButtons()
     buyShootSpeedButton.on("pointerup", buyShootSpeed); // function reference to startGame
     buyShootSpeedButton.on('pointerover', e => e.target.alpha = 0.7);
     buyShootSpeedButton.on('pointerout', e => e.currentTarget.alpha = 1.0);
-    shopScene.addChild(buyShootSpeedButton); 
+    shopScene.addChild(buyShootSpeedButton);
 
     fireSpeedLabel = new PIXI.Text(`Fire Speed \n$${shootSpeedCost} | ${player.attackSpeed}x`);
     fireSpeedLabel.style = textStyle;
@@ -449,7 +437,7 @@ function createLabelsAndButtons()
     buyMoveSpeedButton.on("pointerup", buySpeed); // function reference to startGame
     buyMoveSpeedButton.on('pointerover', e => e.target.alpha = 0.7);
     buyMoveSpeedButton.on('pointerout', e => e.currentTarget.alpha = 1.0);
-    shopScene.addChild(buyMoveSpeedButton); 
+    shopScene.addChild(buyMoveSpeedButton);
 
     moveSpeedLabel = new PIXI.Text(`Movement Speed \n$${moveSpeedCost} | ${player.speedMultiplier}x`);
     moveSpeedLabel.style = textStyle;
@@ -466,7 +454,7 @@ function createLabelsAndButtons()
     buyHealthutton.on("pointerup", buyHealth); // function reference to startGame
     buyHealthutton.on('pointerover', e => e.target.alpha = 0.7);
     buyHealthutton.on('pointerout', e => e.currentTarget.alpha = 1.0);
-    shopScene.addChild(buyHealthutton); 
+    shopScene.addChild(buyHealthutton);
 
     healthShopLabel = new PIXI.Text(`Health \n$${healthCost} | ${player.healthMultiplier}x`);
     healthShopLabel.style = textStyle;
@@ -536,7 +524,7 @@ function createLabelsAndButtons()
 }
 
 //scene change functions
-function startGame(){
+function startGame() {
     // play button sound
     clickSound.play();
     // make correct scene visible
@@ -566,25 +554,21 @@ function startGame(){
     player.maxHealth = player.startHealth;
 
     // clear everything
-    for(let z of zombies)
-    {
+    for (let z of zombies) {
         gameScene.removeChild(z);
     }
     zombies = [];
-    for(let b of bullets)
-    {
+    for (let b of bullets) {
         gameScene.removeChild(b);
     }
     bullets = [];
-    for(let s of survivors)
-    {
+    for (let s of survivors) {
         gameScene.removeChild(s);
     }
     survivors = [];
 
     // create new survivors
-    for(let i = 0; i < 10; i++)
-    {
+    for (let i = 0; i < 10; i++) {
         let s = new Survivor(Math.random() * sceneHeight, Math.random() * sceneWidth, "images/S_Survivor.png");
         survivors.push(s);
         gameScene.addChild(s);
@@ -593,7 +577,7 @@ function startGame(){
     newWave();
 }
 
-function openHelp(){
+function openHelp() {
     // play button sound
     clickSound.play();
     // make correct scene visible
@@ -606,7 +590,7 @@ function openHelp(){
     currentState = GameState.Start;
 }
 
-function backToTitle(){
+function backToTitle() {
     // play button sound
     clickSound.play();
     // make correct scene visible
@@ -619,7 +603,7 @@ function backToTitle(){
     currentState = GameState.Start;
 }
 
-function openShop(){
+function openShop() {
     // play button sound
     clickSound.play();
     // make correct scene visible
@@ -632,7 +616,7 @@ function openShop(){
     currentState = GameState.Shop;
 }
 
-function backToGame(){
+function backToGame() {
     // play button sound
     clickSound.play();
     // make correct scene visible
@@ -688,18 +672,16 @@ function updateLifeDisplay()
 */
 
 function buyShootSpeed() {
-    if(points >= shootSpeedCost)
-    {
+    if (points >= shootSpeedCost) {
         player.attackSpeed += 0.2;
         player.attackSpeed = Math.round(player.attackSpeed * 10) / 10;
         increaseScoreBy(-shootSpeedCost);
         shootSpeedCost++;
         fireSpeedLabel.text = `Fire Speed \n$${shootSpeedCost} | ${player.attackSpeed}x`;
-    } 
+    }
 }
 function buySpeed() {
-    if(points >= moveSpeedCost)
-    {
+    if (points >= moveSpeedCost) {
         player.speedMultiplier += 0.1;
         player.speedMultiplier = Math.round(player.speedMultiplier * 10) / 10;
         player.physics.maxSpeed = player.startSpeed * player.speedMultiplier;
@@ -709,8 +691,7 @@ function buySpeed() {
     }
 }
 function buyHealth() {
-    if(points >= healthCost)
-    {
+    if (points >= healthCost) {
         player.healthMultiplier += 0.5;
         player.healthMultiplier = Math.round(player.healthMultiplier * 10) / 10;
         player.maxHealth = player.startHealth * player.healthMultiplier;
@@ -721,19 +702,17 @@ function buyHealth() {
 }
 
 // game control functions
-function spawnZombies(num){
-    for(let i = 0; i < num; i++)
-    {
+function spawnZombies(num) {
+    for (let i = 0; i < num; i++) {
         let y = Math.random() * sceneHeight;
         let x = 0;
-        
+
         // half of the zombies go to each side
-        if(i % 2 == 0)
-        {
+        if (i % 2 == 0) {
             x = sceneWidth;
         }
 
-        let z = new Zombie(x,y,"images/S_Zombie.png");
+        let z = new Zombie(x, y, "images/S_Zombie.png");
         zombies.push(z);
         gameScene.addChild(z);
     }
@@ -744,7 +723,7 @@ function fireBullet(e){
 }
 */
 
-function newWave(){
+function newWave() {
     waveNum++;
     waveLabel.text = `Wave:    ${waveNum}`
     // spawn up to waveNum * 2 zombies, but never less than waveNum
@@ -752,173 +731,151 @@ function newWave(){
 }
 
 //utilities
-function clamp(val, min, max){
+function clamp(val, min, max) {
     return val < min ? min : (val > max ? max : val);
 }
 
 
 // game loop
-function gameLoop(){
-    switch(currentState)
-    {
-        case GameState.Game:
-            // calculate "delta time"
-            let dt = 1/app.ticker.FPS;
-            if(dt > 1/12) dt=1/12;
+function gameLoop() {
+    if (currentState == GameState.Game) {
+        // calculate "delta time"
+        let dt = 1 / app.ticker.FPS;
+        if (dt > 1 / 12) dt = 1 / 12;
 
-            // save game time
-            time += dt;
+        // save game time
+        time += dt;
 
-            // calculate player's movement vector
-            let mov = new Victor(0,0);
+        // calculate player's movement vector
+        let mov = new Victor(0, 0);
 
-            //test movement, player goes down and to the right
-            //let mov = new Victor(1,1);
+        // open shop with ESC
+        if(keyEsc)
+        {
+            openShop();
+        }
 
-            if(keyW)
-            {
-                mov.addScalarY(-1);
-            }
-            if(keyS)
-            {
-                mov.addScalarY(1);
-            }
-            if(keyA)
-            {
-                mov.addScalarX(-1);
-            }
-            if(keyD)
-            {
-                mov.addScalarX(1);
-            }
+        // allow player movement
+        if (keyW) {
+            mov.addScalarY(-1);
+        }
+        if (keyS) {
+            mov.addScalarY(1);
+        }
+        if (keyA) {
+            mov.addScalarX(-1);
+        }
+        if (keyD) {
+            mov.addScalarX(1);
+        }
 
 
-            //get a vector mouse position
-            let mousePosition = new Victor(
-                app.renderer.plugins.interaction.mouse.global.x,
-                app.renderer.plugins.interaction.mouse.global.y
-            );
+        //get a vector mouse position
+        let mousePosition = new Victor(
+            app.renderer.plugins.interaction.mouse.global.x,
+            app.renderer.plugins.interaction.mouse.global.y
+        );
 
-            if(shooting && player.health > 0)
-            {
-                player.shoot(mousePosition);
-            }
-            
+        if (shooting && player.health > 0) {
+            player.shoot(mousePosition);
+        }
 
-            // update the player's position
-            player.update(mov,mousePosition,dt);
 
-            //keep player on screen
-            player.physics.position.x = clamp(player.physics.position.x,0+player.physics.radius,sceneWidth-player.physics.radius);
-            player.physics.position.y = clamp(player.physics.position.y,0+player.physics.radius,sceneHeight-player.physics.radius);
+        // update the player's position
+        player.update(mov, mousePosition, dt);
 
-            // report player position & physics position
-            //console.log(`${player.x}, ${player.y}`);
-            //console.log(player.physics.position);
-            //console.log(player.physics.velocity.length())
+        //keep player on screen
+        player.physics.position.x = clamp(player.physics.position.x, 0 + player.physics.radius, sceneWidth - player.physics.radius);
+        player.physics.position.y = clamp(player.physics.position.y, 0 + player.physics.radius, sceneHeight - player.physics.radius);
 
-            // move zombies & check thier collisions
-            for(let zombie of zombies)
-            {
-                // zombies find and follow the closest survivor/player
-                let closestTarget;
-                let closestDist = Infinity; // start with large number
 
-                // find the closest survivor
-                for(let survivor of survivors)
-                {
-                    let distSq = zombie.physics.position.distanceSq(survivor.physics.position);
-                    if( distSq < closestDist)
-                    {
-                        closestDist = distSq;
-                        closestTarget = survivor;
-                    }
-                }
+        // move zombies & check thier collisions
+        for (let zombie of zombies) {
+            // zombies find and follow the closest survivor/player
+            let closestTarget;
+            let closestDist = Infinity; // start with large number
 
-                // check if the player is closer & alive
-                let distSq = zombie.physics.position.distanceSq(player.physics.position);
-                if( distSq < closestDist && player.health > 0)
-                {
+            // find the closest survivor
+            for (let survivor of survivors) {
+                let distSq = zombie.physics.position.distanceSq(survivor.physics.position);
+                if (distSq < closestDist) {
                     closestDist = distSq;
-                    closestTarget = player;
-                }
-
-                zombie.update(closestTarget, zombies, dt);
-
-                // detect survivor/player collisions
-                if(zombie.physics.detectIntersection(player.physics) && player.health > 0)
-                {
-                    zombie.attack(player);
-                }
-                for(let survivor of survivors)
-                {
-                    if(zombie.physics.detectIntersection(survivor.physics))
-                    {
-                        zombie.attack(survivor);
-                    }
-                }
-
-                // detect bullet collisions
-                for(let b of bullets)
-                {
-                    if(b.detectIntersection(zombie.physics))
-                    {
-                        console.log("hit detected");
-                        zombie.health -= b.damage;
-                        gameScene.removeChild(b);
-                        b.isAlive = false;
-
-                        // play hit sound
-                        bulletHitSound.play();
-                    }
-
-                    // kill bullets that move offscreen
-                    if(b.y < -10 || b.y > sceneHeight + 10 || b.x < -10 || b.x > sceneWidth + 10)
-                    {
-                        b.isAlive = false;
-                    }
+                    closestTarget = survivor;
                 }
             }
 
-            // Move Bullets
-	        for (let b of bullets){
-		        b.move(dt);
-	        }
-
-            // Move Survivors
-            for(let s of survivors){
-                s.update(survivors, zombies, dt);
-            }
-            
-            // some clean up
-            bullets = bullets.filter(b=>b.isAlive);
-            zombies = zombies.filter(z=>z.isAlive);
-            survivors = survivors.filter(s=>s.isAlive);
-
-            // end the game if no survivors remain
-            if(survivors.length == 0){
-                gameOver();
+            // check if the player is closer & alive
+            let distSq = zombie.physics.position.distanceSq(player.physics.position);
+            if (distSq < closestDist && player.health > 0) {
+                closestDist = distSq;
+                closestTarget = player;
             }
 
-            // load next level
-            if(zombies.length == 0) {
-                newWave();
+            zombie.update(closestTarget, zombies, dt);
+
+            // detect survivor/player collisions
+            if (zombie.physics.detectIntersection(player.physics) && player.health > 0) {
+                zombie.attack(player);
+            }
+            for (let survivor of survivors) {
+                if (zombie.physics.detectIntersection(survivor.physics)) {
+                    zombie.attack(survivor);
+                }
             }
 
-            // update labels
-            healthLabel.text = `Health: ${Math.max(0,player.health)}`;
+            // detect bullet collisions
+            for (let b of bullets) {
+                if (b.detectIntersection(zombie.physics)) {
+                    console.log("hit detected");
+                    zombie.health -= b.damage;
+                    gameScene.removeChild(b);
+                    b.isAlive = false;
 
-            let totalseconds = Math.floor(time);
-            let minutes = Math.floor(totalseconds / 60)
-            let seconds = totalseconds % 60;
-            let formatSeconds = seconds < 10 ? '0' + seconds : seconds;
-            timeLabel.text = `Time:    ${minutes}:${formatSeconds}`;
-        break;
-        case GameState.GameOver:
-        break;
-        case GameState.Shop:
-        break;
-        case GameState.Start:
-        break; 
+                    // play hit sound
+                    bulletHitSound.play();
+                }
+
+                // kill bullets that move offscreen
+                if (b.y < -10 || b.y > sceneHeight + 10 || b.x < -10 || b.x > sceneWidth + 10) {
+                    b.isAlive = false;
+                }
+            }
+        }
+
+        // Move Bullets
+        for (let b of bullets) {
+            b.move(dt);
+        }
+
+        // Move Survivors
+        for (let s of survivors) {
+            s.update(survivors, zombies, dt);
+        }
+
+        // some clean up
+        bullets = bullets.filter(b => b.isAlive);
+        zombies = zombies.filter(z => z.isAlive);
+        survivors = survivors.filter(s => s.isAlive);
+
+        // end the game if no survivors remain
+        if (survivors.length == 0) {
+            gameOver();
+        }
+
+        // load next level
+        if (zombies.length == 0) {
+            newWave();
+        }
+
+        // update labels
+        healthLabel.text = `Health: ${Math.max(0, player.health)}`;
+
+        let totalseconds = Math.floor(time);
+        let minutes = Math.floor(totalseconds / 60)
+        let seconds = totalseconds % 60;
+        let formatSeconds = seconds < 10 ? '0' + seconds : seconds;
+        timeLabel.text = `Time:    ${minutes}:${formatSeconds}`;
     }
+    // note whether ESC was held last frame
+
 }
