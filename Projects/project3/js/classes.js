@@ -91,17 +91,103 @@ class PhysicsObject {
     }
 }
 
-class Player extends PIXI.Graphics {
-    constructor(x = 0, y = 0, radius=25, color=0xFFFF00) {
+class Agent extends PIXI.Graphics {
+    constructor(x=0, y=0, radius=25, color=0xFF0000, maxSpeed=50, maxForce=400, coefFriction=500, separateRadius=150)
+    {
         super();
+        // store a physics component
+        this.physics = new PhysicsObject(x,y,radius,maxSpeed,coefFriction);
+
+        // create the graphic
+        this.beginFill(color);
+        this.drawCircle(0,0,this.physics.radius);
+        this.endFill();
+
+        // set the PIXI graphics position equal to the victor vector position
+        this.x = this.physics.position.x;
+        this.y = this.physics.position.y;
+
+        this.separateRadius = separateRadius;
+        this.maxForce = maxForce;
+    }
+
+    /*
+    * returns a force vector that seeks a target position
+    */
+    seek(targetPos) {
+        let desiredVel = (targetPos.clone().subtract(this.physics.position)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
+    }
+
+    /*
+    * returns a force vector that flees from a target position
+    */
+    flee(targetPos) {
+        let desiredVel = (this.physics.position.clone().subtract(targetPos)).normalize().multiplyScalar(this.physics.maxSpeed);
+        return desiredVel.subtract(this.physics.velocity);
+    }
+
+    /*
+    * returns a force vector that separates this object from others
+    */
+    separate(otherObjects)
+    {
+        let sum = new Victor(0,0);
+        let count = 0;
+
+        for(let object of otherObjects)
+        {
+            //check for others within separation distance
+            if(object !== this && this.physics.position.distance(object.physics.position) < this.separateRadius)
+            {
+                // add a flee force scaled by the distance between the objects
+                sum.add(this.flee(object.physics.position).divideScalar(this.physics.position.distance(object.physics.position)))
+                count++;
+            }
+        }
+
+        // don't devide if there were zero other objets
+        if(count > 0)
+        {
+            sum.divideScalar(count);
+        }
+
+        return sum;
+    }
+
+    stayInBounds(position, radius)
+    {
+        let force = new Victor(0,0);
+
+        // if the agent leaves the radius, apply force 
+        // to return to the radius (scaled by distance)
+        if(this.physics.position.distance(position) > radius)
+        {
+            force = this.seek(position).multiplyScalar(this.physics.position.distance(position));
+        }
+
+        return force;
+    }
+}
+
+class Player extends PIXI.Sprite {
+    constructor(x = 0, y = 0, radius=25) {
+        //set up sprite
+        super(app.loader.resources["images/S_Player.png"].texture);
+        this.anchor.set(.5, .5);
+
+        // set up physics
         this.physics = new PhysicsObject(x,y,radius,250,500);
+        /*
         this.beginFill(color);
         this.drawCircle(0,0,radius);
         this.endFill();
+        */
         //super(app.loader.resources["images/spaceship.png"].texture);
         //this.anchor.set(.5, .5); // position, scaling, rotating etc are now from center of sprite
         //this.scale.set(0.1);
 
+        // set the sptite position equal to vector position
         this.x = this.physics.position.x;
         this.y = this.physics.position.y;
 
@@ -186,85 +272,6 @@ class Player extends PIXI.Graphics {
             this.respawn(deltaTime);
         }
         
-    }
-}
-
-class Agent extends PIXI.Graphics {
-    constructor(x=0, y=0, radius=25, color=0xFF0000, maxSpeed=50, maxForce=400, coefFriction=500, separateRadius=150)
-    {
-        super();
-        // store a physics component
-        this.physics = new PhysicsObject(x,y,radius,maxSpeed,coefFriction);
-
-        // create the graphic
-        this.beginFill(color);
-        this.drawCircle(0,0,this.physics.radius);
-        this.endFill();
-
-        // set the PIXI graphics position equal to the victor vector position
-        this.x = this.physics.position.x;
-        this.y = this.physics.position.y;
-
-        this.separateRadius = separateRadius;
-        this.maxForce = maxForce;
-    }
-
-    /*
-    * returns a force vector that seeks a target position
-    */
-    seek(targetPos) {
-        let desiredVel = (targetPos.clone().subtract(this.physics.position)).normalize().multiplyScalar(this.physics.maxSpeed);
-        return desiredVel.subtract(this.physics.velocity);
-    }
-
-    /*
-    * returns a force vector that flees from a target position
-    */
-    flee(targetPos) {
-        let desiredVel = (this.physics.position.clone().subtract(targetPos)).normalize().multiplyScalar(this.physics.maxSpeed);
-        return desiredVel.subtract(this.physics.velocity);
-    }
-
-    /*
-    * returns a force vector that separates this object from others
-    */
-    separate(otherObjects)
-    {
-        let sum = new Victor(0,0);
-        let count = 0;
-
-        for(let object of otherObjects)
-        {
-            //check for others within separation distance
-            if(object !== this && this.physics.position.distance(object.physics.position) < this.separateRadius)
-            {
-                // add a flee force scaled by the distance between the objects
-                sum.add(this.flee(object.physics.position).divideScalar(this.physics.position.distance(object.physics.position)))
-                count++;
-            }
-        }
-
-        // don't devide if there were zero other objets
-        if(count > 0)
-        {
-            sum.divideScalar(count);
-        }
-
-        return sum;
-    }
-
-    stayInBounds(position, radius)
-    {
-        let force = new Victor(0,0);
-
-        // if the agent leaves the radius, apply force 
-        // to return to the radius (scaled by distance)
-        if(this.physics.position.distance(position) > radius)
-        {
-            force = this.seek(position).multiplyScalar(this.physics.position.distance(position));
-        }
-
-        return force;
     }
 }
 

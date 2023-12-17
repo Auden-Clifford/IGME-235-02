@@ -34,7 +34,8 @@ app.loader.
         "images/buyButton.svg",
         "images/gameOverTitle.svg",
         "images/retryButton.svg",
-        "images/quitButton.svg"
+        "images/quitButton.svg",
+        "images/S_Player.png"
     ]);
 app.loader.onProgress.add(e => { console.log(`progress=${e.progress}`) });
 app.loader.onComplete.add(Setup);
