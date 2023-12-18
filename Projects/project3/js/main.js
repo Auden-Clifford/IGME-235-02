@@ -548,10 +548,19 @@ function startGame() {
     player.physics.position.y = sceneHeight - 200;
 
     player.attackSpeed = 1;
+    shootSpeedCost = 5
     player.speedMultiplier = 1;
     player.physics.maxSpeed = player.startSpeed;
+    moveSpeedCost = 1;
     player.healthMultiplier = 1;
     player.maxHealth = player.startHealth;
+    player.health = player.maxHealth;
+    healthCost = 10;
+
+    //reset store text
+    fireSpeedLabel.text = `Fire Speed \n$${shootSpeedCost} | ${player.attackSpeed}x`;
+    moveSpeedLabel.text = `Movement Speed \n$${moveSpeedCost} | ${player.speedMultiplier}x`;
+    healthShopLabel.text = `Health \n$${healthCost} | ${player.healthMultiplier}x`;
 
     // clear everything
     for (let z of zombies) {
