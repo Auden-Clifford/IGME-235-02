@@ -36,7 +36,17 @@ app.loader.
         "images/retryButton.svg",
         "images/quitButton.svg",
         "images/S_Player.png",
-        "images/S_Zombie.png",
+        "images/S_Zombie1.png",
+        "images/S_Zombie2.png",
+        "images/S_Zombie3.png",
+        "images/S_Zombie4.png",
+        "images/S_Zombie5.png",
+        "images/S_Zombie6.png",
+        "images/S_Zombie7.png",
+        "images/S_Zombie8.png",
+        "images/S_ZombieInjured.png",
+        "images/S_ZombieBig.png",
+        "images/S_ZombieFast.png",
         "images/S_Survivor.png",
         "images/S_Shot.png"
     ]);
@@ -721,7 +731,7 @@ function spawnZombies(num) {
             x = sceneWidth;
         }
 
-        let z = new Zombie(x, y, "images/S_Zombie.png");
+        let z = new Zombie(x, y, `images/S_Zombie${Math.floor(Math.random() * 8 + 1)}.png`);
         zombies.push(z);
         gameScene.addChild(z);
     }
