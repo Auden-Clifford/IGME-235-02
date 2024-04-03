@@ -37,7 +37,11 @@
                 <div id="aboutMe" class="info">
                     <h2>About Me</h2>
                     <p>
-                        I’m Auden Clifford, A second-year Game Design and Development student at Rochester Institute of Technolofy. I first developed at taste for designing games during highscool when I got into minecraft modding and writing Dungeons & Dragons campaigns. In the present day, I'm currently interested in exploring VR development. I excel at the programming and always enjoy a challenge or an interesting logic problem. I'm well-versed in various tools like Visual Studio, IntelliJ, Unity, Unreal, MonoGame, Source 2, Photoshop, Maya, Blender, and GitHub.The coding languages I've worked with so far include C#, JavaScript, Java, Python, HTML, and CSS.
+                        I’m Auden Clifford, A second-year Game Design and Development student at Rochester Institute of Technology. I first developed a taste for designing games during 
+                        highschool when I got into Minecraft modding and writing Dungeons & Dragons campaigns. In the present day, I'm learning the big stuff in class and exploring VR 
+                        development in my own time. I excel at the programming side of things and always enjoy a challenge or an interesting logic problem. I'm well-versed in various 
+                        tools like Visual Studio, IntelliJ, Unity, Unreal, MonoGame, Source 2, Photoshop, Maya, Blender, and GitHub.The coding languages I've worked with so far include C#, 
+                        JavaScript, Java, Python, HTML, and CSS.
                     </p>
                 </div>
 
@@ -118,43 +122,42 @@
                 </nav>
 
                 <p>
-                    I was tasked with creating my own version of a classic top-down shoot ‘em up game in Unity. The game I created was Spinner Scorge, the base concept for which was 
-                    “what if we give Beyblades guns?” My goal was to introduce the chaotic interactions of spinning objects colliding to the SHMUP genre.
+                    I was tasked with creating my own version of a classic top-down shoot 'em-up game in Unity. The game I created was Spinner Scorge, the base concept for which was 
+                    “What if we give Beyblades guns?” So I set out to introduce the chaotic interactions of clashing spinners to the SHMUP genre.
                 </p>
+
+                
 
                 <h3>Game Mechanics</h3>
 
                 <p>
-                    Just like when dueling with Beybldes, if your spinner stops spinning you’re out. This means that the player’s angular velocity was this game’s equivalent to 
-                    health. Spinners lose some angular velocity (health) in the process of colliding with one another, but some spinners have guns, the bullets from which directly 
-                    slow other spinners’ rotation when they hit. The player can only regain their “health” by getting kills or clearing whole waves of enemies.
+                    Just like dueling with Beybldes, stop spinning and you’re out. Angular velocity is key–it’s your health. Collisions chip away at it, and spinners with guns can shoot to 
+                    slow rivals down. Replenishing your spinner's speed requires defeating enemies or surviving waves.
+                </p>
+
+                <p>
+                    The goal of the game is simple: rack up the highest score possible. When your spinner stops spinning, it's game over, but every new attempt is a chance to outdo yourself. 
+                    Your score climbs with each enemy downed, and tougher foes offer bigger bounties. Enemies will appear randomly each round, escalating in number and challenge per round. 
+                    Completing a round means clearing all enemies, immediately triggering the next round, and spawning new enemies.
+                </p>
+
+                <p>
+                    I pushed this game beyond traditional SHMUP constraints by implementing a physics system for authentic top-like spinner interactions. Without relying on Unity’s default rigid 
+                    body collision system, I created my own custom-coded forces and collision detection to allow spinners to push and crash into each other.
                 </p>
 
                 <figure id="spCollide" class="multiContainter">
                     <img src="media/spinner.gif" alt="">
 
                     <p>
-                        Wham! The spinners collide and are sent flying across the map. This chaotic motion was 
-                        achieved by programmatically simulating physics collisions. Unfortunately, the code is 
-                        essentially "faking it" as momentum is not properly conserved, but the effect 
-                        nonetheless is a fun game mechanic regardless of real-world accuracy.
+                        Wham! The spinners collide and are sent flying across the map. This chaotic motion was achieved using my own custom script. 
                     </p>
                 </figure>
 
                 <p>
-                    Because I wanted the spinners to move and collide like tops I had to add a few things uncommon to the SHMUP genre. The first was a physics/collision system, much 
-                    like rigid body collisions. This project required that I not use Unity’s built-in rigid body components, so the physics code is my own design. In this system, 
-                    spinners move using force vectors and physically collide with one another rather than simply taking damage on contact. The next addition was unbound movement 
-                    across an infinite plane. It is typical of SHMUP games to either have a fixed view or a scrolling view, however, it would be difficult to evoke the chaotic 
-                    feeling of a Beyblade duel if the player was locked to moving in one direction, so I simply made the view follow the player as they move and did not set bounds 
-                    for their movement.
-                </p>
-
-                <p>
-                    The object of the game is to get as high a score as possible without dying. The game ends when the player dies and the player may then retry for a higher score. 
-                    The player gains points toward their score by getting kills. Certain types of enemies give more points than others. These enemies are spawned in random locations 
-                    around the player and the number and difficulty of enemies spawned increases with the current round. A round will last as long as it takes the player to kill all 
-                    of the enemies that were spawned at the beginning of the round. As soon as the player kills the last enemy the next round begins and new enemies are spawned.
+                    Commonly, in a SHMUP the player shoots enemies inside a fixed area or perpetually scrolls in one direction. However, in order to evoke the chaotic energy of a Beyblade duel 
+                    my game allows limitless movement across an endless map; the player can go anywhere and the enemies can come from any direction. From there, the game follows the player, 
+                    moving the background and spawning enemies nearby.
                 </p>
 
                 <h4>Enemy Types</h4>
