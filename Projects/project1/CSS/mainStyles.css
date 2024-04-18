@@ -185,30 +185,45 @@ h1 {
 #thumbnailGrid {
     display: grid;
     grid-template-columns: 50px 50px 1fr 1fr 50px 50px;
-    grid-template-rows: repeat(20, 50px);
+    grid-template-rows: repeat(31, 50px);
 }
 #aboutMe {grid-area: 1 / 1 / 7 / -1;}
 
-#spImage {grid-area: 7 / 1 / 10 / 4;} 
-#spTitle {grid-area: 10 / 2 / 12 / 5;} 
-#spType {grid-area: 8 / 4 / 10 / 5;} 
-#spLang {grid-area: 8 / 5 / 9 / 6;} 
-#spEngine {grid-area: 9 / 5 / 10 / 6;} 
-#spRepo {grid-area: 10 / 1 / 12 / 3;} 
+#mopImage {grid-area: 7 / 1 / 10 / 4;} 
+#mopTitle {grid-area: 10 / 2 / 12 / 5;} 
+#mopType {grid-area: 8 / 4 / 10 / 5;} 
+#mopLang {grid-area: 8 / 5 / 9 / 6;} 
+#mopEngine {grid-area: 9 / 5 / 10 / 6;}
+#mopPlatform {grid-area: 8 / 6 / 9 / 6;} 
+#mopRepo {grid-area: 10 / 1 / 12 / 3;} 
 
-#sgbImage {grid-area: 12 / 4 / 15 / -1;}
-#sgbTitle {grid-area: 15 / 3 / 17 / -2;}
-#sgbType {grid-area: 13 / 3 / 15 / 4;}
-#sgbLang {grid-area: 13 / 2 / 14 / 3;}
-#sgbEngine {grid-area: -8 / 2 / -7 / 3;}
-#sgbRepo {grid-area: 15 / -3 / 17 / -1;}
+#spImage {grid-area: 12 / 4 / 15 / -1;}
+#spTitle {grid-area: 15 / 3 / 17 / -2;}
+#spType {grid-area: 13 / 3 / 15 / 4;}
+#spLang {grid-area: 13 / 2 / 14 / 3;}
+#spEngine {grid-area: 14 / 2 / 15 / 3;}
+#spRepo {grid-area: 15 / -3 / 17 / -1;}
 
-#bgImage {grid-area: 17 / 1 / 20 / 4;} 
-#bgTitle {grid-area: 20 / 2 / 22 / 5;} 
-#bgType {grid-area: 18 / 4 / 20 / 5;}
-#bgEngine{grid-area: -4 / -3 / -3 / -2} 
-#bgPlatform{grid-area: -3 / -3 / -2 / -2} 
-#bgWorkshop {grid-area: 20 / 1 / 22 / 3;} 
+#zomImage {grid-area: 17 / 1 / 20 / 4;} 
+#zomTitle {grid-area: 20 / 2 / 22 / 5;} 
+#zomType {grid-area: 18 / 4 / 20 / 5;}
+#zomLang {grid-area: 18 / -3 / 19 / -2;}
+#zomPlatform{grid-area: 19 / -3 / 20 / -2} 
+#zomRepo {grid-area: 20 / 1 / 22 / 3;} 
+
+#sgbImage {grid-area: 22 / 4 / 26 / -1;}
+#sgbTitle {grid-area: 25 / 3 / 27 / -2;}
+#sgbType {grid-area: 23 / 3 / 25 / 4;}
+#sgbLang {grid-area: 23 / 2 / 24 / 3;}
+#sgbEngine {grid-area: 24 / 2 / 25 / 3;}
+#sgbRepo {grid-area: 25 / -3 / 27 / -1;}
+
+#bgImage {grid-area: 27 / 1 / 31 / 4;}
+#bgTitle {grid-area: 30 / 2 / 32 / -3;}
+#bgType {grid-area: 28 / 4 / 30 / 5;}
+#bgEngine {grid-area: 28 / -3 / 29 / -2;}
+#bgPlatform {grid-area: 29 / -3/ 30 / -2;}
+#bgWorkshop {grid-area: 30 / 1 / 32 / 3;}
 
 #headerGrid {
     display: grid;
@@ -270,6 +285,12 @@ h1 {
         width: 30%;
     }
 
+    #mopLore{
+        float: right;
+    }
+    #mopRig{
+        float: left;
+    }
     #spCollide {
         float: right;
     }
