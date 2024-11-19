@@ -296,12 +296,12 @@ h1 {
     #sgbEngine {grid-area: 17 / 5 / 18 / 6;}
     #sgbRepo {grid-area: 14 / 2 / 16 / 4;}
     
-    #dnImage {grid-area: 19 / -13 / 23 / -3; z-index: 1;}
-    #dnTitle {grid-area: 18 / 10 / 20 / -8; z-index: 1;}
-    #dnType {grid-area: 20 / -14 / 22 / -11; z-index: 1;}
-    #dnEngine{grid-area: 18 / -8 / 19 / -7; z-index: 1;} 
-    #dnLang {grid-area: 19 / -8 / 20 / -7; z-index: 1;} 
-    #dnWebsite {grid-area: 18 / 9 / 20 / 11; z-index: 1;}
+    #dnImage {grid-area: 19 / -13 / 23 / -3;}
+    #dnTitle {grid-area: 18 / 10 / 20 / -8;}
+    #dnType {grid-area: 20 / -14 / 22 / -11;}
+    #dnEngine{grid-area: 18 / -8 / 19 / -7; } 
+    #dnLang {grid-area: 19 / -8 / 20 / -7; } 
+    #dnWebsite {grid-area: 18 / 9 / 20 / 11;}
     
     
 
