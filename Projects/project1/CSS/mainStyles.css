@@ -43,6 +43,7 @@ a:visited {color: #B8B8B8;}
 a:focus {background-color: var(--accent-color); color: var(--accent-color)}
 a:hover {color: var(--accent-color);}
 a:active {color: #E5E5E5;}
+strong { color: var(--accent-color);}
 /*class rules*/
 .multiContainter {
     display: flex;
@@ -86,7 +87,7 @@ a:active {color: #E5E5E5;}
     background-color: #32363E;
     border: 10px solid #06080F;
 }
-.repoLink, .workshopLink{
+.repoLink, .workshopLink, .downloadLink, .websiteLink{
     background-color: #06080F;
     border: 10px solid #06080F;
     border-radius: 100%;
@@ -216,12 +217,12 @@ h1 {
 #spEngine {grid-area: 14 / 2 / 15 / 3;}
 #spRepo {grid-area: 15 / -3 / 17 / -1;}
 
-#zomImage {grid-area: 17 / 1 / 20 / 4;} 
-#zomTitle {grid-area: 20 / 2 / 22 / 5;} 
-#zomType {grid-area: 18 / 4 / 20 / 5;}
-#zomLang {grid-area: 18 / -3 / 19 / -2;}
-#zomPlatform{grid-area: 19 / -3 / 20 / -2} 
-#zomRepo {grid-area: 20 / 1 / 22 / 3;} 
+#hdrImage {grid-area: 17 / 1 / 20 / 4;} 
+#hdrTitle {grid-area: 20 / 2 / 22 / 5;} 
+#hdrType {grid-area: 18 / 4 / 20 / 5;}
+#hdrLang {grid-area: 18 / -3 / 19 / -2;}
+#hdrEngine{grid-area: 19 / -3 / 20 / -2} 
+#hdrDownload {grid-area: 20 / 1 / 22 / 3;} 
 
 #sgbImage {grid-area: 22 / 4 / 26 / -1;}
 #sgbTitle {grid-area: 25 / 3 / 27 / -2;}
@@ -230,12 +231,12 @@ h1 {
 #sgbEngine {grid-area: 24 / 2 / 25 / 3;}
 #sgbRepo {grid-area: 25 / -3 / 27 / -1;}
 
-#bgImage {grid-area: 27 / 1 / 31 / 4;}
-#bgTitle {grid-area: 30 / 2 / 32 / -3;}
-#bgType {grid-area: 28 / 4 / 30 / 5;}
-#bgEngine {grid-area: 28 / -3 / 29 / -2;}
-#bgPlatform {grid-area: 29 / -3/ 30 / -2;}
-#bgWorkshop {grid-area: 30 / 1 / 32 / 3;}
+#dnImage {grid-area: 27 / 1 / 31 / 4;}
+#dnTitle {grid-area: 30 / 2 / 32 / -3;}
+#dnType {grid-area: 28 / 4 / 30 / 5;}
+#dnEngine {grid-area: 28 / -3 / 29 / -2;}
+#dnLang {grid-area: 29 / -3/ 30 / -2;}
+#dnWebsite {grid-area: 30 / 1 / 32 / 3;}
 
 #headerGrid {
     display: grid;
@@ -281,12 +282,12 @@ h1 {
     #spEngine {grid-area: 11 / 5 / 12 / 6;}
     #spRepo {grid-area: 8 / 8 / 10 / 10;}
 
-    #zomImage {grid-area: 8 / -2 / 12 / 11;} 
-    #zomTitle {grid-area: 7 / -2 / 9 / 16;} 
-    #zomType {grid-area: 9 / -1 / 11 / -4;}
-    #zomLang {grid-area: 11 / -3 / 12 / -2;}
-    #zomPlatform{grid-area: 11 / -2 / 12 / -1} 
-    #zomRepo {grid-area: 7 / -3 / 9 / -1;} 
+    #hdrImage {grid-area: 8 / -2 / 12 / 11;} 
+    #hdrTitle {grid-area: 7 / -2 / 9 / 15;} 
+    #hdrType {grid-area: 9 / -1 / 11 / -4;}
+    #hdrLang {grid-area: 11 / -3 / 12 / -2;}
+    #hdrEngine{grid-area: 11 / -2 / 12 / -1} 
+    #hdrDownload {grid-area: 7 / -3 / 9 / -1;} 
     
     #sgbImage {grid-area: 15 / 3 / 19 / 13;}
     #sgbTitle {grid-area: 14 / 3 / 16 / 8;}
@@ -295,12 +296,12 @@ h1 {
     #sgbEngine {grid-area: 17 / 5 / 18 / 6;}
     #sgbRepo {grid-area: 14 / 2 / 16 / 4;}
     
-    #bgImage {grid-area: 19 / -13 / 23 / -3;}
-    #bgTitle {grid-area: 18 / 10 / 20 / -8;}
-    #bgType {grid-area: 20 / -14 / 22 / -11;}
-    #bgEngine{grid-area: 18 / -8 / 19 / -7} 
-    #bgPlatform{grid-area: 19 / -8 / 20 / -7} 
-    #bgWorkshop {grid-area: 18 / 9 / 20 / 11;}
+    #dnImage {grid-area: 19 / -13 / 23 / -3; z-index: 1;}
+    #dnTitle {grid-area: 18 / 10 / 20 / -8; z-index: 1;}
+    #dnType {grid-area: 20 / -14 / 22 / -11; z-index: 1;}
+    #dnEngine{grid-area: 18 / -8 / 19 / -7; z-index: 1;} 
+    #dnLang {grid-area: 19 / -8 / 20 / -7; z-index: 1;} 
+    #dnWebsite {grid-area: 18 / 9 / 20 / 11; z-index: 1;}
     
     
 
@@ -317,6 +318,12 @@ h1 {
     }
     #mopRig{
         float: left;
+    }
+    #hyprLore{
+        float: right;
+    }
+    #depthsLore{
+        float: right;
     }
     #spCollide {
         float: right;
